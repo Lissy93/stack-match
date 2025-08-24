@@ -19,13 +19,18 @@
   };
 
   // Capitalize preset names for display
-  function formatPresetName(name: PresetName): string {
+  function formatPresetName(name: string): string {
     return name.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
   }
 
   // Handle preset selection
-  function selectPreset(presetName: PresetName) {
-    onPresetSelect(PRESETS[presetName]);
+  function selectPreset(presetName: string) {
+    onPresetSelect(PRESETS[presetName as PresetName]);
+  }
+
+  // Get icon component for preset
+  function getIconComponent(presetName: string) {
+    return presetIcons[presetName as PresetName];
   }
 </script>
 
@@ -33,7 +38,7 @@
   <h3 class="preset-title">Quick Presets</h3>
   <div class="preset-grid">
     {#each Object.keys(PRESETS) as presetName}
-      {@const IconComponent = presetIcons[presetName]}
+      {@const IconComponent = getIconComponent(presetName)}
       <button
         type="button"
         class="preset-btn"

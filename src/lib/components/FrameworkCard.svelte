@@ -15,6 +15,13 @@
   $: bestAttrs = getBestAttributes(framework, 3);
   $: worstAttrs = getWorstAttributes(framework, 3);
   $: iconUrl = getIconUrl(framework.meta);
+
+  function handleImageError(event: Event) {
+    const target = event.currentTarget as HTMLImageElement;
+    if (target) {
+      target.style.display = 'none';
+    }
+  }
 </script>
 
 <article class="framework-card" class:expanded={isExpanded} on:click={onToggleExpanded} role="button" tabindex="0" on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? onToggleExpanded() : null}>
@@ -25,7 +32,7 @@
         src={iconUrl}
         alt="{framework.meta.name} icon"
         class="framework-icon"
-        on:error={(e) => e.currentTarget && (e.currentTarget.style.display = 'none')}
+        on:error={handleImageError}
       />
       <div class="framework-details">
         <h3 class="framework-name">{framework.meta.name}</h3>
@@ -154,7 +161,7 @@
                   src={framework.meta.example.logo} 
                   alt="{framework.meta.example.title} logo"
                   class="example-logo-img"
-                  on:error={(e) => e.currentTarget && (e.currentTarget.style.display = 'none')}
+                  on:error={handleImageError}
                 />
               </div>
             {/if}

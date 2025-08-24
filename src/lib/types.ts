@@ -1,4 +1,6 @@
-import type { Attribute } from './constants';
+import type { Attribute } from "./constants";
+
+export type { Attribute };
 
 export interface Framework {
   name: string;

@@ -21,8 +21,8 @@ export interface FrameworkMetadata {
   };
   website?: string;
   docs?: string;
-  category: 'framework' | 'library' | 'meta-framework' | 'build-tool';
-  type: 'spa' | 'ssr' | 'ssg' | 'hybrid' | 'build-tool';
+  category: "framework" | "library" | "meta-framework" | "build-tool";
+  type: "spa" | "ssr" | "ssg" | "hybrid" | "build-tool";
   // Additional package names for ecosystem analysis
   ecosystem?: {
     corePackages?: string[];
@@ -33,437 +33,441 @@ export interface FrameworkMetadata {
 
 export const FRAMEWORK_METADATA: Record<string, FrameworkMetadata> = {
   react: {
-    id: 'react',
-    name: 'React',
+    id: "react",
+    name: "React",
     github: {
-      owner: 'facebook',
-      repo: 'react',
-      fullName: 'facebook/react'
+      owner: "facebook",
+      repo: "react",
+      fullName: "facebook/react",
     },
     npm: {
-      packageName: 'react',
-      alternativePackages: ['react-dom', 'react-router-dom']
+      packageName: "react",
+      alternativePackages: ["react-dom", "react-router-dom"],
     },
     bundle: {
-      bundlephobiaName: 'react'
+      bundlephobiaName: "react",
     },
-    website: 'https://reactjs.org',
-    docs: 'https://reactjs.org/docs',
-    category: 'library',
-    type: 'spa',
+    website: "https://reactjs.org",
+    docs: "https://reactjs.org/docs",
+    category: "library",
+    type: "spa",
     ecosystem: {
-      corePackages: ['react-dom', 'react-router', 'react-scripts'],
-      devTools: ['@testing-library/react', 'react-devtools'],
-      plugins: ['babel-preset-react', 'eslint-plugin-react']
-    }
+      corePackages: ["react-dom", "react-router", "react-scripts"],
+      devTools: ["@testing-library/react", "react-devtools"],
+      plugins: ["babel-preset-react", "eslint-plugin-react"],
+    },
   },
 
   angular: {
-    id: 'angular',
-    name: 'Angular',
+    id: "angular",
+    name: "Angular",
     github: {
-      owner: 'angular',
-      repo: 'angular',
-      fullName: 'angular/angular'
+      owner: "angular",
+      repo: "angular",
+      fullName: "angular/angular",
     },
     npm: {
-      packageName: '@angular/core',
-      alternativePackages: ['@angular/common', '@angular/router', '@angular/forms']
+      packageName: "@angular/core",
+      alternativePackages: [
+        "@angular/common",
+        "@angular/router",
+        "@angular/forms",
+      ],
     },
     bundle: {
-      bundlephobiaName: '@angular/core'
+      bundlephobiaName: "@angular/core",
     },
-    website: 'https://angular.io',
-    docs: 'https://angular.io/docs',
-    category: 'framework',
-    type: 'spa',
+    website: "https://angular.io",
+    docs: "https://angular.io/docs",
+    category: "framework",
+    type: "spa",
     ecosystem: {
-      corePackages: ['@angular/cli', '@angular/common', '@angular/router'],
-      devTools: ['@angular/devkit/build-angular', 'angular-devtools'],
-      plugins: ['@angular/eslint-plugin']
-    }
+      corePackages: ["@angular/cli", "@angular/common", "@angular/router"],
+      devTools: ["@angular/devkit/build-angular", "angular-devtools"],
+      plugins: ["@angular/eslint-plugin"],
+    },
   },
 
   vue: {
-    id: 'vue',
-    name: 'Vue.js',
+    id: "vue",
+    name: "Vue.js",
     github: {
-      owner: 'vuejs',
-      repo: 'core',
-      fullName: 'vuejs/core'
+      owner: "vuejs",
+      repo: "core",
+      fullName: "vuejs/core",
     },
     npm: {
-      packageName: 'vue',
-      alternativePackages: ['vue-router', 'vuex', 'pinia']
+      packageName: "vue",
+      alternativePackages: ["vue-router", "vuex", "pinia"],
     },
     bundle: {
-      bundlephobiaName: 'vue'
+      bundlephobiaName: "vue",
     },
-    website: 'https://vuejs.org',
-    docs: 'https://vuejs.org/guide/',
-    category: 'framework',
-    type: 'spa',
+    website: "https://vuejs.org",
+    docs: "https://vuejs.org/guide/",
+    category: "framework",
+    type: "spa",
     ecosystem: {
-      corePackages: ['vue-router', 'pinia', '@vue/cli'],
-      devTools: ['@vue/devtools', 'vite'],
-      plugins: ['@vue/eslint-config', 'vue-loader']
-    }
+      corePackages: ["vue-router", "pinia", "@vue/cli"],
+      devTools: ["@vue/devtools", "vite"],
+      plugins: ["@vue/eslint-config", "vue-loader"],
+    },
   },
 
   svelte: {
-    id: 'svelte',
-    name: 'Svelte',
+    id: "svelte",
+    name: "Svelte",
     github: {
-      owner: 'sveltejs',
-      repo: 'svelte',
-      fullName: 'sveltejs/svelte'
+      owner: "sveltejs",
+      repo: "svelte",
+      fullName: "sveltejs/svelte",
     },
     npm: {
-      packageName: 'svelte'
+      packageName: "svelte",
     },
     bundle: {
-      bundlephobiaName: 'svelte'
+      bundlephobiaName: "svelte",
     },
-    website: 'https://svelte.dev',
-    docs: 'https://svelte.dev/docs',
-    category: 'framework',
-    type: 'spa',
+    website: "https://svelte.dev",
+    docs: "https://svelte.dev/docs",
+    category: "framework",
+    type: "spa",
     ecosystem: {
-      corePackages: ['@sveltejs/kit', 'svelte-check'],
-      devTools: ['@sveltejs/vite-plugin-svelte'],
-      plugins: ['eslint-plugin-svelte3']
-    }
+      corePackages: ["@sveltejs/kit", "svelte-check"],
+      devTools: ["@sveltejs/vite-plugin-svelte"],
+      plugins: ["eslint-plugin-svelte3"],
+    },
   },
 
-  'next-js': {
-    id: 'next-js',
-    name: 'Next.js',
+  "next-js": {
+    id: "next-js",
+    name: "Next.js",
     github: {
-      owner: 'vercel',
-      repo: 'next.js',
-      fullName: 'vercel/next.js'
+      owner: "vercel",
+      repo: "next.js",
+      fullName: "vercel/next.js",
     },
     npm: {
-      packageName: 'next'
+      packageName: "next",
     },
     bundle: {
-      bundlephobiaName: 'next'
+      bundlephobiaName: "next",
     },
-    website: 'https://nextjs.org',
-    docs: 'https://nextjs.org/docs',
-    category: 'meta-framework',
-    type: 'hybrid',
+    website: "https://nextjs.org",
+    docs: "https://nextjs.org/docs",
+    category: "meta-framework",
+    type: "hybrid",
     ecosystem: {
-      corePackages: ['react', 'react-dom'],
-      devTools: ['eslint-config-next'],
-      plugins: ['@next/eslint-plugin-next']
-    }
+      corePackages: ["react", "react-dom"],
+      devTools: ["eslint-config-next"],
+      plugins: ["@next/eslint-plugin-next"],
+    },
   },
 
-  'nuxt-js': {
-    id: 'nuxt-js',
-    name: 'Nuxt.js',
+  "nuxt-js": {
+    id: "nuxt-js",
+    name: "Nuxt.js",
     github: {
-      owner: 'nuxt',
-      repo: 'nuxt',
-      fullName: 'nuxt/nuxt'
+      owner: "nuxt",
+      repo: "nuxt",
+      fullName: "nuxt/nuxt",
     },
     npm: {
-      packageName: 'nuxt'
+      packageName: "nuxt",
     },
     bundle: {
-      bundlephobiaName: 'nuxt'
+      bundlephobiaName: "nuxt",
     },
-    website: 'https://nuxtjs.org',
-    docs: 'https://nuxtjs.org/docs',
-    category: 'meta-framework',
-    type: 'hybrid',
+    website: "https://nuxtjs.org",
+    docs: "https://nuxtjs.org/docs",
+    category: "meta-framework",
+    type: "hybrid",
     ecosystem: {
-      corePackages: ['vue', '@nuxt/devtools'],
-      devTools: ['@nuxt/eslint-config'],
-      plugins: ['@nuxt/module-builder']
-    }
+      corePackages: ["vue", "@nuxt/devtools"],
+      devTools: ["@nuxt/eslint-config"],
+      plugins: ["@nuxt/module-builder"],
+    },
   },
 
   astro: {
-    id: 'astro',
-    name: 'Astro',
+    id: "astro",
+    name: "Astro",
     github: {
-      owner: 'withastro',
-      repo: 'astro',
-      fullName: 'withastro/astro'
+      owner: "withastro",
+      repo: "astro",
+      fullName: "withastro/astro",
     },
     npm: {
-      packageName: 'astro'
+      packageName: "astro",
     },
     bundle: {
-      bundlephobiaName: 'astro'
+      bundlephobiaName: "astro",
     },
-    website: 'https://astro.build',
-    docs: 'https://docs.astro.build',
-    category: 'meta-framework',
-    type: 'ssg',
+    website: "https://astro.build",
+    docs: "https://docs.astro.build",
+    category: "meta-framework",
+    type: "ssg",
     ecosystem: {
-      corePackages: ['@astrojs/node'],
-      devTools: ['@astrojs/check'],
-      plugins: ['@astrojs/react', '@astrojs/vue', '@astrojs/svelte']
-    }
+      corePackages: ["@astrojs/node"],
+      devTools: ["@astrojs/check"],
+      plugins: ["@astrojs/react", "@astrojs/vue", "@astrojs/svelte"],
+    },
   },
 
   solid: {
-    id: 'solid',
-    name: 'SolidJS',
+    id: "solid",
+    name: "SolidJS",
     github: {
-      owner: 'solidjs',
-      repo: 'solid',
-      fullName: 'solidjs/solid'
+      owner: "solidjs",
+      repo: "solid",
+      fullName: "solidjs/solid",
     },
     npm: {
-      packageName: 'solid-js'
+      packageName: "solid-js",
     },
     bundle: {
-      bundlephobiaName: 'solid-js'
+      bundlephobiaName: "solid-js",
     },
-    website: 'https://solidjs.com',
-    docs: 'https://solidjs.com/docs',
-    category: 'framework',
-    type: 'spa',
+    website: "https://solidjs.com",
+    docs: "https://solidjs.com/docs",
+    category: "framework",
+    type: "spa",
     ecosystem: {
-      corePackages: ['solid-start', '@solidjs/router'],
-      devTools: ['solid-devtools', 'vite-plugin-solid'],
-      plugins: ['babel-preset-solid', 'eslint-plugin-solid']
-    }
+      corePackages: ["solid-start", "@solidjs/router"],
+      devTools: ["solid-devtools", "vite-plugin-solid"],
+      plugins: ["babel-preset-solid", "eslint-plugin-solid"],
+    },
   },
 
   qwik: {
-    id: 'qwik',
-    name: 'Qwik',
+    id: "qwik",
+    name: "Qwik",
     github: {
-      owner: 'BuilderIO',
-      repo: 'qwik',
-      fullName: 'BuilderIO/qwik'
+      owner: "BuilderIO",
+      repo: "qwik",
+      fullName: "BuilderIO/qwik",
     },
     npm: {
-      packageName: '@builder.io/qwik'
+      packageName: "@builder.io/qwik",
     },
     bundle: {
-      bundlephobiaName: '@builder.io/qwik'
+      bundlephobiaName: "@builder.io/qwik",
     },
-    website: 'https://qwik.builder.io',
-    docs: 'https://qwik.builder.io/docs',
-    category: 'framework',
-    type: 'hybrid',
+    website: "https://qwik.builder.io",
+    docs: "https://qwik.builder.io/docs",
+    category: "framework",
+    type: "hybrid",
     ecosystem: {
-      corePackages: ['@builder.io/qwik-city'],
-      devTools: ['@builder.io/eslint-plugin-qwik'],
-      plugins: ['vite-plugin-qwik']
-    }
+      corePackages: ["@builder.io/qwik-city"],
+      devTools: ["@builder.io/eslint-plugin-qwik"],
+      plugins: ["vite-plugin-qwik"],
+    },
   },
 
   lit: {
-    id: 'lit',
-    name: 'Lit',
+    id: "lit",
+    name: "Lit",
     github: {
-      owner: 'lit',
-      repo: 'lit',
-      fullName: 'lit/lit'
+      owner: "lit",
+      repo: "lit",
+      fullName: "lit/lit",
     },
     npm: {
-      packageName: 'lit'
+      packageName: "lit",
     },
     bundle: {
-      bundlephobiaName: 'lit'
+      bundlephobiaName: "lit",
     },
-    website: 'https://lit.dev',
-    docs: 'https://lit.dev/docs/',
-    category: 'library',
-    type: 'spa',
+    website: "https://lit.dev",
+    docs: "https://lit.dev/docs/",
+    category: "library",
+    type: "spa",
     ecosystem: {
-      corePackages: ['@lit/reactive-element', 'lit-html'],
-      devTools: ['@lit/eslint-plugin'],
-      plugins: ['@lit/localize']
-    }
+      corePackages: ["@lit/reactive-element", "lit-html"],
+      devTools: ["@lit/eslint-plugin"],
+      plugins: ["@lit/localize"],
+    },
   },
 
   alpine: {
-    id: 'alpine',
-    name: 'Alpine.js',
+    id: "alpine",
+    name: "Alpine.js",
     github: {
-      owner: 'alpinejs',
-      repo: 'alpine',
-      fullName: 'alpinejs/alpine'
+      owner: "alpinejs",
+      repo: "alpine",
+      fullName: "alpinejs/alpine",
     },
     npm: {
-      packageName: 'alpinejs'
+      packageName: "alpinejs",
     },
     bundle: {
-      bundlephobiaName: 'alpinejs'
+      bundlephobiaName: "alpinejs",
     },
-    website: 'https://alpinejs.dev',
-    docs: 'https://alpinejs.dev/start-here',
-    category: 'library',
-    type: 'spa'
+    website: "https://alpinejs.dev",
+    docs: "https://alpinejs.dev/start-here",
+    category: "library",
+    type: "spa",
   },
 
   preact: {
-    id: 'preact',
-    name: 'Preact',
+    id: "preact",
+    name: "Preact",
     github: {
-      owner: 'preactjs',
-      repo: 'preact',
-      fullName: 'preactjs/preact'
+      owner: "preactjs",
+      repo: "preact",
+      fullName: "preactjs/preact",
     },
     npm: {
-      packageName: 'preact'
+      packageName: "preact",
     },
     bundle: {
-      bundlephobiaName: 'preact'
+      bundlephobiaName: "preact",
     },
-    website: 'https://preactjs.com',
-    docs: 'https://preactjs.com/guide/v10/getting-started',
-    category: 'library',
-    type: 'spa',
+    website: "https://preactjs.com",
+    docs: "https://preactjs.com/guide/v10/getting-started",
+    category: "library",
+    type: "spa",
     ecosystem: {
-      corePackages: ['preact-router'],
-      devTools: ['@preact/preset-vite'],
-      plugins: ['@babel/preset-react']
-    }
+      corePackages: ["preact-router"],
+      devTools: ["@preact/preset-vite"],
+      plugins: ["@babel/preset-react"],
+    },
   },
 
   remix: {
-    id: 'remix',
-    name: 'Remix',
+    id: "remix",
+    name: "Remix",
     github: {
-      owner: 'remix-run',
-      repo: 'remix',
-      fullName: 'remix-run/remix'
+      owner: "remix-run",
+      repo: "remix",
+      fullName: "remix-run/remix",
     },
     npm: {
-      packageName: '@remix-run/react'
+      packageName: "@remix-run/react",
     },
     bundle: {
-      bundlephobiaName: '@remix-run/react'
+      bundlephobiaName: "@remix-run/react",
     },
-    website: 'https://remix.run',
-    docs: 'https://remix.run/docs',
-    category: 'meta-framework',
-    type: 'ssr',
+    website: "https://remix.run",
+    docs: "https://remix.run/docs",
+    category: "meta-framework",
+    type: "ssr",
     ecosystem: {
-      corePackages: ['@remix-run/node', '@remix-run/serve'],
-      devTools: ['@remix-run/dev'],
-      plugins: ['@remix-run/eslint-config']
-    }
+      corePackages: ["@remix-run/node", "@remix-run/serve"],
+      devTools: ["@remix-run/dev"],
+      plugins: ["@remix-run/eslint-config"],
+    },
   },
 
   gatsby: {
-    id: 'gatsby',
-    name: 'Gatsby',
+    id: "gatsby",
+    name: "Gatsby",
     github: {
-      owner: 'gatsbyjs',
-      repo: 'gatsby',
-      fullName: 'gatsbyjs/gatsby'
+      owner: "gatsbyjs",
+      repo: "gatsby",
+      fullName: "gatsbyjs/gatsby",
     },
     npm: {
-      packageName: 'gatsby'
+      packageName: "gatsby",
     },
     bundle: {
-      bundlephobiaName: 'gatsby'
+      bundlephobiaName: "gatsby",
     },
-    website: 'https://gatsbyjs.com',
-    docs: 'https://gatsbyjs.com/docs',
-    category: 'meta-framework',
-    type: 'ssg',
+    website: "https://gatsbyjs.com",
+    docs: "https://gatsbyjs.com/docs",
+    category: "meta-framework",
+    type: "ssg",
     ecosystem: {
-      corePackages: ['gatsby-cli', 'gatsby-plugin-react-helmet'],
-      devTools: ['gatsby-plugin-eslint'],
-      plugins: ['gatsby-source-filesystem', 'gatsby-transformer-remark']
-    }
+      corePackages: ["gatsby-cli", "gatsby-plugin-react-helmet"],
+      devTools: ["gatsby-plugin-eslint"],
+      plugins: ["gatsby-source-filesystem", "gatsby-transformer-remark"],
+    },
   },
 
   ember: {
-    id: 'ember',
-    name: 'Ember.js',
+    id: "ember",
+    name: "Ember.js",
     github: {
-      owner: 'emberjs',
-      repo: 'ember.js',
-      fullName: 'emberjs/ember.js'
+      owner: "emberjs",
+      repo: "ember.js",
+      fullName: "emberjs/ember.js",
     },
     npm: {
-      packageName: 'ember-source'
+      packageName: "ember-source",
     },
     bundle: {
-      bundlephobiaName: 'ember-source'
+      bundlephobiaName: "ember-source",
     },
-    website: 'https://emberjs.com',
-    docs: 'https://guides.emberjs.com',
-    category: 'framework',
-    type: 'spa',
+    website: "https://emberjs.com",
+    docs: "https://guides.emberjs.com",
+    category: "framework",
+    type: "spa",
     ecosystem: {
-      corePackages: ['ember-cli', 'ember-data'],
-      devTools: ['ember-inspector'],
-      plugins: ['eslint-plugin-ember']
-    }
+      corePackages: ["ember-cli", "ember-data"],
+      devTools: ["ember-inspector"],
+      plugins: ["eslint-plugin-ember"],
+    },
   },
 
   backbone: {
-    id: 'backbone',
-    name: 'Backbone.js',
+    id: "backbone",
+    name: "Backbone.js",
     github: {
-      owner: 'jashkenas',
-      repo: 'backbone',
-      fullName: 'jashkenas/backbone'
+      owner: "jashkenas",
+      repo: "backbone",
+      fullName: "jashkenas/backbone",
     },
     npm: {
-      packageName: 'backbone'
+      packageName: "backbone",
     },
     bundle: {
-      bundlephobiaName: 'backbone'
+      bundlephobiaName: "backbone",
     },
-    website: 'https://backbonejs.org',
-    docs: 'https://backbonejs.org',
-    category: 'library',
-    type: 'spa'
+    website: "https://backbonejs.org",
+    docs: "https://backbonejs.org",
+    category: "library",
+    type: "spa",
   },
 
   stimulus: {
-    id: 'stimulus',
-    name: 'Stimulus',
+    id: "stimulus",
+    name: "Stimulus",
     github: {
-      owner: 'hotwired',
-      repo: 'stimulus',
-      fullName: 'hotwired/stimulus'
+      owner: "hotwired",
+      repo: "stimulus",
+      fullName: "hotwired/stimulus",
     },
     npm: {
-      packageName: '@hotwired/stimulus'
+      packageName: "@hotwired/stimulus",
     },
     bundle: {
-      bundlephobiaName: '@hotwired/stimulus'
+      bundlephobiaName: "@hotwired/stimulus",
     },
-    website: 'https://stimulus.hotwired.dev',
-    docs: 'https://stimulus.hotwired.dev/handbook/introduction',
-    category: 'library',
-    type: 'spa'
+    website: "https://stimulus.hotwired.dev",
+    docs: "https://stimulus.hotwired.dev/handbook/introduction",
+    category: "library",
+    type: "spa",
   },
 
   fresh: {
-    id: 'fresh',
-    name: 'Fresh',
+    id: "fresh",
+    name: "Fresh",
     github: {
-      owner: 'denoland',
-      repo: 'fresh',
-      fullName: 'denoland/fresh'
+      owner: "denoland",
+      repo: "fresh",
+      fullName: "denoland/fresh",
     },
     npm: {
-      packageName: '$fresh'
+      packageName: "$fresh",
     },
     bundle: {
-      bundlephobiaName: '$fresh'
+      bundlephobiaName: "$fresh",
     },
-    website: 'https://fresh.deno.dev',
-    docs: 'https://fresh.deno.dev/docs',
-    category: 'meta-framework',
-    type: 'ssr'
-  }
+    website: "https://fresh.deno.dev",
+    docs: "https://fresh.deno.dev/docs",
+    category: "meta-framework",
+    type: "ssr",
+  },
 };
 
 // Helper functions
@@ -475,10 +479,18 @@ export function getAllFrameworkIds(): string[] {
   return Object.keys(FRAMEWORK_METADATA);
 }
 
-export function getFrameworksByCategory(category: FrameworkMetadata['category']): FrameworkMetadata[] {
-  return Object.values(FRAMEWORK_METADATA).filter(framework => framework.category === category);
+export function getFrameworksByCategory(
+  category: FrameworkMetadata["category"],
+): FrameworkMetadata[] {
+  return Object.values(FRAMEWORK_METADATA).filter(
+    (framework) => framework.category === category,
+  );
 }
 
-export function getFrameworksByType(type: FrameworkMetadata['type']): FrameworkMetadata[] {
-  return Object.values(FRAMEWORK_METADATA).filter(framework => framework.type === type);
+export function getFrameworksByType(
+  type: FrameworkMetadata["type"],
+): FrameworkMetadata[] {
+  return Object.values(FRAMEWORK_METADATA).filter(
+    (framework) => framework.type === type,
+  );
 }

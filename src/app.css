@@ -1,36 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 
 :root {
   /* Colors - Dark high-tech theme */
   --color-primary: #0a0f1c;
   --color-secondary: #111827;
   --color-tertiary: #1f2937;
-  
+
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-tertiary: #64748b;
   --text-danger: #ef4444;
-  
+
   --accent-primary: #3b82f6;
   --accent-gradient: #8b5cf6;
   --accent-secondary: rgba(59, 130, 246, 0.1);
   --accent-shadow-light: rgba(59, 130, 246, 0.3);
   --accent-shadow-medium: rgba(59, 130, 246, 0.4);
-  
+
   --surface-primary: var(--color-primary);
   --surface-secondary: var(--color-secondary);
   --surface-tertiary: var(--color-tertiary);
   --surface-danger: rgba(239, 68, 68, 0.1);
-  
+
   --border-primary: rgba(148, 163, 184, 0.1);
   --border-secondary: rgba(148, 163, 184, 0.2);
-  
+
   --shadow-color: rgba(0, 0, 0, 0.3);
 
   /* White overlays for effects */
   --overlay-light: rgba(255, 255, 255, 0.05);
   --overlay-medium: rgba(255, 255, 255, 0.4);
-  
+
   /* Spacing */
   --container-max-width: 100rem;
   --sidebar-width: 25%;
@@ -43,12 +43,12 @@
 
   /* Alternative spacing values */
   --gap-sm-alt: 0.875rem;
-  
+
   /* Animation */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.25s ease;
   --transition-slow: 0.4s ease;
-  
+
   /* Typography */
   --font-xs: 0.75rem;
   --font-sm: 0.875rem;
@@ -86,7 +86,13 @@
 }
 
 html {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   line-height: 1.6;
   font-size: 16px;
   scroll-behavior: smooth;
@@ -96,10 +102,15 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-primary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 50%,
+    var(--color-primary) 100%
+  );
   color: var(--text-primary);
   min-height: 100vh;
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   overflow-x: hidden;
 }
 
@@ -110,21 +121,34 @@ body {
 
 /* Background pattern */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+  background:
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(59, 130, 246, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(139, 92, 246, 0.1) 0%,
+      transparent 50%
+    );
   pointer-events: none;
   z-index: -1;
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   font-weight: 700;
   line-height: 1.3;
@@ -134,7 +158,11 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
   font-size: 2.75rem;
   font-weight: 900;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-gradient));
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-gradient)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -255,7 +283,11 @@ input[type="range"] {
 }
 
 .btn.btn-primary {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-gradient));
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-gradient)
+  );
   color: var(--text-primary);
   border: 1px solid var(--accent-primary);
 }
@@ -325,15 +357,27 @@ input[type="range"] {
   flex-direction: column;
 }
 
-.text-center { text-align: center; }
-.text-primary { color: var(--text-primary); }
-.text-secondary { color: var(--text-secondary); }
-.text-tertiary { color: var(--text-tertiary); }
+.text-center {
+  text-align: center;
+}
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.text-tertiary {
+  color: var(--text-tertiary);
+}
 
 /* Animation utilities */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
@@ -370,7 +414,8 @@ input[type="range"] {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -405,15 +450,15 @@ input[type="range"] {
   html {
     font-size: 14px;
   }
-  
+
   h1 {
     font-size: 1.875rem;
   }
-  
+
   h2 {
     font-size: 1.5rem;
   }
-  
+
   h3 {
     font-size: 1.25rem;
   }

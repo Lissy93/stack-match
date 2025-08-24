@@ -21,7 +21,7 @@ class APICache {
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
-      ttl: ttlMs
+      ttl: ttlMs,
     });
   }
 
@@ -86,7 +86,7 @@ class APICache {
       entries: entries.length,
       keys,
       oldestEntry: sorted[0]?.[0],
-      newestEntry: sorted[sorted.length - 1]?.[0]
+      newestEntry: sorted[sorted.length - 1]?.[0],
     };
   }
 
@@ -133,7 +133,7 @@ class RateLimiter {
       // Reset or create new entry
       this.limits.set(identifier, {
         count: 1,
-        resetTime: now + this.windowMs
+        resetTime: now + this.windowMs,
       });
       return true;
     }
@@ -177,7 +177,7 @@ interface FetchOptions extends RequestInit {
 
 export async function fetchWithRetry(
   url: string,
-  options: FetchOptions = {}
+  options: FetchOptions = {},
 ): Promise<Response> {
   const {
     retries = 3,
@@ -195,7 +195,7 @@ export async function fetchWithRetry(
 
       const response = await fetch(url, {
         ...fetchOptions,
-        signal: controller.signal
+        signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
@@ -206,18 +206,20 @@ export async function fetchWithRetry(
       }
 
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-
     } catch (error) {
       lastError = error as Error;
 
       // Don't retry on abort (timeout) for final attempt
-      if (attempt === retries || error instanceof DOMException && error.name === 'AbortError') {
+      if (
+        attempt === retries ||
+        (error instanceof DOMException && error.name === "AbortError")
+      ) {
         break;
       }
 
       // Exponential backoff with jitter
       const delay = retryDelay * Math.pow(2, attempt) + Math.random() * 1000;
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 
@@ -230,35 +232,39 @@ export const rateLimiter = new RateLimiter(100, 60 * 1000); // 100 requests per 
 
 // Cache key generators
 export function getCacheKey(type: string, ...params: string[]): string {
-  return `${type}:${params.join(':')}`;
+  return `${type}:${params.join(":")}`;
 }
 
-export function getGitHubCacheKey(owner: string, repo: string, endpoint: string): string {
-  return getCacheKey('github', owner, repo, endpoint);
+export function getGitHubCacheKey(
+  owner: string,
+  repo: string,
+  endpoint: string,
+): string {
+  return getCacheKey("github", owner, repo, endpoint);
 }
 
 export function getNPMCacheKey(packageName: string, endpoint: string): string {
-  return getCacheKey('npm', packageName, endpoint);
+  return getCacheKey("npm", packageName, endpoint);
 }
 
 export function getBundleCacheKey(packageName: string): string {
-  return getCacheKey('bundle', packageName);
+  return getCacheKey("bundle", packageName);
 }
 
 export function getSecurityCacheKey(packageName: string): string {
-  return getCacheKey('security', packageName);
+  return getCacheKey("security", packageName);
 }
 
 // Cache TTL constants (in milliseconds)
 export const CACHE_TTL = {
-  GITHUB_REPO: 30 * 60 * 1000,      // 30 minutes
-  GITHUB_ACTIVITY: 60 * 60 * 1000,  // 1 hour
-  GITHUB_RELEASES: 60 * 60 * 1000,  // 1 hour
-  NPM_PACKAGE: 30 * 60 * 1000,      // 30 minutes
-  NPM_DOWNLOADS: 60 * 60 * 1000,    // 1 hour
+  GITHUB_REPO: 30 * 60 * 1000, // 30 minutes
+  GITHUB_ACTIVITY: 60 * 60 * 1000, // 1 hour
+  GITHUB_RELEASES: 60 * 60 * 1000, // 1 hour
+  NPM_PACKAGE: 30 * 60 * 1000, // 30 minutes
+  NPM_DOWNLOADS: 60 * 60 * 1000, // 1 hour
   BUNDLE_SIZE: 24 * 60 * 60 * 1000, // 24 hours
   SECURITY_AUDIT: 6 * 60 * 60 * 1000, // 6 hours
-  FRAMEWORK_STATS: 60 * 60 * 1000    // 1 hour for complete response
+  FRAMEWORK_STATS: 60 * 60 * 1000, // 1 hour for complete response
 } as const;
 
 // Health check for external APIs
@@ -269,25 +275,27 @@ export async function checkAPIHealth(): Promise<{
   osv: boolean;
 }> {
   const checks = await Promise.allSettled([
-    fetch('https://api.github.com/rate_limit', { method: 'HEAD' }),
-    fetch('https://registry.npmjs.org/react/latest', { method: 'HEAD' }),
-    fetch('https://bundlephobia.com/api/size?package=react', { method: 'HEAD' }),
-    fetch('https://api.osv.dev/v1/query', { method: 'POST', body: '{}' })
+    fetch("https://api.github.com/rate_limit", { method: "HEAD" }),
+    fetch("https://registry.npmjs.org/react/latest", { method: "HEAD" }),
+    fetch("https://bundlephobia.com/api/size?package=react", {
+      method: "HEAD",
+    }),
+    fetch("https://api.osv.dev/v1/query", { method: "POST", body: "{}" }),
   ]);
 
   return {
-    github: checks[0].status === 'fulfilled' && checks[0].value.ok,
-    npm: checks[1].status === 'fulfilled' && checks[1].value.ok,
-    bundlephobia: checks[2].status === 'fulfilled' && checks[2].value.ok,
-    osv: checks[3].status === 'fulfilled'
+    github: checks[0].status === "fulfilled" && checks[0].value.ok,
+    npm: checks[1].status === "fulfilled" && checks[1].value.ok,
+    bundlephobia: checks[2].status === "fulfilled" && checks[2].value.ok,
+    osv: checks[3].status === "fulfilled",
   };
 }
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
+process.on("SIGTERM", () => {
   frameworkCache.destroy();
 });
 
-process.on('SIGINT', () => {
+process.on("SIGINT", () => {
   frameworkCache.destroy();
 });
