@@ -1,0 +1,546 @@
+{
+  "frameworks": [
+    {
+      "name": "alpine",
+      "performance": 6,
+      "maintainability": 8,
+      "bundleSize": 9,
+      "buildTimes": 9,
+      "ecosystem": 5,
+      "scalability": 4,
+      "learningCurve": 9,
+      "tooling": 6,
+      "stability": 6,
+      "viability": 6
+    },
+    {
+      "name": "angular",
+      "performance": 7,
+      "maintainability": 6,
+      "bundleSize": 4,
+      "buildTimes": 5,
+      "ecosystem": 9,
+      "scalability": 10,
+      "learningCurve": 5,
+      "tooling": 9,
+      "stability": 10,
+      "viability": 10
+    },
+    {
+      "name": "backbone",
+      "performance": 4,
+      "maintainability": 5,
+      "bundleSize": 8,
+      "buildTimes": 8,
+      "ecosystem": 4,
+      "scalability": 5,
+      "learningCurve": 6,
+      "tooling": 4,
+      "stability": 5,
+      "viability": 3
+    },
+    {
+      "name": "ember",
+      "performance": 5,
+      "maintainability": 7,
+      "bundleSize": 5,
+      "buildTimes": 4,
+      "ecosystem": 6,
+      "scalability": 8,
+      "learningCurve": 4,
+      "tooling": 7,
+      "stability": 8,
+      "viability": 5
+    },
+    {
+      "name": "jquery",
+      "performance": 3,
+      "maintainability": 4,
+      "bundleSize": 9,
+      "buildTimes": 10,
+      "ecosystem": 8,
+      "scalability": 2,
+      "learningCurve": 10,
+      "tooling": 5,
+      "stability": 4,
+      "viability": 2
+    },
+    {
+      "name": "lit",
+      "performance": 8,
+      "maintainability": 7,
+      "bundleSize": 8,
+      "buildTimes": 8,
+      "ecosystem": 6,
+      "scalability": 7,
+      "learningCurve": 5,
+      "tooling": 7,
+      "stability": 7,
+      "viability": 7
+    },
+    {
+      "name": "marko",
+      "performance": 9,
+      "maintainability": 7,
+      "bundleSize": 9,
+      "buildTimes": 7,
+      "ecosystem": 5,
+      "scalability": 7,
+      "learningCurve": 6,
+      "tooling": 6,
+      "stability": 7,
+      "viability": 6
+    },
+    {
+      "name": "nue",
+      "performance": 8,
+      "maintainability": 6,
+      "bundleSize": 8,
+      "buildTimes": 8,
+      "ecosystem": 2,
+      "scalability": 5,
+      "learningCurve": 5,
+      "tooling": 5,
+      "stability": 4,
+      "viability": 3
+    },
+    {
+      "name": "preact",
+      "performance": 9,
+      "maintainability": 7,
+      "bundleSize": 10,
+      "buildTimes": 9,
+      "ecosystem": 7,
+      "scalability": 7,
+      "learningCurve": 7,
+      "tooling": 8,
+      "stability": 8,
+      "viability": 8
+    },
+    {
+      "name": "qwik",
+      "performance": 10,
+      "maintainability": 6,
+      "bundleSize": 9,
+      "buildTimes": 6,
+      "ecosystem": 6,
+      "scalability": 7,
+      "learningCurve": 6,
+      "tooling": 7,
+      "stability": 7,
+      "viability": 7
+    },
+    {
+      "name": "rax",
+      "performance": 8,
+      "maintainability": 6,
+      "bundleSize": 8,
+      "buildTimes": 8,
+      "ecosystem": 5,
+      "scalability": 7,
+      "learningCurve": 6,
+      "tooling": 6,
+      "stability": 6,
+      "viability": 5
+    },
+    {
+      "name": "riot",
+      "performance": 7,
+      "maintainability": 7,
+      "bundleSize": 9,
+      "buildTimes": 9,
+      "ecosystem": 4,
+      "scalability": 6,
+      "learningCurve": 7,
+      "tooling": 6,
+      "stability": 6,
+      "viability": 5
+    },
+    {
+      "name": "react",
+      "performance": 8,
+      "maintainability": 7,
+      "bundleSize": 6,
+      "buildTimes": 8,
+      "ecosystem": 10,
+      "scalability": 9,
+      "learningCurve": 7,
+      "tooling": 10,
+      "stability": 9,
+      "viability": 10
+    },
+    {
+      "name": "solid",
+      "performance": 10,
+      "maintainability": 8,
+      "bundleSize": 9,
+      "buildTimes": 8,
+      "ecosystem": 6,
+      "scalability": 7,
+      "learningCurve": 6,
+      "tooling": 7,
+      "stability": 8,
+      "viability": 8
+    },
+    {
+      "name": "svelte",
+      "performance": 9,
+      "maintainability": 8,
+      "bundleSize": 9,
+      "buildTimes": 9,
+      "ecosystem": 8,
+      "scalability": 7,
+      "learningCurve": 7,
+      "tooling": 9,
+      "stability": 8,
+      "viability": 9
+    },
+    {
+      "name": "vanilla-js",
+      "performance": 10,
+      "maintainability": 5,
+      "bundleSize": 10,
+      "buildTimes": 10,
+      "ecosystem": 2,
+      "scalability": 5,
+      "learningCurve": 4,
+      "tooling": 3,
+      "stability": 8,
+      "viability": 10
+    },
+    {
+      "name": "vanjs",
+      "performance": 9,
+      "maintainability": 6,
+      "bundleSize": 10,
+      "buildTimes": 9,
+      "ecosystem": 2,
+      "scalability": 5,
+      "learningCurve": 6,
+      "tooling": 4,
+      "stability": 5,
+      "viability": 4
+    },
+    {
+      "name": "vue",
+      "performance": 8,
+      "maintainability": 9,
+      "bundleSize": 8,
+      "buildTimes": 9,
+      "ecosystem": 9,
+      "scalability": 9,
+      "learningCurve": 9,
+      "tooling": 9,
+      "stability": 9,
+      "viability": 10
+    }
+  ],
+  "meta": [
+    {
+      "id": "react",
+      "name": "React",
+      "description": "Component-based library for building user interfaces with a large ecosystem",
+      "longDescription": "Declarative UI library with component-based architecture and virtual DOM.",
+      "branding": {
+        "iconName": "react",
+        "fallbackEmoji": "⚛️",
+        "color": "#61DAFB",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/react.png"
+      },
+      "links": {
+        "website": "https://react.dev/",
+        "docs": "https://react.dev/learn",
+        "github": "https://github.com/facebook/react",
+        "npmPackage": "react",
+        "video": "Tn6-PIqc4UM"
+      },
+      "example": {
+        "title": "Web Check",
+        "description": "All-in-one OSINT tool for analyzing any site",
+        "repo": "https://github.com/Lissy93/web-check",
+        "website": "https://web-check.xyz/",
+        "logo": "https://raw.githubusercontent.com/Lissy93/web-check/master/public/android-chrome-192x192.png"
+      }
+    },
+    {
+      "id": "angular",
+      "name": "Angular",
+      "description": "Full-featured framework with TypeScript, dependency injection, and CLI tooling",
+      "longDescription": "Opinionated platform with built-in routing, forms, HTTP client, and testing.",
+      "branding": {
+        "iconName": "angular",
+        "fallbackEmoji": "🅰️",
+        "color": "#DD0031",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/angular.png"
+      },
+      "links": {
+        "website": "https://angular.io/",
+        "docs": "https://angular.io/docs",
+        "github": "https://github.com/angular/angular",
+        "npmPackage": "@angular/core",
+        "video": "Ata9cSC2WpM"
+      },
+      "example": {
+        "title": "Domain Locker",
+        "description": "Domain name portfolio manager",
+        "repo": "https://github.com/Lissy93/domain-locker",
+        "website": "https://domain-locker.com",
+        "logo": "https://storage.googleapis.com/as93-screenshots/project-logos/domain-locker.png"
+      }
+    },
+    {
+      "id": "svelte",
+      "name": "Svelte",
+      "description": "Compile-time optimized framework with no runtime overhead and small bundles",
+      "longDescription": "Compiled framework that generates vanilla JavaScript with no virtual DOM.",
+      "branding": {
+        "iconName": "svelte",
+        "fallbackEmoji": "🔥",
+        "color": "#ff3e00",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/svelte.png"
+      },
+      "links": {
+        "website": "https://svelte.dev/",
+        "docs": "https://svelte.dev/docs",
+        "github": "https://github.com/sveltejs/svelte",
+        "npmPackage": "svelte",
+        "video": "rv3Yq-B8qp4"
+      },
+      "example": {
+        "title": "Portainer Templates",
+        "description": "Automated Docker deployment specs",
+        "repo": "https://github.com/Lissy93/portainer-templates",
+        "website": "https://portainer-templates.as93.net/",
+        "logo": "https://storage.googleapis.com/as93-screenshots/project-logos/portainer-templates.png"
+      }
+    },
+    {
+      "id": "preact",
+      "name": "Preact",
+      "description": "3KB React alternative with the same API and ES6 features for fast apps",
+      "longDescription": "Lightweight React alternative with the same API but 3KB bundle size.",
+      "branding": {
+        "iconName": "preact",
+        "fallbackEmoji": "💜",
+        "color": "#673AB8",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/preact.png"
+      },
+      "links": {
+        "website": "https://preactjs.com/",
+        "docs": "https://preactjs.com/guide/v10/getting-started",
+        "github": "https://github.com/preactjs/preact",
+        "npmPackage": "preact",
+        "video": "wnUJqJmh33E"
+      },
+      "example": {
+        "title": "",
+        "description": "",
+        "repo": "",
+        "website": "",
+        "logo": ""
+      }
+    },
+    {
+      "id": "solid",
+      "name": "Solid.js",
+      "description": "Fine-grained reactive framework with no virtual DOM and strong performance",
+      "longDescription": "Reactive framework with fine-grained updates and compile-time optimizations.",
+      "branding": {
+        "iconName": "solid",
+        "fallbackEmoji": "🚀",
+        "color": "#2C4F7C",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/solid.png"
+      },
+      "links": {
+        "website": "https://www.solidjs.com/",
+        "docs": "https://www.solidjs.com/docs/latest",
+        "github": "https://github.com/solidjs/solid",
+        "npmPackage": "solid-js",
+        "video": "hw3Bx5vxKl0"
+      },
+      "example": {
+        "title": "Chief Snack Officer",
+        "description": "Office snack management app",
+        "repo": "https://github.com/Lissy93/cso",
+        "website": "https://lissy93.github.io/cso",
+        "logo": "https://storage.googleapis.com/as93-screenshots/project-logos/cso.png"
+      }
+    },
+    {
+      "id": "qwik",
+      "name": "Qwik",
+      "description": "Resumable framework with O(1) loading time regardless of app complexity",
+      "longDescription": "Resumable framework that loads instantly by streaming HTML and lazy-loading JS.",
+      "branding": {
+        "iconName": "qwik",
+        "fallbackEmoji": "⚡",
+        "color": "#ac7ef4",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/qwik.png"
+      },
+      "links": {
+        "website": "https://qwik.builder.io/",
+        "docs": "https://qwik.builder.io/docs/",
+        "github": "https://github.com/QwikDev/qwik",
+        "npmPackage": "@builder.io/qwik",
+        "video": "x2eF3YLiNhY"
+      },
+      "example": {
+        "title": "Digital Defense",
+        "description": "Interactive personal security checklist",
+        "repo": "https://github.com/Lissy93/personal-security-checklist",
+        "website": "https://digital-defense.io",
+        "logo": "https://storage.googleapis.com/as93-screenshots/project-logos/digital-defense.png"
+      }
+    },
+    {
+      "id": "vue",
+      "name": "Vue",
+      "description": "Progressive framework that's incrementally adoptable with flexible architecture",
+      "longDescription": "Approachable framework that scales between a library and full-featured SPA.",
+      "branding": {
+        "iconName": "vuedotjs",
+        "fallbackEmoji": "💚",
+        "color": "#4FC08D",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/vue.png"
+      },
+      "links": {
+        "website": "https://vuejs.org/",
+        "docs": "https://vuejs.org/guide/",
+        "github": "https://github.com/vuejs/core",
+        "npmPackage": "vue",
+        "video": "nhBVL41-_Cw"
+      },
+      "example": {
+        "title": "Dashy",
+        "description": "Highly configurable self-hostable server dashboard",
+        "repo": "https://github.com/Lissy93/dashy",
+        "website": "https://dashy.to",
+        "logo": "https://i.ibb.co/yhbt6CY/dashy.png"
+      }
+    },
+    {
+      "id": "jquery",
+      "name": "jQuery",
+      "description": "Fast, lightweight DOM manipulation library with cross-browser compatibility",
+      "longDescription": "DOM manipulation library that simplifies HTML traversing and event handling.",
+      "branding": {
+        "iconName": "jquery",
+        "fallbackEmoji": "💙",
+        "color": "#0769AD",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/jquery.png"
+      },
+      "links": {
+        "website": "https://jquery.com/",
+        "docs": "https://api.jquery.com/",
+        "github": "https://github.com/jquery/jquery",
+        "npmPackage": "jquery",
+        "video": "UU-GebNqdbg"
+      },
+      "example": {}
+    },
+    {
+      "id": "alpine",
+      "name": "Alpine.js",
+      "description": "Minimal framework for composing behavior directly in HTML markup",
+      "longDescription": "Lightweight framework that adds reactive behavior directly to HTML.",
+      "branding": {
+        "iconName": "alpinedotjs",
+        "fallbackEmoji": "🏔️",
+        "color": "#8BC0D0",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/alpine.png"
+      },
+      "links": {
+        "website": "https://alpinejs.dev/",
+        "docs": "https://alpinejs.dev/start-here",
+        "github": "https://github.com/alpinejs/alpine",
+        "npmPackage": "alpinejs",
+        "video": "CPXUsbgv_V0"
+      },
+      "example": {
+        "title": "Who Dat",
+        "description": "WHOIS lookup for domain registration info",
+        "repo": "https://github.com/Lissy93/who-dat",
+        "website": "https://who-dat.as93.net",
+        "logo": "https://storage.googleapis.com/as93-screenshots/project-logos/who-dat.png"
+      }
+    },
+    {
+      "id": "lit",
+      "name": "Lit",
+      "description": "Web Components library built on standard APIs with efficient updates",
+      "longDescription": "Simple library for building web components with declarative templates.",
+      "branding": {
+        "iconName": "lit",
+        "fallbackEmoji": "🔥",
+        "color": "#324fff",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/lit.png"
+      },
+      "links": {
+        "website": "https://lit.dev/",
+        "docs": "https://lit.dev/docs/",
+        "github": "https://github.com/lit/lit",
+        "npmPackage": "lit",
+        "video": "Jy0dMy2qDMo"
+      },
+      "example": {
+        "title": "Email Comparison",
+        "description": "Objective testing of mail providers",
+        "repo": "https://github.com/Lissy93/email-comparison",
+        "website": "https://email-comparison.as93.net/",
+        "logo": "https://storage.googleapis.com/as93-screenshots/project-logos/email-comparison.png"
+      }
+    },
+    {
+      "id": "vanjs",
+      "name": "VanJS",
+      "description": "Ultra-lightweight reactive UI framework with under 1kB bundle size",
+      "longDescription": "Minimalist framework that's smaller than most utility libraries.",
+      "branding": {
+        "iconName": "vitess",
+        "fallbackEmoji": "🚐",
+        "color": "#F44336",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/vanjs.png"
+      },
+      "links": {
+        "website": "https://vanjs.org/",
+        "docs": "https://vanjs.org/tutorial",
+        "github": "https://github.com/vanjs-org/van",
+        "npmPackage": "vanjs-core",
+        "video": "Oh2IEVqarHs"
+      },
+      "example": {
+        "title": "RAID Calculator",
+        "description": "RAID array capacity and fault tolerance",
+        "repo": "https://github.com/Lissy93/raid-calculator",
+        "website": "https://raid-calculator.as93.net/",
+        "logo": "https://storage.googleapis.com/as93-screenshots/project-screenshots/raid-caclularor.png"
+      }
+    },
+    {
+      "id": "vanilla",
+      "name": "Vanilla JS",
+      "description": "Pure JavaScript without frameworks or libraries for maximum compatibility",
+      "longDescription": "Native browser JavaScript that runs everywhere without dependencies.",
+      "branding": {
+        "iconName": "javascript",
+        "fallbackEmoji": "🧪",
+        "color": "#F7DF1E",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/javascript.png"
+      },
+      "links": {
+        "website": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+        "docs": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide",
+        "github": "https://github.com/tc39/ecma262",
+        "npmPackage": "",
+        "video": "DHjqpvDnNGE"
+      },
+      "example": {
+        "title": "",
+        "description": "",
+        "repo": "",
+        "website": "",
+        "logo": ""
+      }
+    }
+  ]
+}
