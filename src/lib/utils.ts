@@ -148,3 +148,38 @@ export function debounce<T extends (...args: any[]) => any>(
     timeoutId = setTimeout(() => func(...args), delay);
   };
 }
+
+// LocalStorage utilities with error handling
+const STORAGE_KEYS = {
+  SHORTLIST: 'stack-match-shortlist'
+} as const;
+
+// Save shortlist to localStorage
+export function saveShortlistToStorage(shortlist: string[]): void {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.SHORTLIST, JSON.stringify(shortlist));
+    }
+  } catch (error) {
+    console.warn('Failed to save shortlist to localStorage:', error);
+  }
+}
+
+// Load shortlist from localStorage with validation
+export function loadShortlistFromStorage(): string[] {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const stored = localStorage.getItem(STORAGE_KEYS.SHORTLIST);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // Validate that it's an array of strings
+        if (Array.isArray(parsed) && parsed.every(item => typeof item === 'string')) {
+          return parsed;
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to load shortlist from localStorage:', error);
+  }
+  return []; // Return empty array as fallback
+}

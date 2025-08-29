@@ -5,6 +5,7 @@
   import type { Weights } from '../types';
 
   export let onPresetSelect: (preset: Weights) => void;
+  export let activePreset: string | null = null;
 
   // Icon mapping for presets
   const presetIcons: Record<PresetName, any> = {
@@ -36,6 +37,7 @@
       <button
         type="button"
         class="preset-btn"
+        class:selected={activePreset === presetName}
         on:click={() => selectPreset(presetName)}
         aria-label="Apply {formatPresetName(presetName)} preset"
       >
@@ -48,20 +50,27 @@
 
 <style>
   .preset-container {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
   }
 
   .preset-title {
     font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin: 0 0 1rem 0;
+    margin: 0;
+    min-width: 128px;
+    opacity: 0.85;
   }
 
   .preset-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 0.75rem;
+    width: 100%;
   }
 
   .preset-btn {
@@ -70,7 +79,7 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.75rem 1rem;
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-gradient));
+    background: var(--color-primary);
     border: none;
     border-radius: 0.75rem;
     color: white;
@@ -80,6 +89,13 @@
     transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
+    border: 1px solid var(--border-primary);
+  }
+
+  .preset-btn.selected {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-gradient));
+    border-color: var(--accent-primary);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
   }
 
   .preset-btn:before {
@@ -89,7 +105,7 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
     transition: left 0.5s;
   }
 
@@ -97,6 +113,16 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 25px var(--shadow-color);
   }
+
+  .preset-btn.selected:hover {
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+  }
+
+  .preset-btn.selected:before:hover {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  }
+
+
 
   .preset-btn:hover:before {
     left: 100%;

@@ -223,14 +223,14 @@
     },
     {
       "name": "vue",
-      "performance": 8,
+      "performance": 7,
       "maintainability": 9,
-      "bundleSize": 8,
+      "bundleSize": 7,
       "buildTimes": 9,
-      "ecosystem": 9,
-      "scalability": 9,
+      "ecosystem": 8,
+      "scalability": 8,
       "learningCurve": 9,
-      "tooling": 9,
+      "tooling": 8,
       "stability": 9,
       "viability": 10
     }

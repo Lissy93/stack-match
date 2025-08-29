@@ -1,8 +1,9 @@
 <script lang="ts">
   import { ChevronDown, ChevronUp, Plus, Check } from 'lucide-svelte';
   import { getBestAttributes, getWorstAttributes, getScoreColor, getIconUrl, capitalize } from '../utils';
-  import { ATTRIBUTES } from '../constants';
+  import { ATTRIBUTES, ATTR_DESCRIPTIONS } from '../constants';
   import type { FrameworkScore, Framework } from '../types';
+  import TooltipText from './TooltipText.svelte';
 
   export let framework: FrameworkScore;
   export let isExpanded: boolean = false;
@@ -36,9 +37,9 @@
   <div class="score-section">
     <div class="score-header">
       <span class="score-label">Match Score</span>
-      <span class="score-value">{Math.round(framework.score)}%</span>
+      <span class="score-value" aria-live="polite">{Math.round(framework.score)}%</span>
     </div>
-    <div class="progress-bar">
+    <div class="progress-bar" role="progressbar" aria-valuenow={Math.round(framework.score)} aria-valuemin="0" aria-valuemax="100" aria-label="Match score: {Math.round(framework.score)}%">
       <div
         class="progress-fill"
         style="width: {framework.score}%; background-color: {getScoreColor(framework.score / 10)}"
@@ -103,7 +104,9 @@
         <div class="attribute-grid">
           {#each ATTRIBUTES as attr}
             <div class="attribute-row">
-              <span class="attribute-name">{capitalize(attr)}</span>
+              <TooltipText tooltip={ATTR_DESCRIPTIONS[attr]} position="right">
+                <span class="attribute-name">{capitalize(attr)}</span>
+              </TooltipText>
               <div class="attribute-bar">
                 <div
                   class="attribute-fill"
@@ -139,23 +142,94 @@
         </div>
       {/if}
 
+      <!-- Example App -->
+      {#if framework.meta.example && framework.meta.example.title}
+        <div class="example-app">
+          <h4 class="section-title">Example App</h4>
+          <div class="example-card">
+            {#if framework.meta.example.logo}
+              <div class="example-logo">
+                <img 
+                  src={framework.meta.example.logo} 
+                  alt="{framework.meta.example.title} logo"
+                  class="example-logo-img"
+                  on:error={(e) => e.currentTarget && (e.currentTarget.style.display = 'none')}
+                />
+              </div>
+            {/if}
+            <div class="example-content">
+              <h5 class="example-title">{framework.meta.example.title}</h5>
+              {#if framework.meta.example.description}
+                <p class="example-description">{framework.meta.example.description}</p>
+              {/if}
+              <div class="example-links">
+                {#if framework.meta.example.repo}
+                  <a 
+                    href={framework.meta.example.repo} 
+                    class="example-link primary" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    aria-label="View {framework.meta.example.title} source code"
+                  >
+                    GitHub
+                  </a>
+                {/if}
+                {#if framework.meta.example.website}
+                  <a 
+                    href={framework.meta.example.website} 
+                    class="example-link secondary" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    aria-label="Visit {framework.meta.example.title}"
+                  >
+                    View App
+                  </a>
+                {/if}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      {/if}
+
       <!-- Links -->
       {#if framework.meta.links.website || framework.meta.links.docs || framework.meta.links.github}
         <div class="framework-links">
           <h4 class="section-title">Resources</h4>
-          <div class="links-grid">
+          <div class="links-grid" role="list">
             {#if framework.meta.links.website}
-              <a href={framework.meta.links.website} class="resource-link" target="_blank" rel="noopener noreferrer">
+              <a 
+                href={framework.meta.links.website} 
+                class="resource-link" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                role="listitem"
+                aria-label="Visit {framework.meta.name} website"
+              >
                 Website
               </a>
             {/if}
             {#if framework.meta.links.docs}
-              <a href={framework.meta.links.docs} class="resource-link" target="_blank" rel="noopener noreferrer">
+              <a 
+                href={framework.meta.links.docs} 
+                class="resource-link" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                role="listitem"
+                aria-label="View {framework.meta.name} documentation"
+              >
                 Documentation
               </a>
             {/if}
             {#if framework.meta.links.github}
-              <a href={framework.meta.links.github} class="resource-link" target="_blank" rel="noopener noreferrer">
+              <a 
+                href={framework.meta.links.github} 
+                class="resource-link" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                role="listitem"
+                aria-label="View {framework.meta.name} GitHub repository"
+              >
                 GitHub
               </a>
             {/if}
@@ -175,6 +249,7 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    height: 100%;
   }
 
   .framework-card:hover {
@@ -394,6 +469,93 @@
     margin: 0;
   }
 
+  .example-app {
+    margin-bottom: 1.5rem;
+  }
+
+  .example-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+  }
+
+  .example-card:hover {
+    box-shadow: 0 4px 12px var(--shadow-color);
+  }
+
+  .example-logo {
+    flex-shrink: 0;
+  }
+
+  .example-logo-img {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    border: 1px solid var(--border-primary);
+  }
+
+  .example-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .example-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .example-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .example-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .example-link {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 1px solid;
+  }
+
+  .example-link.primary {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+  }
+
+  .example-link.primary:hover {
+    background: var(--accent-gradient);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  .example-link.secondary {
+    background: transparent;
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
+  }
+
+  .example-link.secondary:hover {
+    background: var(--accent-secondary);
+  }
+
   .framework-links {
     margin-bottom: 0;
   }
@@ -418,5 +580,39 @@
   .resource-link:hover {
     background: var(--accent-secondary);
     border-color: var(--accent-primary);
+  }
+
+  /* Mobile adjustments for example app */
+  @media (max-width: 640px) {
+    .example-card {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .example-logo {
+      align-self: flex-start;
+    }
+
+    .example-logo-img {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .example-title {
+      font-size: 0.875rem;
+    }
+
+    .example-description {
+      font-size: 0.8125rem;
+    }
+
+    .example-links {
+      gap: 0.375rem;
+    }
+
+    .example-link {
+      font-size: 0.6875rem;
+      padding: 0.3125rem 0.625rem;
+    }
   }
 </style>

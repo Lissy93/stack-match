@@ -5,10 +5,16 @@
   import FrameworkCard from '$lib/components/FrameworkCard.svelte';
   import ComparisonTable from '$lib/components/ComparisonTable.svelte';
   import SearchInput from '$lib/components/SearchInput.svelte';
+  import EmptyComparisonState from '$lib/components/EmptyComparisonState.svelte';
+  import { Github } from 'lucide-svelte';
   import { weights, searchQuery, shortlist, expandedCards, sortedFrameworks, frameworkData, frameworkStats, frameworkCommentary } from '$lib/stores';
   import { ATTRIBUTES, PRESETS } from '$lib/constants';
-  import { fetchFrameworkStats, fetchFrameworkCommentary } from '$lib/utils';
+  import { fetchFrameworkStats, fetchFrameworkCommentary, saveShortlistToStorage, loadShortlistFromStorage } from '$lib/utils';
   import type { FrameworkData, Weights } from '$lib/types';
+
+  let showGithubButton = true;
+  let lastScrollY = 0;
+  let heroElement: HTMLElement;
 
   // Load framework data from JSON
   async function loadFrameworkData(): Promise<void> {
@@ -40,6 +46,20 @@
     frameworkCommentary.set(commentary);
   }
 
+  // Check if current weights match a preset exactly
+  function getActivePreset(currentWeights: Weights): string | null {
+    for (const [presetName, presetWeights] of Object.entries(PRESETS)) {
+      const matches = ATTRIBUTES.every(attr => 
+        currentWeights[attr] === presetWeights[attr]
+      );
+      if (matches) return presetName;
+    }
+    return null;
+  }
+
+  // Get currently active preset
+  $: activePreset = getActivePreset($weights);
+
   // Handle preset selection
   function handlePresetSelect(preset: Weights): void {
     weights.set(preset);
@@ -60,13 +80,13 @@
     searchQuery.set(query);
   }
 
-  // Toggle framework expansion
+  // Toggle framework expansion (only one at a time)
   function toggleExpanded(frameworkName: string): void {
     expandedCards.update(current => {
-      const newSet = new Set(current);
-      if (newSet.has(frameworkName)) {
-        newSet.delete(frameworkName);
-      } else {
+      const newSet = new Set<string>();
+      // If the clicked card is already expanded, close it
+      // If it's not expanded, close all others and open this one
+      if (!current.has(frameworkName)) {
         newSet.add(frameworkName);
       }
       return newSet;
@@ -77,24 +97,56 @@
   function toggleShortlist(frameworkName: string): void {
     shortlist.update(current => {
       const index = current.indexOf(frameworkName);
-      if (index >= 0) {
-        return current.filter(name => name !== frameworkName);
-      } else {
-        return [...current, frameworkName];
-      }
+      const newShortlist = index >= 0 
+        ? current.filter(name => name !== frameworkName)
+        : [...current, frameworkName];
+      
+      // Save to localStorage
+      saveShortlistToStorage(newShortlist);
+      return newShortlist;
     });
   }
 
   // Remove from shortlist
   function removeFromShortlist(frameworkName: string): void {
-    shortlist.update(current => current.filter(name => name !== frameworkName));
+    shortlist.update(current => {
+      const newShortlist = current.filter(name => name !== frameworkName);
+      // Save to localStorage
+      saveShortlistToStorage(newShortlist);
+      return newShortlist;
+    });
   }
 
-  // Initialize auto-shortlist on first load
+  // Initialize shortlist from localStorage or default values
   let hasInitialized = false;
-  $: if ($sortedFrameworks.length > 0 && $shortlist.length === 0 && !hasInitialized) {
-    shortlist.set($sortedFrameworks.slice(0, 3).map(fw => fw.name));
+  
+  function initializeShortlist(): void {
+    // Wait until we have framework data loaded
+    if (hasInitialized || !$frameworkData || $sortedFrameworks.length === 0) return;
+    
+    // Try to load from localStorage first
+    const storedShortlist = loadShortlistFromStorage();
+    
+    if (storedShortlist.length > 0) {
+      // Validate that stored frameworks still exist in the current data
+      const availableFrameworkNames = $frameworkData.frameworks.map(fw => fw.name);
+      const validFrameworks = storedShortlist.filter(name => 
+        availableFrameworkNames.includes(name)
+      );
+            
+      if (validFrameworks.length > 0) {
+        shortlist.set(validFrameworks);
+        hasInitialized = true;
+        return;
+      }
+    }
+
     hasInitialized = true;
+  }
+  
+  // Initialize when frameworks are loaded - watch both frameworkData and sortedFrameworks
+  $: if ($frameworkData && $sortedFrameworks.length > 0) {
+    initializeShortlist();
   }
 
   // Get shortlisted frameworks with metadata
@@ -109,6 +161,40 @@
   onMount(() => {
     loadFrameworkData();
     loadExternalData();
+    
+    // Set up scroll listener for GitHub button visibility
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const isAtBottom = currentScrollY + windowHeight >= documentHeight - 100;
+      
+      // Get hero height for reference
+      const heroHeight = heroElement?.offsetHeight || 500;
+      
+      // Show button if:
+      // - At top (within hero section)
+      // - Scrolling up
+      // - At bottom of page
+      if (currentScrollY < heroHeight * 0.8) {
+        showGithubButton = true;
+      } else if (isAtBottom) {
+        showGithubButton = true;
+      } else if (currentScrollY < lastScrollY && currentScrollY > heroHeight * 0.8) {
+        showGithubButton = true;
+      } else {
+        showGithubButton = false;
+      }
+      
+      lastScrollY = currentScrollY;
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   });
 </script>
 
@@ -117,22 +203,42 @@
 </svelte:head>
 
 <main class="app-container">
+  <!-- Skip Navigation -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- GitHub Button -->
+  <a 
+    href="https://github.com/lissy93/stack-match" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="github-button"
+    class:hidden={!showGithubButton}
+    aria-label="View on GitHub"
+  >
+    <Github size={20} />
+    <span class="github-text">View on GitHub</span>
+  </a>
+
   <!-- Header -->
-  <header class="app-header">
+  <header class="app-header" bind:this={heroElement}>
     <h1 class="app-title">Framework Comparator</h1>
     <p class="app-subtitle">
-      Find your perfect frontend framework based on what matters most to you
+      Find your perfect frontend framework, based on what matters most for your project.
+    </p>
+    <p class="app-second-subtitle">
+      Results are using data calculated from <a href="https://github.com/Lissy93/framework-benchmarks" aria-label="Visit framework benchmarks repository on GitHub">framework-benchmarks</a>
     </p>
   </header>
+
+
+  <!-- Presets -->
+  <section class="control-section presets-section">
+    <PresetButtons onPresetSelect={handlePresetSelect} {activePreset} />
+  </section>
 
   <div class="main-content">
     <!-- Sidebar - Controls -->
     <aside class="sidebar" aria-label="Framework selection controls">
-      <!-- Presets -->
-      <section class="control-section">
-        <PresetButtons onPresetSelect={handlePresetSelect} />
-      </section>
-
       <!-- Attribute Sliders -->
       <section class="control-section">
         <h2 class="section-title">Your Priorities</h2>
@@ -166,7 +272,7 @@
       </div>
 
       <!-- Framework Cards -->
-      <section class="frameworks-grid" role="main" aria-label="Framework comparison results">
+      <section id="main-content" class="frameworks-grid" role="main" aria-label="Framework comparison results">
         {#each $sortedFrameworks as framework (framework.name)}
           <div class="framework-card-wrapper animate-slide-up">
             <FrameworkCard
@@ -180,12 +286,12 @@
         {/each}
 
         {#if $sortedFrameworks.length === 0 && $frameworkData}
-          <div class="no-results">
+          <div class="no-results" role="status" aria-live="polite">
             <h3>No frameworks found</h3>
             <p>Try adjusting your search query or clearing filters.</p>
           </div>
         {:else if !$frameworkData}
-          <div class="loading">
+          <div class="loading" role="status" aria-live="polite">
             <h3>Loading frameworks...</h3>
             <p>Please wait while we load the comparison data.</p>
           </div>
@@ -194,13 +300,29 @@
     </div>
   </div>
 
-  <!-- Comparison Table -->
+  <!-- Comparison Section -->
   {#if shortlistedFrameworks.length > 0}
     <ComparisonTable
       {shortlistedFrameworks}
       onRemoveFromShortlist={removeFromShortlist}
     />
+  {:else}
+    <EmptyComparisonState />
   {/if}
+  
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p class="footer-text">
+      <a href="https://github.com/lissy93/stack-match" target="_blank" rel="noopener noreferrer">
+        Framework Comparator
+      </a>
+      is licensed under MIT. © 
+      <a href="https://github.com/lissy93" target="_blank" rel="noopener noreferrer">
+        Alicia Sykes
+      </a>
+      2025.
+    </p>
+  </footer>
 </main>
 
 <style>
@@ -209,7 +331,68 @@
     max-width: var(--container-max-width);
     margin: 0 auto;
     padding: var(--gap-xl);
+    padding-bottom: 0;
     animation: fadeIn 0.6s ease-out;
+    position: relative;
+  }
+
+  .github-button {
+    position: fixed;
+    top: var(--gap-lg);
+    right: var(--gap-lg);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .github-button.hidden {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -45px;
+    left: 6px;
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 1000;
+    transition: top 0.3s;
+    border: 2px solid var(--accent-primary);
+  }
+
+  .skip-link:focus {
+    top: 6px;
+  }
+
+  .github-button:hover {
+    background: var(--surface-tertiary);
+    border-color: var(--accent-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px var(--shadow-color);
+    color: var(--text-primary);
+  }
+
+  .github-text {
+    white-space: nowrap;
   }
 
   .app-header {
@@ -238,9 +421,21 @@
   .app-subtitle {
     font-size: 1.125rem;
     color: var(--text-secondary);
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     line-height: 1.6;
+  }
+
+  .app-second-subtitle {
+    font-size: 0.875rem;
+    opacity: 0.9;
+    color: var(--text-secondary);
+    margin-top: var(--gap-sm);
+    line-height: 1.4;
+  }
+  .app-second-subtitle a {
+    color: var(--accent-primary);
+    text-decoration: underline;
   }
 
   .main-content {
@@ -262,6 +457,10 @@
     padding: var(--gap-xl);
     border: 1px solid var(--border-primary);
     margin-bottom: var(--gap-xl);
+    &.presets-section {
+      /* margin-bottom: 1rem; */
+      padding: 1rem var(--gap-xl) 0 var(--gap-xl);
+    }
   }
 
   .control-section:last-child {
@@ -386,6 +585,62 @@
 
     .sliders-grid {
       gap: var(--gap-sm);
+    }
+  }
+
+  .app-footer {
+    margin-top: var(--gap-xl);
+    padding: var(--gap-lg) 0;
+    text-align: center;
+    border-top: 1px solid var(--border-primary);
+  }
+
+  .footer-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .footer-text a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .footer-text a:hover {
+    color: var(--accent-gradient);
+    text-decoration: underline;
+  }
+
+  /* Mobile adjustments for GitHub button */
+  @media (max-width: 768px) {
+    .github-button {
+      top: var(--gap-md);
+      right: var(--gap-md);
+      padding: 0.625rem 0.875rem;
+      font-size: 0.8125rem;
+    }
+
+    .github-text {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .github-button {
+      padding: 0.5rem;
+    }
+
+    .app-footer {
+      margin-top: var(--gap-xl);
+      padding: var(--gap-lg) 0;
+    }
+
+    .footer-text {
+      font-size: 0.8125rem;
+      line-height: 1.4;
     }
   }
 </style>

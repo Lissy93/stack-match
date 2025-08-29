@@ -1,14 +1,91 @@
 <script lang="ts">
-  import { X } from 'lucide-svelte';
+  import { X, ChevronUp, ChevronDown, ArrowUpDown } from 'lucide-svelte';
   import { ATTRIBUTES, ATTR_DESCRIPTIONS } from '../constants';
   import { getScoreColor, capitalize } from '../utils';
-  import type { Framework, FrameworkMeta } from '../types';
+  import type { Framework, FrameworkMeta, Attribute } from '../types';
+  import TooltipText from './TooltipText.svelte';
 
   export let shortlistedFrameworks: Array<{ framework: Framework; meta: FrameworkMeta }>;
   export let onRemoveFromShortlist: (frameworkName: string) => void;
 
+  // Sorting state
+  let sortBy: 'attribute' | string | null = null;
+  let sortOrder: 'asc' | 'desc' = 'desc';
+
   // Check if table should be displayed
   $: showTable = shortlistedFrameworks.length > 0;
+
+  // Get overall score for a framework (average of all attributes)
+  function getOverallScore(framework: Framework): number {
+    const total = ATTRIBUTES.reduce((sum, attr) => sum + (framework[attr] as number), 0);
+    return total / ATTRIBUTES.length;
+  }
+
+  // Sort frameworks by selected column
+  $: sortedFrameworks = sortBy 
+    ? [...shortlistedFrameworks].sort((a, b) => {
+        let scoreA: number;
+        let scoreB: number;
+
+        if (sortBy === 'attribute') {
+          // Sort by overall score (average)
+          scoreA = getOverallScore(a.framework);
+          scoreB = getOverallScore(b.framework);
+        } else {
+          // Sort by specific framework column
+          const frameworkA = shortlistedFrameworks.find(f => f.meta.name === sortBy);
+          const frameworkB = shortlistedFrameworks.find(f => f.meta.name === sortBy);
+          
+          if (!frameworkA || !frameworkB) return 0;
+          
+          // For framework sorting, we need to compare by which attribute has higher scores
+          const scoresA = ATTRIBUTES.map(attr => frameworkA.framework[attr] as number);
+          const scoresB = ATTRIBUTES.map(attr => frameworkB.framework[attr] as number);
+          
+          // Sort by average score of the selected framework
+          scoreA = scoresA.reduce((sum, score) => sum + score, 0) / scoresA.length;
+          scoreB = scoresB.reduce((sum, score) => sum + score, 0) / scoresB.length;
+        }
+
+        return sortOrder === 'desc' ? scoreB - scoreA : scoreA - scoreB;
+      })
+    : shortlistedFrameworks;
+
+  // Sort attributes by selected framework
+  $: sortedAttributes = sortBy && sortBy !== 'attribute'
+    ? [...ATTRIBUTES].sort((a, b) => {
+        const framework = shortlistedFrameworks.find(f => f.meta.name === sortBy);
+        if (!framework) return 0;
+        
+        const scoreA = framework.framework[a] as number;
+        const scoreB = framework.framework[b] as number;
+        
+        return sortOrder === 'desc' ? scoreB - scoreA : scoreA - scoreB;
+      })
+    : ATTRIBUTES;
+
+  // Handle column header click
+  function handleSort(column: 'attribute' | string) {
+    if (sortBy === column) {
+      // Same column - toggle order
+      sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+    } else {
+      // New column - default to desc (best first)
+      sortBy = column;
+      sortOrder = 'desc';
+    }
+  }
+
+  // Get sort icon for column
+  function getSortIcon(column: 'attribute' | string) {
+    if (sortBy !== column) return ArrowUpDown;
+    return sortOrder === 'desc' ? ChevronDown : ChevronUp;
+  }
+
+  // Check if column is currently sorted
+  function isColumnSorted(column: 'attribute' | string): boolean {
+    return sortBy === column;
+  }
 </script>
 
 {#if showTable}
@@ -16,14 +93,37 @@
     <h2 id="comparison-title" class="section-title">Framework Comparison</h2>
     
     <div class="table-wrapper">
-      <table class="comparison-table">
+      <table class="comparison-table" role="table" aria-labelledby="comparison-title">
+        <caption class="sr-only">
+          Comparison table showing attribute scores for {sortedFrameworks.length} selected frameworks across {sortedAttributes.length} different criteria.
+        </caption>
         <thead>
           <tr>
-            <th class="attribute-header">Attribute</th>
-            {#each shortlistedFrameworks as { framework, meta }}
-              <th class="framework-header">
+            <th class="attribute-header sortable" class:sorted={isColumnSorted('attribute')} scope="col">
+              <button 
+                type="button"
+                class="sort-button"
+                on:click={() => handleSort('attribute')}
+                aria-label="Sort by overall score"
+                aria-pressed={isColumnSorted('attribute')}
+              >
+                <span>Attribute</span>
+                <svelte:component this={getSortIcon('attribute')} size={16} />
+              </button>
+            </th>
+            {#each sortedFrameworks as { framework, meta }}
+              <th class="framework-header sortable" class:sorted={isColumnSorted(meta.name)} scope="col">
                 <div class="framework-header-content">
-                  <span class="framework-name">{meta.name}</span>
+                  <button 
+                    type="button"
+                    class="sort-button framework-sort"
+                    on:click={() => handleSort(meta.name)}
+                    aria-label="Sort by {meta.name} scores"
+                    aria-pressed={isColumnSorted(meta.name)}
+                  >
+                    <span class="framework-name">{meta.name}</span>
+                    <svelte:component this={getSortIcon(meta.name)} size={14} />
+                  </button>
                   <button
                     type="button"
                     class="remove-btn"
@@ -38,15 +138,17 @@
           </tr>
         </thead>
         <tbody>
-          {#each ATTRIBUTES as attribute}
+          {#each sortedAttributes as attribute}
             <tr class="attribute-row">
-              <td class="attribute-cell">
+              <th class="attribute-cell" scope="row">
                 <div class="attribute-info">
-                  <span class="attribute-name">{capitalize(attribute)}</span>
+                  <TooltipText tooltip={ATTR_DESCRIPTIONS[attribute]} position="right">
+                    <span class="attribute-name">{capitalize(attribute)}</span>
+                  </TooltipText>
                   <span class="attribute-desc">{ATTR_DESCRIPTIONS[attribute]}</span>
                 </div>
-              </td>
-              {#each shortlistedFrameworks as { framework }}
+              </th>
+              {#each sortedFrameworks as { framework }}
                 {@const score = framework[attribute]}
                 <td class="framework-cell">
                   <div class="score-display">
@@ -126,16 +228,77 @@
     min-width: 150px;
   }
 
+  .sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .sortable:hover {
+    background: var(--surface-tertiary);
+  }
+
+  .sortable.sorted {
+    background: var(--accent-secondary);
+    border-color: var(--accent-primary);
+  }
+
+  .sort-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: inherit;
+    font-weight: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .sort-button:hover {
+    color: var(--accent-primary);
+  }
+
+  .sortable.sorted .sort-button {
+    color: var(--accent-primary);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .framework-header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
+  }
+
+  .framework-sort {
+    flex: 1;
+    min-width: 0;
   }
 
   .framework-name {
     font-size: 0.875rem;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .remove-btn {
@@ -251,6 +414,25 @@
     .score-text {
       font-size: 0.8125rem;
       min-width: 2.25rem;
+    }
+
+    .sort-button {
+      gap: 0.25rem;
+    }
+
+    .framework-name {
+      font-size: 0.8125rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .sort-button {
+      flex-direction: column;
+      gap: 0.125rem;
+    }
+
+    .framework-sort {
+      text-align: center;
     }
   }
 </style>
