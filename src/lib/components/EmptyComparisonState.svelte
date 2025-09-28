@@ -50,14 +50,14 @@
   }
 
   .empty-state-title {
-    font-size: 1.5rem;
+    font-size: var(--font-2xl);
     font-weight: 700;
     color: var(--text-primary);
     margin: 0 0 var(--gap-md) 0;
   }
 
   .empty-state-description {
-    font-size: 1rem;
+    font-size: var(--font-base);
     color: var(--text-secondary);
     line-height: 1.6;
     max-width: 500px;
@@ -87,7 +87,7 @@
     display: flex;
     align-items: center;
     gap: var(--gap-sm);
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     color: var(--text-secondary);
   }
 
@@ -105,11 +105,11 @@
     }
 
     .empty-state-title {
-      font-size: 1.25rem;
+      font-size: var(--font-xl);
     }
 
     .empty-state-description {
-      font-size: 0.875rem;
+      font-size: var(--font-sm);
     }
   }
 </style>

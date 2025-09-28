@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ChevronDown, ChevronUp, Plus, Check } from 'lucide-svelte';
+  import { slide } from 'svelte/transition';
   import { getBestAttributes, getWorstAttributes, getScoreColor, getIconUrl, capitalize } from '../utils';
   import { ATTRIBUTES, ATTR_DESCRIPTIONS } from '../constants';
   import type { FrameworkScore, Framework } from '../types';
@@ -16,7 +17,7 @@
   $: iconUrl = getIconUrl(framework.meta);
 </script>
 
-<article class="framework-card" class:expanded={isExpanded}>
+<article class="framework-card" class:expanded={isExpanded} on:click={onToggleExpanded} role="button" tabindex="0" on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? onToggleExpanded() : null}>
   <!-- Card Header -->
   <header class="card-header">
     <div class="framework-info">
@@ -66,7 +67,7 @@
     <button
       type="button"
       class="action-btn expand-btn"
-      on:click={onToggleExpanded}
+      on:click|stopPropagation={onToggleExpanded}
       aria-expanded={isExpanded}
       aria-label="{isExpanded ? 'Collapse' : 'Expand'} details for {framework.meta.name}"
     >
@@ -82,7 +83,7 @@
       type="button"
       class="action-btn shortlist-btn"
       class:added={isInShortlist}
-      on:click={onToggleShortlist}
+      on:click|stopPropagation={onToggleShortlist}
       aria-label="{isInShortlist ? 'Remove from' : 'Add to'} comparison shortlist"
     >
       {#if isInShortlist}
@@ -97,7 +98,7 @@
 
   <!-- Expanded Details -->
   {#if isExpanded}
-    <div class="expanded-content">
+    <div class="expanded-content" transition:slide={{ duration: 400 }}>
       <!-- All Attributes -->
       <div class="all-attributes">
         <h4 class="section-title">All Attributes</h4>
@@ -164,23 +165,25 @@
               {/if}
               <div class="example-links">
                 {#if framework.meta.example.repo}
-                  <a 
-                    href={framework.meta.example.repo} 
-                    class="example-link primary" 
-                    target="_blank" 
+                  <a
+                    href={framework.meta.example.repo}
+                    class="example-link primary"
+                    target="_blank"
                     rel="noopener noreferrer"
                     aria-label="View {framework.meta.example.title} source code"
+                    on:click|stopPropagation
                   >
                     GitHub
                   </a>
                 {/if}
                 {#if framework.meta.example.website}
-                  <a 
-                    href={framework.meta.example.website} 
-                    class="example-link secondary" 
-                    target="_blank" 
+                  <a
+                    href={framework.meta.example.website}
+                    class="example-link secondary"
+                    target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Visit {framework.meta.example.title}"
+                    on:click|stopPropagation
                   >
                     View App
                   </a>
@@ -198,37 +201,37 @@
           <h4 class="section-title">Resources</h4>
           <div class="links-grid" role="list">
             {#if framework.meta.links.website}
-              <a 
-                href={framework.meta.links.website} 
-                class="resource-link" 
-                target="_blank" 
+              <a
+                href={framework.meta.links.website}
+                class="resource-link"
+                target="_blank"
                 rel="noopener noreferrer"
-                role="listitem"
                 aria-label="Visit {framework.meta.name} website"
+                on:click|stopPropagation
               >
                 Website
               </a>
             {/if}
             {#if framework.meta.links.docs}
-              <a 
-                href={framework.meta.links.docs} 
-                class="resource-link" 
-                target="_blank" 
+              <a
+                href={framework.meta.links.docs}
+                class="resource-link"
+                target="_blank"
                 rel="noopener noreferrer"
-                role="listitem"
                 aria-label="View {framework.meta.name} documentation"
+                on:click|stopPropagation
               >
                 Documentation
               </a>
             {/if}
             {#if framework.meta.links.github}
-              <a 
-                href={framework.meta.links.github} 
-                class="resource-link" 
-                target="_blank" 
+              <a
+                href={framework.meta.links.github}
+                class="resource-link"
+                target="_blank"
                 rel="noopener noreferrer"
-                role="listitem"
                 aria-label="View {framework.meta.name} GitHub repository"
+                on:click|stopPropagation
               >
                 GitHub
               </a>
@@ -246,20 +249,23 @@
     border: 1px solid var(--border-primary);
     border-radius: 1rem;
     padding: 1.5rem;
-    transition: all 0.3s ease;
+    transition: all var(--transition-slow);
     position: relative;
     overflow: hidden;
     height: 100%;
+    transform-origin: center top;
   }
 
   .framework-card:hover {
     border-color: var(--accent-primary);
-    box-shadow: 0 8px 25px var(--shadow-color);
+    box-shadow: var(--shadow-xl);
     transform: translateY(-2px);
   }
 
   .framework-card.expanded {
     border-color: var(--accent-primary);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, var(--surface-secondary), var(--surface-tertiary));
   }
 
   .card-header {
@@ -285,14 +291,14 @@
   }
 
   .framework-name {
-    font-size: 1.25rem;
+    font-size: var(--font-xl);
     font-weight: 700;
     color: var(--text-primary);
     margin: 0 0 0.25rem 0;
   }
 
   .framework-description {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     color: var(--text-secondary);
     margin: 0;
     line-height: 1.4;
@@ -310,13 +316,13 @@
   }
 
   .score-label {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 500;
     color: var(--text-secondary);
   }
 
   .score-value {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 700;
     color: var(--text-primary);
   }
@@ -347,7 +353,7 @@
   .attribute-chip {
     padding: 0.375rem 0.75rem;
     border-radius: 9999px;
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     font-weight: 600;
     border: 1px solid;
     background: transparent;
@@ -364,7 +370,7 @@
     gap: 0.375rem;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 500;
     border: 1px solid var(--border-primary);
     background: var(--surface-primary);
@@ -390,22 +396,11 @@
     margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border-primary);
-    animation: slideIn 0.3s ease-out;
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    overflow: hidden;
   }
 
   .section-title {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 600;
     color: var(--text-primary);
     margin: 0 0 0.75rem 0;
@@ -429,7 +424,7 @@
   }
 
   .attribute-name {
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     font-weight: 500;
     color: var(--text-secondary);
   }
@@ -448,7 +443,7 @@
   }
 
   .attribute-score {
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     font-weight: 600;
     min-width: 2.5rem;
     text-align: right;
@@ -463,7 +458,7 @@
   }
 
   .framework-long-desc {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     color: var(--text-secondary);
     line-height: 1.5;
     margin: 0;
@@ -484,7 +479,7 @@
   }
 
   .example-card:hover {
-    box-shadow: 0 4px 12px var(--shadow-color);
+    box-shadow: var(--shadow-md);
   }
 
   .example-logo {
@@ -505,14 +500,14 @@
   }
 
   .example-title {
-    font-size: 1rem;
+    font-size: var(--font-base);
     font-weight: 600;
     color: var(--text-primary);
     margin: 0 0 0.5rem 0;
   }
 
   .example-description {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     color: var(--text-secondary);
     line-height: 1.4;
     margin: 0 0 0.75rem 0;
@@ -527,7 +522,7 @@
   .example-link {
     padding: 0.375rem 0.75rem;
     border-radius: 0.375rem;
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     font-weight: 500;
     text-decoration: none;
     transition: all 0.2s ease;
@@ -543,7 +538,7 @@
   .example-link.primary:hover {
     background: var(--accent-gradient);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    box-shadow: var(--shadow-accent-md);
   }
 
   .example-link.secondary {
@@ -570,7 +565,7 @@
     padding: 0.375rem 0.75rem;
     border: 1px solid var(--border-primary);
     border-radius: 0.375rem;
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     font-weight: 500;
     color: var(--accent-primary);
     text-decoration: none;
@@ -599,7 +594,7 @@
     }
 
     .example-title {
-      font-size: 0.875rem;
+      font-size: var(--font-sm);
     }
 
     .example-description {

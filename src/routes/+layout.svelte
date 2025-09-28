@@ -4,8 +4,8 @@
 
 <svelte:head>
 	<!-- Primary Meta Tags -->
-	<title>Framework Comparator - Find Your Perfect Frontend Framework</title>
-	<meta name="title" content="Framework Comparator - Find Your Perfect Frontend Framework" />
+	<title>Stack Match - Find Your Perfect Frontend Framework</title>
+	<meta name="title" content="Stack Match - Find Your Perfect Frontend Framework" />
 	<meta name="description" content="Compare 18+ frontend frameworks including React, Vue, Angular, Svelte. Interactive tool with performance metrics, bundle size analysis, and scoring system. Make data-driven decisions for your next project." />
 	<meta name="keywords" content="frontend frameworks, React vs Vue, Angular comparison, Svelte performance, JavaScript frameworks, frontend development, framework comparison tool, web development, performance metrics, bundle size" />
 	<meta name="author" content="Alicia Sykes" />
@@ -15,18 +15,18 @@
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://stack-match.vercel.app/" />
-	<meta property="og:title" content="Framework Comparator - Find Your Perfect Frontend Framework" />
+	<meta property="og:title" content="Stack Match - Find Your Perfect Frontend Framework" />
 	<meta property="og:description" content="Interactive tool to compare 18+ frontend frameworks. Analyze React, Vue, Angular, Svelte and more with performance metrics, bundle sizes, and customizable scoring." />
 	<meta property="og:image" content="https://stack-match.vercel.app/og_image.png" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
-	<meta property="og:image:alt" content="Framework Comparator - Interactive frontend framework comparison tool" />
-	<meta property="og:site_name" content="Framework Comparator" />
+	<meta property="og:image:alt" content="Stack Match - Interactive frontend framework comparison tool" />
+	<meta property="og:site_name" content="Stack Match" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
 	<meta property="twitter:url" content="https://stack-match.vercel.app/" />
-	<meta property="twitter:title" content="Framework Comparator - Find Your Perfect Frontend Framework" />
+	<meta property="twitter:title" content="Stack Match - Find Your Perfect Frontend Framework" />
 	<meta property="twitter:description" content="Interactive tool to compare 18+ frontend frameworks. Analyze React, Vue, Angular, Svelte and more with performance metrics and customizable scoring." />
 	<meta property="twitter:image" content="https://stack-match.vercel.app/og_image.png" />
 	<meta property="twitter:creator" content="@aliciasykes" />
@@ -42,7 +42,7 @@
 		{
 			"@context": "https://schema.org",
 			"@type": "WebApplication",
-			"name": "Framework Comparator",
+			"name": "Stack Match",
 			"description": "Interactive tool to compare frontend frameworks based on performance, maintainability, bundle size, and other key metrics",
 			"url": "https://stack-match.vercel.app/",
 			"author": {

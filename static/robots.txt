@@ -1,4 +1,4 @@
-# Framework Comparator - Allow all crawlers
+# Stack Match - Allow all crawlers
 User-agent: *
 Allow: /
 

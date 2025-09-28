@@ -199,7 +199,7 @@
 </script>
 
 <svelte:head>
-  <title>Framework Comparator - Find Your Perfect Frontend Stack</title>
+  <title>Stack Match - Find Your Perfect Frontend Stack</title>
 </svelte:head>
 
 <main class="app-container">
@@ -221,7 +221,7 @@
 
   <!-- Header -->
   <header class="app-header" bind:this={heroElement}>
-    <h1 class="app-title">Framework Comparator</h1>
+    <h1 class="app-title">Stack Match</h1>
     <p class="app-subtitle">
       Find your perfect frontend framework, based on what matters most for your project.
     </p>
@@ -247,7 +247,7 @@
             <AttributeSlider
               {attribute}
               value={$weights[attribute]}
-              onValueChange={handleWeightChange(attribute)}
+              onChange={handleWeightChange(attribute)}
             />
           {/each}
         </div>
@@ -274,7 +274,7 @@
       <!-- Framework Cards -->
       <section id="main-content" class="frameworks-grid" role="main" aria-label="Framework comparison results">
         {#each $sortedFrameworks as framework (framework.name)}
-          <div class="framework-card-wrapper animate-slide-up">
+          <div class="framework-card-wrapper animate-slide-up" class:expanded={$expandedCards.has(framework.name)}>
             <FrameworkCard
               {framework}
               isExpanded={$expandedCards.has(framework.name)}
@@ -314,7 +314,7 @@
   <footer class="app-footer">
     <p class="footer-text">
       <a href="https://github.com/lissy93/stack-match" target="_blank" rel="noopener noreferrer">
-        Framework Comparator
+        Stack Match
       </a>
       is licensed under MIT. © 
       <a href="https://github.com/lissy93" target="_blank" rel="noopener noreferrer">
@@ -349,12 +349,12 @@
     border-radius: var(--radius-lg);
     color: var(--text-primary);
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 500;
     transition: all 0.3s ease;
     backdrop-filter: blur(8px);
     z-index: 100;
-    box-shadow: 0 4px 12px var(--shadow-color);
+    box-shadow: var(--shadow-md);
     opacity: 1;
     transform: translateY(0);
   }
@@ -387,7 +387,7 @@
     background: var(--surface-tertiary);
     border-color: var(--accent-primary);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px var(--shadow-color);
+    box-shadow: var(--shadow-lg);
     color: var(--text-primary);
   }
 
@@ -427,7 +427,7 @@
   }
 
   .app-second-subtitle {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     opacity: 0.9;
     color: var(--text-secondary);
     margin-top: var(--gap-sm);
@@ -468,7 +468,7 @@
   }
 
   .section-title {
-    font-size: 1.25rem;
+    font-size: var(--font-xl);
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: var(--gap-lg);
@@ -496,24 +496,31 @@
   }
 
   .results-title {
-    font-size: 1.875rem;
+    font-size: var(--font-3xl);
     font-weight: 800;
     margin-bottom: var(--gap-sm);
   }
 
   .results-subtitle {
     color: var(--text-secondary);
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
   }
 
   .frameworks-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-auto-rows: minmax(300px, auto);
     gap: var(--gap-lg);
   }
 
   .framework-card-wrapper {
     animation-delay: calc(var(--index, 0) * 50ms);
+    transition: all var(--transition-slow);
+
+    &.expanded {
+      grid-row: span 4;
+      z-index: 10;
+    }
   }
 
   .no-results,
@@ -538,7 +545,7 @@
   }
 
   /* Responsive Design */
-  @media (max-width: 1200px) {
+  @media (max-width: 768px) {
     .main-content {
       grid-template-columns: 1fr;
       gap: var(--gap-xl);
@@ -566,18 +573,23 @@
     }
 
     .app-title {
-      font-size: 1.875rem;
+      font-size: var(--font-3xl);
     }
 
     .app-subtitle {
-      font-size: 1rem;
+      font-size: var(--font-base);
     }
 
     .results-title {
-      font-size: 1.5rem;
+      font-size: var(--font-2xl);
     }
   }
 
+  @media (max-width: 1200px) {
+    .control-section {
+      padding: var(--gap-md) var(--gap-sm);
+    }
+  }
   @media (max-width: 480px) {
     .control-section {
       padding: var(--gap-md);
@@ -596,7 +608,7 @@
   }
 
   .footer-text {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     color: var(--text-secondary);
     margin: 0;
     line-height: 1.5;

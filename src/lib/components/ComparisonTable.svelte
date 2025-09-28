@@ -93,7 +93,7 @@
     <h2 id="comparison-title" class="section-title">Framework Comparison</h2>
     
     <div class="table-wrapper">
-      <table class="comparison-table" role="table" aria-labelledby="comparison-title">
+      <table class="comparison-table" aria-labelledby="comparison-title">
         <caption class="sr-only">
           Comparison table showing attribute scores for {sortedFrameworks.length} selected frameworks across {sortedAttributes.length} different criteria.
         </caption>
@@ -182,7 +182,7 @@
   }
 
   .section-title {
-    font-size: 1.5rem;
+    font-size: var(--font-2xl);
     font-weight: 700;
     color: var(--text-primary);
     margin: 0 0 1.5rem 0;
@@ -294,7 +294,7 @@
   }
 
   .framework-name {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -337,13 +337,13 @@
   }
 
   .attribute-name {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 600;
     color: var(--text-primary);
   }
 
   .attribute-desc {
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     color: var(--text-secondary);
     line-height: 1.3;
   }
@@ -373,7 +373,7 @@
   }
 
   .score-text {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 600;
     min-width: 2.5rem;
   }
