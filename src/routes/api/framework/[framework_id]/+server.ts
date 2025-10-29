@@ -476,16 +476,26 @@ async function fetchNPMData(
   return result;
 }
 
-// Bundle Phobia API
+// Bundle Phobia API with aggressive caching
 async function fetchBundleData(
   packageName: string,
   errors: APIError[],
 ): Promise<Partial<BundleData>> {
   const result: Partial<BundleData> = {};
 
+  // Check cache first - bundle sizes rarely change
+  const cacheKey = getBundleCacheKey(packageName);
+  const cachedData = frameworkCache.get<BundleData>(cacheKey);
+
+  if (cachedData) {
+    return cachedData;
+  }
+
   try {
+    // Don't retry on 429s - Bundlephobia has strict rate limits
     const bundleResponse = await fetchWithRetry(
       `https://bundlephobia.com/api/size?package=${packageName}`,
+      { retries: 1, retryDelay: 2000, timeout: 15000 }
     );
 
     if (bundleResponse.ok) {
@@ -501,6 +511,17 @@ async function fetchBundleData(
             size: dep.approximateSize,
           }))
           .slice(0, 10) || [];
+
+      // Cache successful results for 30 days
+      frameworkCache.set(cacheKey, result as BundleData, CACHE_TTL.BUNDLE_SIZE);
+    } else if (bundleResponse.status === 429) {
+      // Rate limited - don't log as error, just note it
+      errors.push({
+        source: "bundlephobia",
+        message: `Rate limited by Bundlephobia API. Data will be available after cache expires.`,
+        code: 429,
+        timestamp: new Date().toISOString(),
+      });
     } else {
       errors.push({
         source: "bundlephobia",
@@ -510,11 +531,21 @@ async function fetchBundleData(
       });
     }
   } catch (error) {
-    errors.push({
-      source: "bundlephobia",
-      message: `Error fetching bundle data: ${error instanceof Error ? error.message : "Unknown error"}`,
-      timestamp: new Date().toISOString(),
-    });
+    // Check if it's a rate limit error
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    if (errorMessage.includes("429")) {
+      errors.push({
+        source: "bundlephobia",
+        message: `Bundlephobia rate limit reached. Cached data will be used when available.`,
+        timestamp: new Date().toISOString(),
+      });
+    } else {
+      errors.push({
+        source: "bundlephobia",
+        message: `Error fetching bundle data: ${errorMessage}`,
+        timestamp: new Date().toISOString(),
+      });
+    }
   }
 
   return result;

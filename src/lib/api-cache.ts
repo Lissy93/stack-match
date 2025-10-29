@@ -201,6 +201,7 @@ export async function fetchWithRetry(
       clearTimeout(timeoutId);
 
       // Don't retry for client errors (4xx), only server errors (5xx) and network issues
+      // Special case: 429 (rate limit) should be returned immediately without retry
       if (response.ok || response.status < 500) {
         return response;
       }
@@ -262,7 +263,7 @@ export const CACHE_TTL = {
   GITHUB_RELEASES: 60 * 60 * 1000, // 1 hour
   NPM_PACKAGE: 30 * 60 * 1000, // 30 minutes
   NPM_DOWNLOADS: 60 * 60 * 1000, // 1 hour
-  BUNDLE_SIZE: 24 * 60 * 60 * 1000, // 24 hours
+  BUNDLE_SIZE: 30 * 24 * 60 * 60 * 1000, // 30 days - bundle sizes rarely change
   SECURITY_AUDIT: 6 * 60 * 60 * 1000, // 6 hours
   FRAMEWORK_STATS: 60 * 60 * 1000, // 1 hour for complete response
 } as const;
