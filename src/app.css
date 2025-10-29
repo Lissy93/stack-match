@@ -252,13 +252,6 @@ input[type="range"] {
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-lg);
   padding: var(--gap-lg);
-  transition: all var(--transition-normal);
-}
-
-.card:hover {
-  border-color: var(--accent-primary);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
 }
 
 .btn {

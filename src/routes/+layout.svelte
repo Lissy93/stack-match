@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import Navbar from '$lib/components/Navbar.svelte';
 </script>
 
 <svelte:head>
@@ -68,4 +69,15 @@
 	</script>
 </svelte:head>
 
-<slot />
+<Navbar />
+
+<main class="main-content">
+	<slot />
+</main>
+
+<style>
+	.main-content {
+		padding-top: 60px;
+		min-height: 100vh;
+	}
+</style>

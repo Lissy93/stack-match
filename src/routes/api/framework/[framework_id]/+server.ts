@@ -137,6 +137,29 @@ interface BundleData {
   }>;
 }
 
+interface InstallMetricsData {
+  install: {
+    bytes: number;
+    pretty: string;
+  };
+  publish: {
+    bytes: number;
+    pretty: string;
+  };
+  installTime?: number;
+  publishTime?: number;
+}
+
+interface DownloadTrendsData {
+  downloads: Array<{
+    day: string;
+    downloads: number;
+  }>;
+  start: string;
+  end: string;
+  package: string;
+}
+
 interface SecurityData {
   vulnerabilities: {
     critical: number;
@@ -169,6 +192,8 @@ interface FrameworkStats {
   };
   npm: NPMData;
   bundle: BundleData;
+  install_metrics?: InstallMetricsData;
+  download_trends?: DownloadTrendsData;
   security: SecurityData;
   ecosystem: EcosystemHealth;
   last_updated: string;
@@ -495,6 +520,89 @@ async function fetchBundleData(
   return result;
 }
 
+// PackagePhobia install metrics
+async function fetchInstallMetrics(
+  packageName: string,
+  errors: APIError[],
+): Promise<Partial<InstallMetricsData>> {
+  const result: Partial<InstallMetricsData> = {};
+
+  try {
+    const response = await fetchWithRetry(
+      `https://packagephobia.com/v2/api.json?p=${packageName}`,
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      result.install = data.install;
+      result.publish = data.publish;
+      result.installTime = data.installTime;
+      result.publishTime = data.publishTime;
+    } else {
+      errors.push({
+        source: "packagephobia",
+        message: `Failed to fetch install metrics: ${response.status}`,
+        code: response.status,
+        timestamp: new Date().toISOString(),
+      });
+    }
+  } catch (error) {
+    errors.push({
+      source: "packagephobia",
+      message: `Error fetching install metrics: ${error instanceof Error ? error.message : "Unknown error"}`,
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  return result;
+}
+
+// NPM download trends
+async function fetchDownloadTrends(
+  packageName: string,
+  errors: APIError[],
+): Promise<Partial<DownloadTrendsData>> {
+  const result: Partial<DownloadTrendsData> = {};
+
+  try {
+    // Fetch last year of download data
+    const response = await fetchWithRetry(
+      `https://npm-trends-proxy.uidotdev.workers.dev/npm/downloads/range/last-year/${packageName}`,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Origin': 'https://npmtrends.com',
+          'Referer': 'https://npmtrends.com/',
+        },
+      },
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      result.downloads = data.downloads;
+      result.start = data.start;
+      result.end = data.end;
+      result.package = data.package;
+    } else {
+      errors.push({
+        source: "npm-trends",
+        message: `Failed to fetch download trends: ${response.status}`,
+        code: response.status,
+        timestamp: new Date().toISOString(),
+      });
+    }
+  } catch (error) {
+    errors.push({
+      source: "npm-trends",
+      message: `Error fetching download trends: ${error instanceof Error ? error.message : "Unknown error"}`,
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  return result;
+}
+
 // Security audit (NPM audit API alternative - using Snyk or similar)
 async function fetchSecurityData(
   packageName: string,
@@ -687,7 +795,7 @@ export const GET: RequestHandler = async ({ params, request }) => {
 
   try {
     // Fetch data from all sources in parallel for better performance
-    const [githubData, npmData, bundleData, securityData] =
+    const [githubData, npmData, bundleData, installMetricsData, downloadTrendsData, securityData] =
       await Promise.allSettled([
         fetchGitHubData(
           frameworkMeta.github.owner,
@@ -700,6 +808,8 @@ export const GET: RequestHandler = async ({ params, request }) => {
             frameworkMeta.npm.packageName,
           errors,
         ),
+        fetchInstallMetrics(frameworkMeta.npm.packageName, errors),
+        fetchDownloadTrends(frameworkMeta.npm.packageName, errors),
         fetchSecurityData(frameworkMeta.npm.packageName, errors),
       ]);
 
@@ -707,13 +817,15 @@ export const GET: RequestHandler = async ({ params, request }) => {
     const github = githubData.status === "fulfilled" ? githubData.value : {};
     const npm = npmData.status === "fulfilled" ? npmData.value : {};
     const bundle = bundleData.status === "fulfilled" ? bundleData.value : {};
+    const install_metrics = installMetricsData.status === "fulfilled" ? installMetricsData.value : undefined;
+    const download_trends = downloadTrendsData.status === "fulfilled" ? downloadTrendsData.value : undefined;
     const security =
       securityData.status === "fulfilled" ? securityData.value : {};
 
     // Add errors from rejected promises
-    [githubData, npmData, bundleData, securityData].forEach((result, index) => {
+    [githubData, npmData, bundleData, installMetricsData, downloadTrendsData, securityData].forEach((result, index) => {
       if (result.status === "rejected") {
-        const sources = ["github", "npm", "bundle", "security"];
+        const sources = ["github", "npm", "bundle", "install_metrics", "download_trends", "security"];
         errors.push({
           source: sources[index],
           message: `Promise rejected: ${result.reason}`,
@@ -732,6 +844,8 @@ export const GET: RequestHandler = async ({ params, request }) => {
       github: github as FrameworkStats["github"],
       npm: npm as NPMData,
       bundle: bundle as BundleData,
+      install_metrics: install_metrics as InstallMetricsData | undefined,
+      download_trends: download_trends as DownloadTrendsData | undefined,
       security: security as SecurityData,
       ecosystem,
       last_updated: new Date().toISOString(),
