@@ -28,18 +28,22 @@
 <article class="framework-card" class:expanded={isExpanded} on:click={onToggleExpanded} role="button" tabindex="0" on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? onToggleExpanded() : null} style={brandColor ? `--framework-color: ${brandColor}` : ''}>
   <!-- Card Header -->
   <header class="card-header">
-    <a href="/{framework.meta.id}" class="framework-info" on:click|stopPropagation>
-      <img
-        src={iconUrl}
-        alt="{framework.meta.name} icon"
-        class="framework-icon"
-        on:error={handleImageError}
-      />
+    <div class="framework-info">
+      <a href="/{framework.meta.id}" on:click|stopPropagation class="framework-icon-link">
+        <img
+          src={iconUrl}
+          alt="{framework.meta.name} icon"
+          class="framework-icon"
+          on:error={handleImageError}
+        />
+      </a>
       <div class="framework-details">
-        <h3 class="framework-name">{framework.meta.name}</h3>
+        <a href="/{framework.meta.id}" on:click|stopPropagation class="framework-name-link">
+          <h3 class="framework-name">{framework.meta.name}</h3>
+        </a>
         <p class="framework-description">{framework.meta.description}</p>
       </div>
-    </a>
+    </div>
   </header>
 
   <!-- Score Bar -->
@@ -77,14 +81,14 @@
       class="action-btn expand-btn"
       on:click|stopPropagation={onToggleExpanded}
       aria-expanded={isExpanded}
-      aria-label="{isExpanded ? 'Collapse' : 'Expand'} summary for {framework.meta.name}"
+      aria-label="{isExpanded ? 'Collapse' : 'Expand'} details for {framework.meta.name}"
     >
       {#if isExpanded}
         <ChevronUp size={16} />
       {:else}
         <ChevronDown size={16} />
       {/if}
-      Summary
+      Details
     </button>
 
     <button
@@ -101,20 +105,6 @@
       {/if}
       Compare
     </button>
-
-    <a
-      href="/{framework.meta.id}"
-      class="action-btn info-btn"
-      on:click|stopPropagation
-      aria-label="View full information for {framework.meta.name}"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="12" y1="16" x2="12" y2="12"></line>
-        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-      </svg>
-      Full Info
-    </a>
   </div>
 
   <!-- Expanded Details -->
@@ -216,6 +206,25 @@
         </div>
       {/if}
 
+      <!-- Full Info Section -->
+      <div class="full-info-section">
+        <h4 class="section-title">Want More Details?</h4>
+        <p class="info-description">
+          View comprehensive statistics, metrics, and ecosystem health for {framework.meta.name}.
+        </p>
+        <a
+          href="/{framework.meta.id}"
+          class="full-info-btn"
+          on:click|stopPropagation
+        >
+          View Full Framework Details
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+
       <!-- Links -->
       {#if framework.meta.links.website || framework.meta.links.docs || framework.meta.links.github}
         <div class="framework-links">
@@ -278,7 +287,7 @@
   }
 
   .framework-card:hover {
-    border-color: var(--accent-primary);
+    border-color: var(--framework-color, var(--accent-primary));
     box-shadow: var(--shadow-xl);
     transform: translateY(-2px);
   }
@@ -289,6 +298,10 @@
     background: linear-gradient(135deg, var(--surface-secondary), var(--surface-tertiary));
   }
 
+  .framework-card.expanded:hover {
+    transform: none;
+  }
+
   .card-header {
     margin-bottom: 1rem;
   }
@@ -297,30 +310,21 @@
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
+  }
+
+  .framework-icon-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .framework-name-link {
     text-decoration: none;
     color: inherit;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.25rem;
+    transition: color 0.2s ease;
   }
 
-  .framework-info:hover {
-    background: var(--surface-tertiary);
-    background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 5%, transparent);
-    transform: translateX(3px);
-  }
-
-  .framework-info:hover .framework-name {
-    color: var(--accent-primary);
-  }
-
-  .framework-info:hover .framework-name {
+  .framework-name-link:hover .framework-name {
     color: var(--framework-color, var(--accent-primary));
-  }
-
-  .framework-info:hover .framework-icon {
-    transform: scale(1.05);
   }
 
   .framework-icon {
@@ -328,7 +332,6 @@
     height: 2.5rem;
     border-radius: 0.5rem;
     flex-shrink: 0;
-    transition: transform 0.2s ease;
   }
 
   .framework-details {
@@ -429,26 +432,14 @@
   }
 
   .action-btn:hover {
-    background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 10%, transparent);
-    border-color: var(--framework-color, var(--accent-primary));
-    transform: translateY(-1px);
+    background: var(--surface-tertiary);
+    border-color: var(--border-secondary);
   }
 
   .shortlist-btn.added {
     background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 15%, transparent);
     border-color: var(--framework-color, var(--accent-primary));
     color: var(--framework-color, var(--accent-primary));
-  }
-
-  .info-btn {
-    background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
-    border-color: color-mix(in srgb, var(--accent-primary) 30%, transparent);
-    color: white;
-  }
-
-  .info-btn:hover {
-    background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 70%, transparent);
-    border-color: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 80%, black);
   }
 
   .expanded-content {
@@ -608,6 +599,42 @@
 
   .example-link.secondary:hover {
     background: var(--accent-secondary);
+  }
+
+  .full-info-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .info-description {
+    margin: var(--gap-sm) 0 var(--gap-md) 0;
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .full-info-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    padding: var(--gap-md) var(--gap-lg);
+    background: var(--framework-color, var(--accent-primary));
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0 auto;
+    display: flex;
+    width: fit-content;
+  }
+
+  .full-info-btn:hover {
+    background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 85%, black);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--framework-color, var(--accent-primary)) 40%, transparent);
   }
 
   .framework-links {

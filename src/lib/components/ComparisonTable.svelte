@@ -2,6 +2,7 @@
   import { X, ChevronUp, ChevronDown, ArrowUpDown } from 'lucide-svelte';
   import { ATTRIBUTES, ATTR_DESCRIPTIONS } from '../constants';
   import { getScoreColor, capitalize } from '../utils';
+  import { getSimpleIconUrl } from '../utils/framework-branding';
   import type { Framework, FrameworkMeta, Attribute } from '../types';
   import TooltipText from './TooltipText.svelte';
 
@@ -114,14 +115,21 @@
             {#each sortedFrameworks as { framework, meta }}
               <th class="framework-header sortable" class:sorted={isColumnSorted(meta.name)} scope="col">
                 <div class="framework-header-content">
-                  <button 
+                  <button
                     type="button"
                     class="sort-button framework-sort"
                     on:click={() => handleSort(meta.name)}
                     aria-label="Sort by {meta.name} scores"
                     aria-pressed={isColumnSorted(meta.name)}
                   >
+                  <div class="framework-sort-label">
+                    <img
+                      src={getSimpleIconUrl(meta.id) + '/ffffff'}
+                      alt="{meta.name} icon"
+                      class="framework-icon"
+                    />
                     <span class="framework-name">{meta.name}</span>
+                    </div>
                     <svelte:component this={getSortIcon(meta.name)} size={14} />
                   </button>
                   <button
@@ -291,6 +299,19 @@
   .framework-sort {
     flex: 1;
     min-width: 0;
+  }
+
+  .framework-sort-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .framework-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 
   .framework-name {

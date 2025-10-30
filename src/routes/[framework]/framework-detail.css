@@ -228,10 +228,19 @@
 
 .header-title h1 {
   margin: 0;
-  background: linear-gradient(135deg, var(--brand-color) 0%, var(--brand-color) 60%, var(--text-primary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--brand-color) 0%,
+    color-mix(in srgb, var(--brand-color) 50%, transparent) 65%,
+    color-mix(in srgb, var(--brand-color) 90%, transparent) 85%,
+    var(--brand-color) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-size: var(--font-3xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .header-actions {

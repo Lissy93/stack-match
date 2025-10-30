@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { page } from '$app/stores';
+  import type { PageData } from './$types';
   import OverviewCard from '$lib/components/framework-detail/OverviewCard.svelte';
   import GitHubStatsCard from '$lib/components/framework-detail/GitHubStatsCard.svelte';
   import NPMStatsCard from '$lib/components/framework-detail/NPMStatsCard.svelte';
@@ -22,12 +21,10 @@
   import ExampleProjectCard from '$lib/components/framework-detail/ExampleProjectCard.svelte';
   import { getFrameworkBranding, getSimpleIconUrl, addAlpha, getContrastColor } from '$lib/utils/framework-branding';
 
-  let frameworkData: any = null;
-  let staticData: any = null;
-  let loading = true;
-  let error: string | null = null;
+  export let data: PageData;
 
-  $: frameworkId = $page.params.framework || '';
+  $: ({ frameworkId, frameworkData, staticData, apiError } = data);
+  $: error = apiError?.message || null;
   $: branding = getFrameworkBranding(frameworkId);
   $: brandColor = staticData?.meta?.branding?.color || branding.color;
   $: iconUrl = getSimpleIconUrl(frameworkId);
@@ -46,67 +43,6 @@
     (!frameworkData.ecosystem?.packages || frameworkData.ecosystem?.packages?.length === 0) && 'Ecosystem packages',
     !frameworkData.github?.license && 'License information',
   ].filter(Boolean) : [];
-
-  // Reload data when frameworkId changes
-  $: if (frameworkId) {
-    loadData();
-  }
-
-  async function loadData() {
-    loading = true;
-    error = null;
-    frameworkData = null;
-    staticData = null;
-    await Promise.all([fetchFrameworkData(), fetchStaticData()]);
-  }
-
-  onMount(async () => {
-    await loadData();
-  });
-
-  async function fetchFrameworkData() {
-    try {
-      const response = await fetch(`/api/framework/${frameworkId}`);
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          error = `Framework "${frameworkId}" not found`;
-        } else if (response.status === 429) {
-          error = 'Rate limit exceeded. Please try again later.';
-        } else {
-          error = `Failed to load framework data (${response.status})`;
-        }
-        return;
-      }
-
-      frameworkData = await response.json();
-    } catch (e) {
-      error = e instanceof Error ? e.message : 'Failed to load framework data';
-      console.error('Error fetching framework data:', e);
-    }
-  }
-
-  async function fetchStaticData() {
-    try {
-      const response = await fetch('/data.json');
-      if (!response.ok) {
-        console.error('Failed to load static data');
-        return;
-      }
-
-      const data = await response.json();
-      const framework = data.frameworks.find((f: any) => f.name === frameworkId);
-      const meta = data.meta.find((m: any) => m.id === frameworkId);
-
-      if (framework || meta) {
-        staticData = { framework, meta };
-      }
-    } catch (e) {
-      console.error('Error fetching static data:', e);
-    } finally {
-      loading = false;
-    }
-  }
 </script>
 
 <svelte:head>
@@ -115,23 +51,7 @@
 </svelte:head>
 
 <div class="framework-detail-page">
-  {#if loading}
-    <div class="loading-state">
-      <div class="loading-container">
-        <div class="loading-icon">
-          <div class="pulse-ring"></div>
-          <div class="pulse-ring delay-1"></div>
-          <div class="pulse-ring delay-2"></div>
-          <img src={iconUrl} alt="{frameworkId} icon" class="framework-icon" />
-        </div>
-        <h2>Loading {frameworkId}</h2>
-        <p>Fetching framework data and statistics...</p>
-        <div class="loading-bar">
-          <div class="loading-bar-fill"></div>
-        </div>
-      </div>
-    </div>
-  {:else if error}
+  {#if error}
     <div class="error-state" role="alert">
       <h2>Error</h2>
       <p>{error}</p>

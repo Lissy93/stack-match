@@ -27,7 +27,7 @@ export const FRAMEWORK_BRANDING: Record<string, FrameworkBranding> = {
   fresh: { color: '#FFDB1E', iconSlug: 'fresh' },
   jquery: { color: '#0769AD', iconSlug: 'jquery' },
   marko: { color: '#4A90E2', iconSlug: 'marko' },
-  nue: { color: '#000000', iconSlug: 'nuedotjs' },
+  nue: { color: '#000000', iconSlug: 'javascript' },
   vanjs: { color: '#F44336', iconSlug: 'vitess' },
   vanilla: { color: '#F7DF1E', iconSlug: 'javascript' },
 };

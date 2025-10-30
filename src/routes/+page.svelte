@@ -293,7 +293,7 @@
         {:else if !$frameworkData}
           <div class="loading" role="status" aria-live="polite">
             <h3>Loading frameworks...</h3>
-            <p>Please wait while we load the comparison data.</p>
+            <p>Fetching the latest framework data and metrics</p>
           </div>
         {/if}
       </section>

@@ -203,6 +203,7 @@
   .frameworks-list {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--gap-sm);
     flex: 1;
     overflow-x: auto;
@@ -251,6 +252,17 @@
     display: none;
   }
 
+  /* Show framework names on large screens */
+  @media (min-width: 1400px) {
+    .framework-name {
+      display: inline;
+    }
+
+    .frameworks-list {
+      justify-content: flex-start;
+    }
+  }
+
   .navbar-actions {
     display: flex;
     align-items: center;
@@ -280,14 +292,11 @@
     display: none;
   }
 
-  /* Tablet and below */
+  /* Tablet - keep icons only, centered */
   @media (max-width: 1024px) {
-    .framework-name {
-      display: inline;
-    }
-
     .frameworks-list {
       gap: var(--gap-md);
+      justify-content: center;
     }
   }
 
@@ -400,18 +409,4 @@
     }
   }
 
-  /* Large desktop - show framework names */
-  @media (min-width: 1400px) {
-    .framework-name {
-      display: inline;
-    }
-
-    .frameworks-list {
-      gap: var(--gap-md);
-    }
-
-    .framework-link {
-      padding: var(--gap-sm) var(--gap-md);
-    }
-  }
 </style>
