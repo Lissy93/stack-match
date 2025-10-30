@@ -2,7 +2,7 @@
   import { X, ChevronUp, ChevronDown, ArrowUpDown } from 'lucide-svelte';
   import { ATTRIBUTES, ATTR_DESCRIPTIONS } from '../constants';
   import { getScoreColor, capitalize } from '../utils';
-  import { getSimpleIconUrl } from '../utils/framework-branding';
+  import { getSimpleIconUrl } from '../utils/branding-utils';
   import type { Framework, FrameworkMeta, Attribute } from '../types';
   import TooltipText from './TooltipText.svelte';
 
@@ -124,7 +124,7 @@
                   >
                   <div class="framework-sort-label">
                     <img
-                      src={getSimpleIconUrl(meta.id) + '/ffffff'}
+                      src={getSimpleIconUrl(meta.branding.iconName, '#ffffff')}
                       alt="{meta.name} icon"
                       class="framework-icon"
                     />
@@ -174,6 +174,18 @@
               {/each}
             </tr>
           {/each}
+          <tr class="details-row">
+            <th class="attribute-cell" scope="row">
+              <span class="details-label">View Details</span>
+            </th>
+            {#each sortedFrameworks as { framework, meta }}
+              <td class="framework-cell">
+                <a href="/{meta.id}" class="details-link">
+                  All {meta.name} Stats →
+                </a>
+              </td>
+            {/each}
+          </tr>
         </tbody>
       </table>
     </div>
@@ -339,8 +351,36 @@
     background: var(--surface-danger);
   }
 
-  .attribute-row:last-child td {
+  .details-row {
+    background: var(--surface-tertiary);
+  }
+
+  .details-row th,
+  .details-row td {
     border-bottom: none;
+    padding: 1.25rem 1rem;
+  }
+
+  .details-label {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .details-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--font-sm);
+    font-weight: 500;
+    color: var(--accent-primary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .details-link:hover {
+    color: var(--accent-gradient);
+    transform: translateX(2px);
   }
 
   .attribute-cell {

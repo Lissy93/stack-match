@@ -10,6 +10,7 @@
   import { weights, searchQuery, shortlist, expandedCards, sortedFrameworks, frameworkData, frameworkStats, frameworkCommentary } from '$lib/stores';
   import { ATTRIBUTES, PRESETS } from '$lib/constants';
   import { fetchFrameworkStats, fetchFrameworkCommentary, saveShortlistToStorage, loadShortlistFromStorage } from '$lib/utils';
+  import { getSimpleIconUrl } from '$lib/utils/branding-utils';
   import type { FrameworkData, Weights } from '$lib/types';
 
   let showGithubButton = true;
@@ -225,6 +226,25 @@
     <p class="app-subtitle">
       Find your perfect frontend framework, based on what matters most for your project.
     </p>
+
+    {#if $frameworkData?.meta}
+      <div class="hero-frameworks">
+        {#each $frameworkData.meta as framework}
+          <a
+            href="/{framework.id}"
+            class="hero-framework-icon"
+            title={framework.name}
+            style="--brand-color: {framework.branding.color}"
+          >
+            <img
+              src={getSimpleIconUrl(framework.branding.iconName, framework.branding.color)}
+              alt="{framework.name} icon"
+            />
+          </a>
+        {/each}
+      </div>
+    {/if}
+
     <p class="app-second-subtitle">
       Results are using data calculated from <a href="https://github.com/Lissy93/framework-benchmarks" aria-label="Visit framework benchmarks repository on GitHub">framework-benchmarks</a>
     </p>
@@ -429,6 +449,52 @@
     line-height: 1.6;
   }
 
+  .hero-frameworks {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: var(--gap-sm);
+    margin: var(--gap-xl) auto var(--gap-lg);
+    max-width: 450px;
+  }
+
+  @media (min-width: 1400px) {
+    .hero-frameworks {
+      grid-template-columns: repeat(18, 1fr);
+      max-width: 900px;
+    }
+  }
+
+  .hero-framework-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    padding: var(--gap-xs);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    text-decoration: none;
+  }
+
+  .hero-framework-icon:hover {
+    background: var(--surface-secondary);
+    border-color: var(--brand-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--brand-color) 30%, transparent);
+  }
+
+  .hero-framework-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: grayscale(0.2);
+    transition: filter 0.2s ease;
+  }
+
+  .hero-framework-icon:hover img {
+    filter: grayscale(0);
+  }
+
   .app-second-subtitle {
     font-size: var(--font-sm);
     opacity: 0.9;
@@ -585,6 +651,21 @@
 
     .results-title {
       font-size: var(--font-2xl);
+    }
+
+    .hero-frameworks {
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--gap-sm);
+      margin: var(--gap-lg) auto;
+      max-width: 300px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-frameworks {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.375rem;
+      max-width: 150px;
     }
   }
 

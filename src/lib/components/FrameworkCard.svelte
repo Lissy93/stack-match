@@ -2,6 +2,7 @@
   import { ChevronDown, ChevronUp, Plus, Check } from 'lucide-svelte';
   import { slide } from 'svelte/transition';
   import { getBestAttributes, getWorstAttributes, getScoreColor, getIconUrl, capitalize } from '../utils';
+  import { getSimpleIconUrl } from '../utils/branding-utils';
   import { ATTRIBUTES, ATTR_DESCRIPTIONS } from '../constants';
   import type { FrameworkScore, Framework } from '../types';
   import TooltipText from './TooltipText.svelte';
@@ -217,6 +218,11 @@
           class="full-info-btn"
           on:click|stopPropagation
         >
+          <img
+            src={getSimpleIconUrl(framework.meta.branding.iconName, '#ffffff')}
+            alt=""
+            class="full-info-icon"
+          />
           View Full Framework Details
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -635,6 +641,13 @@
     background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 85%, black);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px color-mix(in srgb, var(--framework-color, var(--accent-primary)) 40%, transparent);
+  }
+
+  .full-info-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 
   .framework-links {

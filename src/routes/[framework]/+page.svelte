@@ -19,15 +19,14 @@
   import StarHistoryCard from '$lib/components/framework-detail/StarHistoryCard.svelte';
   import LinksCard from '$lib/components/framework-detail/LinksCard.svelte';
   import ExampleProjectCard from '$lib/components/framework-detail/ExampleProjectCard.svelte';
-  import { getFrameworkBranding, getSimpleIconUrl, addAlpha, getContrastColor } from '$lib/utils/framework-branding';
+  import { getSimpleIconUrl, addAlpha, getContrastColor } from '$lib/utils/branding-utils';
 
   export let data: PageData;
 
   $: ({ frameworkId, frameworkData, staticData, apiError } = data);
   $: error = apiError?.message || null;
-  $: branding = getFrameworkBranding(frameworkId);
-  $: brandColor = staticData?.meta?.branding?.color || branding.color;
-  $: iconUrl = getSimpleIconUrl(frameworkId);
+  $: brandColor = staticData?.meta?.branding?.color || '#3b82f6';
+  $: iconUrl = staticData?.meta?.branding?.iconName ? getSimpleIconUrl(staticData.meta.branding.iconName, brandColor) : '';
   $: brandColorRgba = addAlpha(brandColor, 0.1);
   $: brandColorRgbaMedium = addAlpha(brandColor, 0.2);
   $: textColor = getContrastColor(brandColor);

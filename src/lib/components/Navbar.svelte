@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import { getSimpleIconUrl } from '$lib/utils/framework-branding';
+  import { getSimpleIconUrl } from '$lib/utils/branding-utils';
 
   interface Framework {
     id: string;
@@ -76,7 +76,7 @@
             on:click={closeMobileMenu}
           >
             <img
-              src={getSimpleIconUrl(framework.id)}
+              src={getSimpleIconUrl(framework.branding.iconName, framework.branding.color)}
               alt="{framework.name} icon"
               class="framework-icon"
             />
