@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { page } from '$app/stores';
   import { getSimpleIconUrl } from '$lib/utils/framework-branding';
 
   interface Framework {
@@ -14,6 +15,9 @@
   let frameworks: Framework[] = [];
   let mobileMenuOpen = false;
   let scrolled = false;
+
+  // Hide navbar on homepage
+  $: isHomePage = $page.url.pathname === '/';
 
   onMount(() => {
     // Fetch framework data
@@ -53,6 +57,7 @@
   }
 </script>
 
+{#if !isHomePage}
 <nav class="navbar" class:scrolled>
   <div class="navbar-container">
     <a href="/" class="logo">
@@ -108,6 +113,7 @@
     ></div>
   {/if}
 </nav>
+{/if}
 
 <style>
   .navbar {

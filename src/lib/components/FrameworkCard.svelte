@@ -15,6 +15,7 @@
   $: bestAttrs = getBestAttributes(framework, 3);
   $: worstAttrs = getWorstAttributes(framework, 3);
   $: iconUrl = getIconUrl(framework.meta);
+  $: brandColor = framework.meta.branding?.color || null;
 
   function handleImageError(event: Event) {
     const target = event.currentTarget as HTMLImageElement;
@@ -24,10 +25,10 @@
   }
 </script>
 
-<article class="framework-card" class:expanded={isExpanded} on:click={onToggleExpanded} role="button" tabindex="0" on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? onToggleExpanded() : null}>
+<article class="framework-card" class:expanded={isExpanded} on:click={onToggleExpanded} role="button" tabindex="0" on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? onToggleExpanded() : null} style={brandColor ? `--framework-color: ${brandColor}` : ''}>
   <!-- Card Header -->
   <header class="card-header">
-    <div class="framework-info">
+    <a href="/{framework.meta.id}" class="framework-info" on:click|stopPropagation>
       <img
         src={iconUrl}
         alt="{framework.meta.name} icon"
@@ -38,7 +39,7 @@
         <h3 class="framework-name">{framework.meta.name}</h3>
         <p class="framework-description">{framework.meta.description}</p>
       </div>
-    </div>
+    </a>
   </header>
 
   <!-- Score Bar -->
@@ -76,16 +77,16 @@
       class="action-btn expand-btn"
       on:click|stopPropagation={onToggleExpanded}
       aria-expanded={isExpanded}
-      aria-label="{isExpanded ? 'Collapse' : 'Expand'} details for {framework.meta.name}"
+      aria-label="{isExpanded ? 'Collapse' : 'Expand'} summary for {framework.meta.name}"
     >
       {#if isExpanded}
         <ChevronUp size={16} />
       {:else}
         <ChevronDown size={16} />
       {/if}
-      Details
+      Summary
     </button>
-    
+
     <button
       type="button"
       class="action-btn shortlist-btn"
@@ -95,12 +96,25 @@
     >
       {#if isInShortlist}
         <Check size={16} />
-        In List
       {:else}
         <Plus size={16} />
-        Compare
       {/if}
+      Compare
     </button>
+
+    <a
+      href="/{framework.meta.id}"
+      class="action-btn info-btn"
+      on:click|stopPropagation
+      aria-label="View full information for {framework.meta.name}"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      Full Info
+    </a>
   </div>
 
   <!-- Expanded Details -->
@@ -283,6 +297,30 @@
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .framework-info:hover {
+    background: var(--surface-tertiary);
+    background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 5%, transparent);
+    transform: translateX(3px);
+  }
+
+  .framework-info:hover .framework-name {
+    color: var(--accent-primary);
+  }
+
+  .framework-info:hover .framework-name {
+    color: var(--framework-color, var(--accent-primary));
+  }
+
+  .framework-info:hover .framework-icon {
+    transform: scale(1.05);
   }
 
   .framework-icon {
@@ -290,6 +328,7 @@
     height: 2.5rem;
     border-radius: 0.5rem;
     flex-shrink: 0;
+    transition: transform 0.2s ease;
   }
 
   .framework-details {
@@ -375,7 +414,7 @@
     display: flex;
     align-items: center;
     gap: 0.375rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
     font-size: var(--font-sm);
     font-weight: 500;
@@ -386,17 +425,30 @@
     transition: all 0.2s ease;
     flex: 1;
     justify-content: center;
+    text-decoration: none;
   }
 
   .action-btn:hover {
-    background: var(--surface-tertiary);
-    border-color: var(--accent-primary);
+    background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 10%, transparent);
+    border-color: var(--framework-color, var(--accent-primary));
+    transform: translateY(-1px);
   }
 
   .shortlist-btn.added {
-    background: var(--accent-secondary);
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
+    background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 15%, transparent);
+    border-color: var(--framework-color, var(--accent-primary));
+    color: var(--framework-color, var(--accent-primary));
+  }
+
+  .info-btn {
+    background: color-mix(in srgb, var(--accent-primary) 10%, transparent);
+    border-color: color-mix(in srgb, var(--accent-primary) 30%, transparent);
+    color: white;
+  }
+
+  .info-btn:hover {
+    background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 70%, transparent);
+    border-color: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 80%, black);
   }
 
   .expanded-content {

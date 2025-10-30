@@ -366,21 +366,24 @@
   }
 
   .skip-link {
-    position: absolute;
-    top: -45px;
-    left: 6px;
+    position: fixed;
+    top: -100px;
+    left: 0;
     background: var(--surface-secondary);
     color: var(--text-primary);
-    padding: 8px;
+    padding: var(--gap-sm) var(--gap-md);
     text-decoration: none;
-    border-radius: 4px;
-    z-index: 1000;
-    transition: top 0.3s;
+    border-radius: var(--radius-md);
+    z-index: 10000;
+    transition: top 0.3s ease;
     border: 2px solid var(--accent-primary);
+    font-weight: 600;
+    margin: var(--gap-md);
+    box-shadow: var(--shadow-lg);
   }
 
   .skip-link:focus {
-    top: 6px;
+    top: 0;
   }
 
   .github-button:hover {

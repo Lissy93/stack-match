@@ -15,7 +15,7 @@ export const FRAMEWORK_BRANDING: Record<string, FrameworkBranding> = {
   'nuxt-js': { color: '#00DC82', iconSlug: 'nuxtdotjs' },
   astro: { color: '#FF5D01', iconSlug: 'astro' },
   solid: { color: '#2C4F7C', iconSlug: 'solid' },
-  qwik: { color: '#AC7EF4', iconSlug: 'builder.io' },
+  qwik: { color: '#AC7EF4', iconSlug: 'qwik' },
   lit: { color: '#324FFF', iconSlug: 'lit' },
   alpine: { color: '#8BC0D0', iconSlug: 'alpinedotjs' },
   preact: { color: '#673AB8', iconSlug: 'preact' },
@@ -28,6 +28,8 @@ export const FRAMEWORK_BRANDING: Record<string, FrameworkBranding> = {
   jquery: { color: '#0769AD', iconSlug: 'jquery' },
   marko: { color: '#4A90E2', iconSlug: 'marko' },
   nue: { color: '#000000', iconSlug: 'nuedotjs' },
+  vanjs: { color: '#F44336', iconSlug: 'vitess' },
+  vanilla: { color: '#F7DF1E', iconSlug: 'javascript' },
 };
 
 export function getFrameworkBranding(frameworkId: string): FrameworkBranding {
