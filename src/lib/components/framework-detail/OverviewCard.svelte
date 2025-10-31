@@ -1,4 +1,6 @@
 <script lang="ts">
+  import BaseCard from './BaseCard.svelte';
+
   export let metadata: any;
   export let ecosystem: any;
   export let github: any;
@@ -9,8 +11,8 @@
                    ecosystem?.overall_health >= 25 ? 'health-fair' : 'health-poor';
 </script>
 
-<div class="card card-large overview-card">
-  <div class="card-header">
+<BaseCard size="large" headerSlot={true}>
+  <svelte:fragment slot="header">
     <h2>Overview</h2>
     {#if ecosystem?.overall_health !== undefined}
       <div class="health-badge {healthClass}">
@@ -18,7 +20,7 @@
         <span class="health-label">Health</span>
       </div>
     {/if}
-  </div>
+  </svelte:fragment>
 
   <div class="overview-content">
     {#if metadata?.branding?.logo}
@@ -76,25 +78,10 @@
       </div>
     {/if}
   </div>
-</div>
+
+</BaseCard>
 
 <style>
-  .overview-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .card-header h2 {
-    margin: 0;
-    font-size: var(--font-xl);
-  }
 
   .health-badge {
     display: flex;

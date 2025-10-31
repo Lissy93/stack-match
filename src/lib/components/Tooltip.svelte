@@ -28,20 +28,21 @@
 </script>
 
 <div class="tooltip-container">
-  <div
+  <button
+    type="button"
     class="tooltip-trigger"
-    role="tooltip"
-    tabindex="0"
     on:mouseenter={handleMouseEnter}
     on:mouseleave={handleMouseLeave}
     on:focus={handleFocus}
     on:blur={handleBlur}
+    aria-describedby={showTooltip ? 'tooltip-content' : undefined}
   >
     <slot />
-  </div>
+  </button>
 
   {#if showTooltip && content}
     <div
+      id="tooltip-content"
       class="tooltip"
       class:visible={showTooltip}
       data-position={position}
@@ -62,6 +63,11 @@
     .tooltip-trigger {
       display: contents;
       cursor: help;
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      color: inherit;
     }
   }
 

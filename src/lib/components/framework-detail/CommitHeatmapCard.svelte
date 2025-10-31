@@ -1,4 +1,6 @@
 <script lang="ts">
+  import BaseCard from './BaseCard.svelte';
+
   export let commitActivity: any[] | undefined;
   export let brandColor: string | undefined = undefined;
 
@@ -127,8 +129,8 @@
   }
 </script>
 
-<div class="card card-wide commit-heatmap-card">
-  <div class="card-header">
+<BaseCard title="Commit Activity" size="wide" headerSlot={true}>
+  <div slot="header" class="card-header-content">
     <h3>Commit Activity</h3>
     <div class="stats">
       <div class="stat-item">
@@ -223,26 +225,24 @@
       <p>No commit activity data available</p>
     </div>
   {/if}
-</div>
+</BaseCard>
 
 <style>
-  .commit-heatmap-card {
+  :global(.commit-heatmap-card) {
     --cell-size: 12px;
     --cell-gap: 3px;
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
   }
 
-  .card-header {
+  .card-header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: var(--gap-md);
+    width: 100%;
   }
 
-  h3 {
+  .card-header-content h3 {
     margin: 0;
     font-size: var(--font-lg);
   }
@@ -449,12 +449,12 @@
   }
 
   @media (max-width: 768px) {
-    .commit-heatmap-card {
+    :global(.commit-heatmap-card) {
       --cell-size: 10px;
       --cell-gap: 2px;
     }
 
-    .card-header {
+    .card-header-content {
       flex-direction: column;
       align-items: flex-start;
     }
@@ -479,7 +479,7 @@
   }
 
   @media (max-width: 480px) {
-    .commit-heatmap-card {
+    :global(.commit-heatmap-card) {
       --cell-size: 8px;
       --cell-gap: 1px;
     }

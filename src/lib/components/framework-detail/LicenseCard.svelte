@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import BaseCard from './BaseCard.svelte';
 
   export let license: any;
 
@@ -31,9 +32,7 @@
   }
 </script>
 
-<div class="card license-card">
-  <h3>License</h3>
-
+<BaseCard title="License">
   {#if loading}
     <div class="loading">Loading license details...</div>
   {:else if licenseDetails}
@@ -116,19 +115,9 @@
   {:else}
     <p class="no-license">No license information available</p>
   {/if}
-</div>
+</BaseCard>
 
 <style>
-  .license-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  h3 {
-    margin: 0;
-    font-size: var(--font-lg);
-  }
 
   .loading {
     color: var(--text-tertiary);

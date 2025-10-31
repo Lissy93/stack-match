@@ -196,7 +196,7 @@
       "viability": 9
     },
     {
-      "name": "vanilla-js",
+      "name": "vanilla",
       "performance": 10,
       "maintainability": 5,
       "bundleSize": 10,
@@ -541,6 +541,126 @@
         "website": "",
         "logo": ""
       }
+    },
+    {
+      "id": "marko",
+      "name": "Marko",
+      "description": "Performant UI framework with streaming and partial hydration support",
+      "longDescription": "Fast framework designed for server-side rendering with streaming and async rendering.",
+      "branding": {
+        "iconName": "marko",
+        "fallbackEmoji": "📝",
+        "color": "#1C90FF",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/marko.png"
+      },
+      "links": {
+        "website": "https://markojs.com/",
+        "docs": "https://markojs.com/docs/",
+        "github": "https://github.com/marko-js/marko",
+        "npmPackage": "marko",
+        "video": ""
+      },
+      "example": {}
+    },
+    {
+      "id": "ember",
+      "name": "Ember.js",
+      "description": "Opinionated framework for building ambitious web applications",
+      "longDescription": "Convention over configuration framework with strong emphasis on developer productivity.",
+      "branding": {
+        "iconName": "emberdotjs",
+        "fallbackEmoji": "🔥",
+        "color": "#E04E39",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/ember.png"
+      },
+      "links": {
+        "website": "https://emberjs.com/",
+        "docs": "https://guides.emberjs.com/",
+        "github": "https://github.com/emberjs/ember.js",
+        "npmPackage": "ember-source",
+        "video": ""
+      },
+      "example": {}
+    },
+    {
+      "id": "backbone",
+      "name": "Backbone.js",
+      "description": "Lightweight MVC framework with minimal structure and RESTful JSON interface",
+      "longDescription": "Minimalist framework providing models, collections, and views for structuring applications.",
+      "branding": {
+        "iconName": "backbonedotjs",
+        "fallbackEmoji": "🦴",
+        "color": "#0071B5",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/backbone.png"
+      },
+      "links": {
+        "website": "https://backbonejs.org/",
+        "docs": "https://backbonejs.org/",
+        "github": "https://github.com/jashkenas/backbone",
+        "npmPackage": "backbone",
+        "video": ""
+      },
+      "example": {}
+    },
+    {
+      "id": "riot",
+      "name": "Riot.js",
+      "description": "Simple and elegant component-based UI library with custom tags",
+      "longDescription": "Minimalist framework with custom tags and an elegant syntax for building user interfaces.",
+      "branding": {
+        "iconName": "rive",
+        "fallbackEmoji": "🎭",
+        "color": "#ed1846",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/riot.png"
+      },
+      "links": {
+        "website": "https://riot.js.org/",
+        "docs": "https://riot.js.org/documentation/",
+        "github": "https://github.com/riot/riot",
+        "npmPackage": "riot",
+        "video": ""
+      },
+      "example": {}
+    },
+    {
+      "id": "nue",
+      "name": "Nue",
+      "description": "Minimalist alternative to React and Vue with a focus on simplicity",
+      "longDescription": "Ultra-minimal framework focusing on web standards and simplicity.",
+      "branding": {
+        "iconName": "javascript",
+        "fallbackEmoji": "✨",
+        "color": "#00A9FF",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/nue.png"
+      },
+      "links": {
+        "website": "https://nuejs.org/",
+        "docs": "https://nuejs.org/docs/",
+        "github": "https://github.com/nuejs/nue",
+        "npmPackage": "nue",
+        "video": ""
+      },
+      "example": {}
+    },
+    {
+      "id": "rax",
+      "name": "Rax",
+      "description": "Progressive React-compatible framework optimized for multiple platforms",
+      "longDescription": "Cross-platform framework compatible with React API for web and mobile development.",
+      "branding": {
+        "iconName": "javascript",
+        "fallbackEmoji": "⚛️",
+        "color": "#3B5998",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/rax.png"
+      },
+      "links": {
+        "website": "https://rax.js.org/",
+        "docs": "https://rax.js.org/docs",
+        "github": "https://github.com/alibaba/rax",
+        "npmPackage": "rax",
+        "video": ""
+      },
+      "example": {}
     }
   ]
 }

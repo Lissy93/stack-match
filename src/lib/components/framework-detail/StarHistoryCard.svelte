@@ -1,6 +1,5 @@
 <script lang="ts">
   export let repoFullName: string | undefined;
-  export let brandColor: string | undefined = undefined;
 
   $: chartUrl = repoFullName
     ? `https://api.star-history.com/svg?repos=${repoFullName}&type=Date&theme=dark`

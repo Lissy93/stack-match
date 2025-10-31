@@ -1,4 +1,6 @@
 <script lang="ts">
+  import BaseCard from './BaseCard.svelte';
+
   export let security: any;
 
   $: totalVulns = security?.vulnerabilities?.total || 0;
@@ -7,8 +9,7 @@
                      totalVulns < 15 ? 'security-fair' : 'security-poor';
 </script>
 
-<div class="card security-card">
-  <h3>Security</h3>
+<BaseCard title="Security">
 
   <div class="security-score {securityClass}">
     <div class="score-icon">🔒</div>
@@ -61,19 +62,10 @@
       Last audit: {new Date(security.last_audit).toLocaleDateString()}
     </div>
   {/if}
-</div>
+
+</BaseCard>
 
 <style>
-  .security-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  h3 {
-    margin: 0;
-    font-size: var(--font-lg);
-  }
 
   .security-score {
     display: flex;

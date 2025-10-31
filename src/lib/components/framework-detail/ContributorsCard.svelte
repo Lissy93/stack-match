@@ -1,4 +1,6 @@
 <script lang="ts">
+  import BaseCard from './BaseCard.svelte';
+
   export let contributors: any;
 
   $: topContributors = contributors?.top_contributors || [];
@@ -17,9 +19,7 @@
   }
 </script>
 
-<div class="card contributors-card">
-  <h3>Contributors</h3>
-
+<BaseCard title="Contributors">
   {#if totalContributors > 0}
     <div class="total-contributors">
       <span class="contributor-count">{totalContributors}</span>
@@ -67,21 +67,11 @@
       <p>No contributor data available</p>
     </div>
   {/if}
-</div>
+</BaseCard>
 
 <style>
-  .contributors-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  h3, h4 {
+  h4 {
     margin: 0;
-  }
-
-  h3 {
-    font-size: var(--font-lg);
   }
 
   h4 {

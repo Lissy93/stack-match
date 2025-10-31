@@ -1,4 +1,6 @@
 <script lang="ts">
+  import BaseCard from './BaseCard.svelte';
+
   export let bundle: any;
 
   function formatBytes(bytes: number | undefined): string {
@@ -15,9 +17,7 @@
                  bundle?.gzip < 300000 ? 'size-fair' : 'size-large';
 </script>
 
-<div class="card bundle-size-card">
-  <h3>Bundle Size</h3>
-
+<BaseCard title="Bundle Size">
   {#if bundle?.gzip !== undefined}
     <div class="size-display {sizeClass}">
       <div class="size-value">{formatBytes(bundle.gzip)}</div>
@@ -54,19 +54,9 @@
       </ul>
     </details>
   {/if}
-</div>
+</BaseCard>
 
 <style>
-  .bundle-size-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  h3 {
-    margin: 0;
-    font-size: var(--font-lg);
-  }
 
   .size-display {
     display: flex;

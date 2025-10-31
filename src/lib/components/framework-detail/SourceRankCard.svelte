@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import BaseCard from './BaseCard.svelte';
 
   export let packageName: string | undefined;
 
@@ -56,9 +57,7 @@
   }
 </script>
 
-<div class="card sourcerank-card">
-  <h3>SourceRank Quality Score</h3>
-
+<BaseCard title="SourceRank Quality Score">
   {#if loading}
     <div class="loading">
       <div class="loading-spinner"></div>
@@ -113,19 +112,9 @@
       <p>No quality score available</p>
     </div>
   {/if}
-</div>
+</BaseCard>
 
 <style>
-  .sourcerank-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  h3 {
-    margin: 0;
-    font-size: var(--font-lg);
-  }
 
   .loading {
     display: flex;

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import BaseCard from './BaseCard.svelte';
+
   export let ecosystem: any;
   export let lastUpdated: string;
 
@@ -30,9 +32,7 @@
   }
 </script>
 
-<div class="card card-large ecosystem-health-card">
-  <h3>Ecosystem Health Scores</h3>
-
+<BaseCard title="Ecosystem Health Scores" size="large">
   {#if ecosystem?.overall_health !== undefined}
     <div class="overall-health">
       <div class="health-circle" style="--health-color: {getHealthColor(ecosystem.overall_health)}">
@@ -79,19 +79,9 @@
       Last updated: {formatDate(lastUpdated)}
     </div>
   {/if}
-</div>
+</BaseCard>
 
 <style>
-  .ecosystem-health-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  h3 {
-    margin: 0;
-    font-size: var(--font-lg);
-  }
 
   .overall-health {
     display: flex;

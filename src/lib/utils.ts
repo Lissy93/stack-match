@@ -112,7 +112,8 @@ export function getIconUrl(meta: FrameworkMeta): string {
 }
 
 // Format large numbers
-export function formatNumber(num: number): string {
+export function formatNumber(num: number | undefined): string {
+  if (num === undefined) return 'N/A';
   if (num >= 1000000) {
     return (num / 1000000).toFixed(1) + "M";
   }
@@ -170,6 +171,22 @@ export function debounce<T extends (...args: any[]) => any>(
   return (...args: Parameters<T>) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func(...args), delay);
+  };
+}
+
+// Throttle function for scroll handlers
+export function throttle<T extends (...args: any[]) => any>(
+  func: T,
+  limit: number,
+): (...args: Parameters<T>) => void {
+  let inThrottle: boolean;
+
+  return (...args: Parameters<T>) => {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
   };
 }
 

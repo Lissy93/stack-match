@@ -1,4 +1,6 @@
 <script lang="ts">
+  import BaseCard from './BaseCard.svelte';
+
   export let installMetrics: any | undefined;
 
   interface PackagePhobiaData {
@@ -28,9 +30,7 @@
 </script>
 
 {#if !hideCard}
-<div class="card install-metrics-card">
-  <h3>Install Metrics</h3>
-
+<BaseCard title="Install Metrics">
   {#if phobiaData}
     <div class="metrics-grid">
       <div class="metric-item">
@@ -68,20 +68,10 @@
       </p>
     </div>
   {/if}
-</div>
+</BaseCard>
 {/if}
 
 <style>
-  .install-metrics-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  h3 {
-    margin: 0;
-    font-size: var(--font-lg);
-  }
 
   .metrics-grid {
     display: grid;

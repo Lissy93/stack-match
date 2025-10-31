@@ -26,7 +26,7 @@
   }
 </script>
 
-<article class="framework-card" class:expanded={isExpanded} on:click={onToggleExpanded} role="button" tabindex="0" on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? onToggleExpanded() : null} style={brandColor ? `--framework-color: ${brandColor}` : ''}>
+<div class="framework-card" class:expanded={isExpanded} on:click={onToggleExpanded} role="button" tabindex="0" on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? onToggleExpanded() : null} style={brandColor ? `--framework-color: ${brandColor}` : ''}>
   <!-- Card Header -->
   <header class="card-header">
     <div class="framework-info">
@@ -277,7 +277,7 @@
       {/if}
     </div>
   {/if}
-</article>
+</div>
 
 <style>
   .framework-card {

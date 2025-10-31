@@ -1,12 +1,8 @@
 <script lang="ts">
-  export let npm: any;
+  import { formatNumber } from '$lib/utils';
+  import BaseCard from './BaseCard.svelte';
 
-  function formatNumber(num: number | undefined): string {
-    if (num === undefined) return 'N/A';
-    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
-    return num.toString();
-  }
+  export let npm: any;
 
   function getPackageAge(createdDate: string | undefined): string {
     if (!createdDate) return 'N/A';
@@ -54,8 +50,7 @@
   $: typeScriptSupport = hasTypeScriptSupport();
 </script>
 
-<div class="card npm-stats-card">
-  <h3>NPM Statistics</h3>
+<BaseCard title="NPM Statistics">
 
   <div class="version-info">
     {#if npm?.version}
@@ -124,19 +119,10 @@
       </div>
     </div>
   {/if}
-</div>
+
+</BaseCard>
 
 <style>
-  .npm-stats-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  h3 {
-    margin: 0;
-    font-size: var(--font-lg);
-  }
 
   .version-info {
     display: flex;

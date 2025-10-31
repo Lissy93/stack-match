@@ -9,7 +9,7 @@
   import { Github } from 'lucide-svelte';
   import { weights, searchQuery, shortlist, expandedCards, sortedFrameworks, frameworkData, frameworkStats, frameworkCommentary } from '$lib/stores';
   import { ATTRIBUTES, PRESETS } from '$lib/constants';
-  import { fetchFrameworkStats, fetchFrameworkCommentary, saveShortlistToStorage, loadShortlistFromStorage } from '$lib/utils';
+  import { fetchFrameworkStats, fetchFrameworkCommentary, saveShortlistToStorage, loadShortlistFromStorage, throttle } from '$lib/utils';
   import { getSimpleIconUrl } from '$lib/utils/branding-utils';
   import type { FrameworkData, Weights } from '$lib/types';
 
@@ -162,17 +162,17 @@
   onMount(() => {
     loadFrameworkData();
     loadExternalData();
-    
+
     // Set up scroll listener for GitHub button visibility
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const isAtBottom = currentScrollY + windowHeight >= documentHeight - 100;
-      
+
       // Get hero height for reference
       const heroHeight = heroElement?.offsetHeight || 500;
-      
+
       // Show button if:
       // - At top (within hero section)
       // - Scrolling up
@@ -186,15 +186,18 @@
       } else {
         showGithubButton = false;
       }
-      
+
       lastScrollY = currentScrollY;
     };
-    
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
+
+    // Throttle scroll handler to improve performance (max once every 100ms)
+    const throttledScroll = throttle(handleScroll, 100);
+
+    window.addEventListener('scroll', throttledScroll, { passive: true });
+
     // Cleanup
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', throttledScroll);
     };
   });
 </script>

@@ -1,6 +1,7 @@
 <script lang="ts">
+  import BaseCard from './BaseCard.svelte';
+
   export let commitActivity: any[] | undefined;
-  export let brandColor: string | undefined = undefined;
 
   function formatWeekData(activity: any[]): { week: string; commits: number; percentage: number }[] {
     if (!activity || activity.length === 0) return [];
@@ -22,9 +23,7 @@
   $: avgCommitsPerWeek = commitActivity ? Math.round(totalCommits / commitActivity.length) : 0;
 </script>
 
-<div class="card card-wide activity-chart-card">
-  <h3>Commit Activity</h3>
-
+<BaseCard title="Commit Activity" size="wide">
   {#if weekData.length > 0}
     <div class="activity-stats">
       <div class="stat">
@@ -52,19 +51,9 @@
       <p>No commit activity data available</p>
     </div>
   {/if}
-</div>
+</BaseCard>
 
 <style>
-  .activity-chart-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  h3 {
-    margin: 0;
-    font-size: var(--font-lg);
-  }
 
   .activity-stats {
     display: flex;

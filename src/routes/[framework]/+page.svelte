@@ -124,7 +124,7 @@
       />
 
       {#if staticData?.framework}
-        <FrameworkScoresCard scores={staticData.framework} brandColor={brandColor} />
+        <FrameworkScoresCard scores={staticData.framework} />
       {/if}
 
       {#if frameworkData.github?.stars}
@@ -175,7 +175,7 @@
       {/if}
 
       {#if frameworkData.metadata?.github?.fullName}
-        <StarHistoryCard repoFullName={frameworkData.metadata.github.fullName} brandColor={brandColor} />
+        <StarHistoryCard repoFullName={frameworkData.metadata.github.fullName} />
       {/if}
 
       {#if frameworkData.github?.contributors && frameworkData.github.contributors.length > 0}

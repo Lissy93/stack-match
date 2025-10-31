@@ -5,7 +5,6 @@
   margin: 0 auto;
 }
 
-.loading-state,
 .error-state {
   display: flex;
   flex-direction: column;
@@ -13,115 +12,6 @@
   justify-content: center;
   min-height: 50vh;
   gap: var(--gap-lg);
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--gap-lg);
-  text-align: center;
-  max-width: 400px;
-}
-
-.loading-icon {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.pulse-ring {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border: 3px solid var(--accent-primary);
-  border-radius: 50%;
-  opacity: 0;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-.pulse-ring.delay-1 {
-  animation-delay: 0.5s;
-}
-
-.pulse-ring.delay-2 {
-  animation-delay: 1s;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(0.8);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(1.4);
-    opacity: 0;
-  }
-}
-
-.framework-icon {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.loading-container h2 {
-  margin: 0;
-  font-size: var(--font-2xl);
-  color: var(--text-primary);
-  text-transform: capitalize;
-}
-
-.loading-container p {
-  margin: 0;
-  font-size: var(--font-base);
-  color: var(--text-secondary);
-}
-
-.loading-bar {
-  width: 100%;
-  height: 4px;
-  background: var(--surface-tertiary);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-}
-
-.loading-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary));
-  background-size: 200% 100%;
-  border-radius: var(--radius-full);
-  animation: loading-bar 1.5s ease-in-out infinite;
-}
-
-@keyframes loading-bar {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.error-state {
   text-align: center;
 }
 

@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { formatNumber } from '$lib/utils';
+  import BaseCard from './BaseCard.svelte';
+
   export let downloadTrends: any | undefined;
   export let brandColor: string | undefined = undefined;
 
@@ -25,12 +28,6 @@
   const padding = { top: 20, right: 20, bottom: 40, left: 60 };
   const innerWidth = chartWidth - padding.left - padding.right;
   const innerHeight = chartHeight - padding.top - padding.bottom;
-
-  function formatNumber(num: number): string {
-    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
-    return num.toString();
-  }
 
   function formatDate(dateStr: string): string {
     const date = new Date(dateStr);
@@ -75,8 +72,8 @@
 </script>
 
 {#if !hideCard}
-<div class="card card-wide download-trends-card">
-  <div class="card-header">
+<BaseCard title="Download Trends" size="wide" headerSlot={true}>
+  <div slot="header" class="card-header-content">
     <h3>Download Trends</h3>
     <div class="stats">
       {#if trendsData}
@@ -157,25 +154,20 @@
       </svg>
     </div>
   {/if}
-</div>
+</BaseCard>
 {/if}
 
 <style>
-  .download-trends-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  .card-header {
+  .card-header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: var(--gap-md);
+    width: 100%;
   }
 
-  h3 {
+  .card-header-content h3 {
     margin: 0;
     font-size: var(--font-lg);
   }
@@ -225,7 +217,7 @@
   }
 
   @media (max-width: 768px) {
-    .card-header {
+    .card-header-content {
       flex-direction: column;
       align-items: flex-start;
     }

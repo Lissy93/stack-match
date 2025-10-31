@@ -1,12 +1,8 @@
 <script lang="ts">
-  export let github: any;
+  import { formatNumber } from '$lib/utils';
+  import BaseCard from './BaseCard.svelte';
 
-  function formatNumber(num: number | undefined): string {
-    if (num === undefined) return 'N/A';
-    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
-    return num.toString();
-  }
+  export let github: any;
 
   function formatDate(dateStr: string | undefined): string {
     if (!dateStr) return 'N/A';
@@ -15,8 +11,7 @@
   }
 </script>
 
-<div class="card github-stats-card">
-  <h3>GitHub Statistics</h3>
+<BaseCard title="GitHub Statistics">
 
   <div class="stats-grid">
     <div class="stat-item stat-primary">
@@ -74,19 +69,10 @@
       {/if}
     </div>
   {/if}
-</div>
+
+</BaseCard>
 
 <style>
-  .github-stats-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  h3 {
-    margin: 0;
-    font-size: var(--font-lg);
-  }
 
   .stats-grid {
     display: grid;

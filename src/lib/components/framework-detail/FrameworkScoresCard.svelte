@@ -1,6 +1,7 @@
 <script lang="ts">
+  import BaseCard from './BaseCard.svelte';
+
   export let scores: any;
-  export let brandColor: string | undefined = undefined;
 
   const attributeLabels: Record<string, string> = {
     performance: 'Performance',
@@ -47,8 +48,8 @@
     : 0;
 </script>
 
-<div class="card card-large framework-scores-card">
-  <div class="card-header">
+<BaseCard title="Framework Ratings" size="large" headerSlot={true}>
+  <div slot="header" class="card-header-content">
     <h3>Framework Ratings</h3>
     <div class="avg-score">
       <span class="avg-value">{avgScore}</span>
@@ -80,22 +81,17 @@
       <p>No rating data available</p>
     </div>
   {/if}
-</div>
+</BaseCard>
 
 <style>
-  .framework-scores-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
-  }
-
-  .card-header {
+  .card-header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
   }
 
-  h3 {
+  .card-header-content h3 {
     margin: 0;
     font-size: var(--font-lg);
   }
