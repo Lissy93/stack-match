@@ -90,9 +90,6 @@
 </script>
 
 {#if showTable}
-  <section class="comparison-section" aria-labelledby="comparison-title">
-    <h2 id="comparison-title" class="section-title">Framework Comparison</h2>
-    
     <div class="table-wrapper">
       <table class="comparison-table" aria-labelledby="comparison-title">
         <caption class="sr-only">
@@ -189,26 +186,9 @@
         </tbody>
       </table>
     </div>
-  </section>
 {/if}
 
 <style>
-  .comparison-section {
-    margin-top: 3rem;
-    padding: 2rem;
-    background: var(--surface-secondary);
-    border-radius: 1.25rem;
-    border: 1px solid var(--border-primary);
-  }
-
-  .section-title {
-    font-size: var(--font-2xl);
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0 0 1.5rem 0;
-    text-align: center;
-  }
-
   .table-wrapper {
     overflow-x: auto;
     border-radius: 0.75rem;
@@ -440,13 +420,6 @@
   }
 
   @media (max-width: 768px) {
-    .comparison-section {
-      padding: 1rem;
-      margin-left: -1rem;
-      margin-right: -1rem;
-      border-radius: 0;
-    }
-
     .comparison-table th,
     .comparison-table td {
       padding: 0.75rem 0.5rem;

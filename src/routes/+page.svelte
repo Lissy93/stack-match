@@ -4,19 +4,26 @@
   import PresetButtons from '$lib/components/PresetButtons.svelte';
   import FrameworkCard from '$lib/components/FrameworkCard.svelte';
   import ComparisonTable from '$lib/components/ComparisonTable.svelte';
+  import DetailedComparisonTable from '$lib/components/DetailedComparisonTable.svelte';
   import SearchInput from '$lib/components/SearchInput.svelte';
   import EmptyComparisonState from '$lib/components/EmptyComparisonState.svelte';
+  import Hero from '$lib/components/Hero.svelte';
   import { Github } from 'lucide-svelte';
   import { weights, searchQuery, shortlist, expandedCards, sortedFrameworks, frameworkData, frameworkStats, frameworkCommentary } from '$lib/stores';
   import { ATTRIBUTES, PRESETS } from '$lib/constants';
   import { fetchFrameworkStats, fetchFrameworkCommentary, saveShortlistToStorage, loadShortlistFromStorage, throttle } from '$lib/utils';
-  import { getSimpleIconUrl } from '$lib/utils/branding-utils';
   import type { FrameworkData, Weights } from '$lib/types';
   import data from '../data.json';
 
   let showGithubButton = true;
   let lastScrollY = 0;
   let heroElement: HTMLElement;
+
+  // Comparison view state
+  type ComparisonView = 'summary' | 'detailed';
+  let comparisonView: ComparisonView = 'summary';
+  let detailedComparisonData: any[] = [];
+  let loadingDetailedData = false;
 
   // Load framework data from JSON
   function loadFrameworkData(): void {
@@ -145,6 +152,46 @@
     })
     .filter((item): item is { framework: any; meta: any } => item !== null);
 
+  // Load detailed comparison data when switching to detailed view
+  async function loadDetailedComparisonData() {
+    if (shortlistedFrameworks.length === 0) {
+      detailedComparisonData = [];
+      return;
+    }
+
+    loadingDetailedData = true;
+    try {
+      const frameworkIds = shortlistedFrameworks.map(f => f.meta.id);
+      const promises = frameworkIds.map(id =>
+        fetch(`/api/framework/${id}`).then(r => r.json())
+      );
+      detailedComparisonData = await Promise.all(promises);
+    } catch (error) {
+      console.error('Failed to load detailed comparison data:', error);
+      detailedComparisonData = [];
+    } finally {
+      loadingDetailedData = false;
+    }
+  }
+
+  // Handle view change
+  async function handleViewChange(view: ComparisonView) {
+    comparisonView = view;
+    if (view === 'detailed' && detailedComparisonData.length === 0) {
+      await loadDetailedComparisonData();
+    }
+  }
+
+  // Reload detailed data when shortlist changes (if we're in detailed view)
+  $: if (comparisonView === 'detailed' && shortlistedFrameworks.length > 0) {
+    loadDetailedComparisonData();
+  }
+
+  // Clear detailed data when shortlist is empty
+  $: if (shortlistedFrameworks.length === 0) {
+    detailedComparisonData = [];
+  }
+
   // Load data on mount
   onMount(() => {
     loadFrameworkData();
@@ -210,35 +257,8 @@
     <span class="github-text">View on GitHub</span>
   </a>
 
-  <!-- Header -->
-  <header class="app-header" bind:this={heroElement}>
-    <h1 class="app-title">Stack Match</h1>
-    <p class="app-subtitle">
-      Find your perfect frontend framework, based on what matters most for your project.
-    </p>
-
-    {#if $frameworkData?.meta}
-      <div class="hero-frameworks">
-        {#each $frameworkData.meta as framework}
-          <a
-            href="/{framework.id}"
-            class="hero-framework-icon"
-            title={framework.name}
-            style="--brand-color: {framework.branding.color}"
-          >
-            <img
-              src={getSimpleIconUrl(framework.branding.iconName, framework.branding.color)}
-              alt="{framework.name} icon"
-            />
-          </a>
-        {/each}
-      </div>
-    {/if}
-
-    <p class="app-second-subtitle">
-      Results are using data calculated from <a href="https://github.com/Lissy93/framework-benchmarks" aria-label="Visit framework benchmarks repository on GitHub">framework-benchmarks</a>
-    </p>
-  </header>
+  <!-- Hero -->
+  <Hero bind:heroElement />
 
 
   <!-- Presets -->
@@ -312,10 +332,61 @@
 
   <!-- Comparison Section -->
   {#if shortlistedFrameworks.length > 0}
-    <ComparisonTable
-      {shortlistedFrameworks}
-      onRemoveFromShortlist={removeFromShortlist}
-    />
+    <section class="comparison-section" aria-labelledby="comparison-title">
+      <div class="comparison-header">
+        <h2 id="comparison-title" class="comparison-title">Framework Comparison</h2>
+        <div class="view-toggle" role="tablist" aria-label="Comparison view">
+          <button
+            type="button"
+            role="tab"
+            class="view-toggle-btn"
+            class:active={comparisonView === 'summary'}
+            aria-selected={comparisonView === 'summary'}
+            aria-controls="comparison-content"
+            on:click={() => handleViewChange('summary')}
+          >
+            Summary
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="view-toggle-btn"
+            class:active={comparisonView === 'detailed'}
+            aria-selected={comparisonView === 'detailed'}
+            aria-controls="comparison-content"
+            on:click={() => handleViewChange('detailed')}
+          >
+            Detailed
+          </button>
+        </div>
+      </div>
+
+      <div id="comparison-content" role="tabpanel">
+        {#if comparisonView === 'summary'}
+          <ComparisonTable
+            {shortlistedFrameworks}
+            onRemoveFromShortlist={removeFromShortlist}
+          />
+        {:else if loadingDetailedData}
+          <div class="loading-detailed">
+            <div class="spinner"></div>
+            <p>Loading detailed comparison data...</p>
+          </div>
+        {:else}
+          <DetailedComparisonTable
+            frameworks={detailedComparisonData}
+            onRemoveFramework={(id) => {
+              const framework = shortlistedFrameworks.find(f => f.meta.id === id);
+              if (framework) {
+                removeFromShortlist(framework.framework.name);
+                // Remove from detailed data too
+                detailedComparisonData = detailedComparisonData.filter(f => f.id !== id);
+              }
+            }}
+          />
+        {/if}
+      </div>
+    </section>
   {:else}
     <EmptyComparisonState />
   {/if}
@@ -406,95 +477,6 @@
 
   .github-text {
     white-space: nowrap;
-  }
-
-  .app-header {
-    text-align: center;
-    margin-bottom: var(--gap-2xl);
-    padding: var(--gap-xl) 0;
-  }
-
-  .app-title {
-    margin-bottom: var(--gap-md);
-    position: relative;
-  }
-
-  .app-title::after {
-    content: '';
-    position: absolute;
-    bottom: -0.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4rem;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent-primary), var(--accent-gradient));
-    border-radius: 9999px;
-  }
-
-  .app-subtitle {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-
-  .hero-frameworks {
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    gap: var(--gap-sm);
-    margin: var(--gap-xl) auto var(--gap-lg);
-    max-width: 450px;
-  }
-
-  @media (min-width: 1400px) {
-    .hero-frameworks {
-      grid-template-columns: repeat(18, 1fr);
-      max-width: 900px;
-    }
-  }
-
-  .hero-framework-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1;
-    padding: var(--gap-xs);
-    border-radius: var(--radius-md);
-    transition: all 0.2s ease;
-    border: 1px solid transparent;
-    text-decoration: none;
-  }
-
-  .hero-framework-icon:hover {
-    background: var(--surface-secondary);
-    border-color: var(--brand-color);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px color-mix(in srgb, var(--brand-color) 30%, transparent);
-  }
-
-  .hero-framework-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: grayscale(0.2);
-    transition: filter 0.2s ease;
-  }
-
-  .hero-framework-icon:hover img {
-    filter: grayscale(0);
-  }
-
-  .app-second-subtitle {
-    font-size: var(--font-sm);
-    opacity: 0.9;
-    color: var(--text-secondary);
-    margin-top: var(--gap-sm);
-    line-height: 1.4;
-  }
-  .app-second-subtitle a {
-    color: var(--accent-primary);
-    text-decoration: underline;
   }
 
   .main-content {
@@ -631,31 +613,8 @@
       gap: var(--gap-md);
     }
 
-    .app-title {
-      font-size: var(--font-3xl);
-    }
-
-    .app-subtitle {
-      font-size: var(--font-base);
-    }
-
     .results-title {
       font-size: var(--font-2xl);
-    }
-
-    .hero-frameworks {
-      grid-template-columns: repeat(6, 1fr);
-      gap: var(--gap-sm);
-      margin: var(--gap-lg) auto;
-      max-width: 300px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .hero-frameworks {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.375rem;
-      max-width: 150px;
     }
   }
 
@@ -672,6 +631,74 @@
     .sliders-grid {
       gap: var(--gap-sm);
     }
+  }
+
+  .comparison-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--surface-secondary);
+    border-radius: 1.25rem;
+    border: 1px solid var(--border-primary);
+  }
+
+  .comparison-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: var(--gap-lg);
+  }
+
+  .comparison-title {
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .view-toggle {
+    display: flex;
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    gap: 0.25rem;
+  }
+
+  .view-toggle-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .view-toggle-btn:hover {
+    color: var(--text-primary);
+    background: var(--surface-tertiary);
+  }
+
+  .view-toggle-btn.active {
+    background: var(--accent-primary);
+    color: white;
+  }
+
+  .loading-detailed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-md);
+    padding: var(--gap-2xl);
+  }
+
+  .loading-detailed p {
+    color: var(--text-secondary);
+    margin: 0;
   }
 
   .app-footer {
@@ -711,6 +738,32 @@
 
     .github-text {
       display: none;
+    }
+
+    .comparison-section {
+      padding: 1rem;
+      margin-left: -1rem;
+      margin-right: -1rem;
+      border-radius: 0;
+    }
+
+    .comparison-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--gap-md);
+    }
+
+    .comparison-title {
+      font-size: var(--font-xl);
+      text-align: center;
+    }
+
+    .view-toggle {
+      width: 100%;
+    }
+
+    .view-toggle-btn {
+      flex: 1;
     }
   }
 
