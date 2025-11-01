@@ -1,6 +1,7 @@
 <script lang="ts">
   import { formatNumber } from '$lib/utils';
   import BaseCard from './BaseCard.svelte';
+  import { Star, GitFork, Eye, Bug } from 'lucide-svelte';
 
   export let github: any;
 
@@ -15,7 +16,7 @@
 
   <div class="stats-grid">
     <div class="stat-item stat-primary">
-      <span class="stat-icon">⭐</span>
+      <span class="stat-icon"><Star size={28} /></span>
       <div class="stat-content">
         <span class="stat-value">{formatNumber(github?.stars)}</span>
         <span class="stat-label">Stars</span>
@@ -23,7 +24,7 @@
     </div>
 
     <div class="stat-item">
-      <span class="stat-icon">🍴</span>
+      <span class="stat-icon"><GitFork size={28} /></span>
       <div class="stat-content">
         <span class="stat-value">{formatNumber(github?.forks)}</span>
         <span class="stat-label">Forks</span>
@@ -31,7 +32,7 @@
     </div>
 
     <div class="stat-item">
-      <span class="stat-icon">👀</span>
+      <span class="stat-icon"><Eye size={28} /></span>
       <div class="stat-content">
         <span class="stat-value">{formatNumber(github?.watchers)}</span>
         <span class="stat-label">Watchers</span>
@@ -39,7 +40,7 @@
     </div>
 
     <div class="stat-item">
-      <span class="stat-icon">🐛</span>
+      <span class="stat-icon"><Bug size={28} /></span>
       <div class="stat-content">
         <span class="stat-value">{formatNumber(github?.open_issues)}</span>
         <span class="stat-label">Issues</span>
@@ -95,7 +96,10 @@
   }
 
   .stat-icon {
-    font-size: var(--font-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
   }
 
   .stat-content {

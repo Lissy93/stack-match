@@ -1,5 +1,6 @@
 <script lang="ts">
   import BaseCard from './BaseCard.svelte';
+  import { LockKeyhole, Check } from 'lucide-svelte';
 
   export let security: any;
 
@@ -12,7 +13,7 @@
 <BaseCard title="Security">
 
   <div class="security-score {securityClass}">
-    <div class="score-icon">🔒</div>
+    <div class="score-icon"><LockKeyhole size={48} /></div>
     <div class="score-content">
       <div class="score-value">{totalVulns}</div>
       <div class="score-label">Known Vulnerabilities</div>
@@ -51,7 +52,7 @@
 
       {#if totalVulns === 0}
         <div class="no-vulnerabilities">
-          <span>✓ No known vulnerabilities</span>
+          <Check size={16} /> No known vulnerabilities
         </div>
       {/if}
     </div>
@@ -76,7 +77,9 @@
   }
 
   .score-icon {
-    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .score-content {
@@ -166,6 +169,10 @@
     border-radius: var(--radius-md);
     text-align: center;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-xs);
   }
 
   .audit-time {

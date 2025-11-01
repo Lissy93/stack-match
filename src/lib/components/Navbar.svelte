@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import { getSimpleIconUrl } from '$lib/utils/branding-utils';
   import data from '../../data.json';
+  import { Flame } from 'lucide-svelte';
 
   interface Framework {
     id: string;
@@ -48,7 +49,7 @@
 <nav class="navbar" class:scrolled>
   <div class="navbar-container">
     <a href="/" class="logo">
-      <span class="logo-icon">🎯</span>
+      <span class="logo-icon"><Flame size={24} /></span>
       <span class="logo-text">Stack Match</span>
     </a>
 
@@ -73,8 +74,8 @@
       </div>
 
       <div class="navbar-actions">
-        <a href="/compare" class="btn btn-secondary">Compare</a>
-        <a href="/" class="btn btn-primary">Compare All</a>
+        <a href="/compare" class="btn btn-secondary">Full Compare</a>
+        <a href="/" class="btn btn-primary">Quick Compare</a>
       </div>
     </div>
 

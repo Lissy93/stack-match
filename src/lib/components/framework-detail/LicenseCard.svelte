@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import BaseCard from './BaseCard.svelte';
+  import { Scale } from 'lucide-svelte';
 
   export let license: any;
 
@@ -116,7 +117,10 @@
     {/if}
   {:else if license}
     <div class="license-fallback">
-      <p class="license-name-text">{license.name}</p>
+      <p class="license-name-text">
+        <Scale size={16} />
+        {license.name}
+      </p>
       {#if rateLimited}
         <p class="rate-limit-notice">
           Full license details temporarily unavailable. Visit the GitHub repository for complete information.
@@ -272,6 +276,9 @@
     margin: 0;
     color: var(--text-secondary);
     font-size: var(--font-base);
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
   }
 
   .rate-limit-notice {

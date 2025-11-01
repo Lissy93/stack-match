@@ -5,6 +5,7 @@
   import NoData from './NoData.svelte';
   import { formatNumber } from '$lib/utils';
   import type { JsDelivrData } from '$lib/types';
+  import { CloudDownload } from 'lucide-svelte';
 
   export let packageName: string | undefined;
 
@@ -45,7 +46,10 @@
     <div class="content">
       <div class="stat-highlight">
         <div class="stat-value">{formatNumber(data.last30Days)}</div>
-        <div class="stat-label">Hits Last 30 Days</div>
+        <div class="stat-label">
+          <CloudDownload size={16} />
+          Downloads (30D)
+        </div>
         <div class="stat-note">Rank #{data.rank}</div>
       </div>
 

@@ -1,14 +1,15 @@
 <script lang="ts">
   import BaseCard from './BaseCard.svelte';
+  import { Chrome, Flame, Compass, Zap } from 'lucide-svelte';
 
   export let packageName: string | undefined;
   export let browserSupportUrl: string | undefined;
 
   const browsers = [
-    { name: 'Chrome', icon: '🌐' },
-    { name: 'Firefox', icon: '🦊' },
-    { name: 'Safari', icon: '🧭' },
-    { name: 'Edge', icon: '⚡' }
+    { name: 'Chrome', iconComponent: Chrome },
+    { name: 'Firefox', iconComponent: Flame },
+    { name: 'Safari', iconComponent: Compass },
+    { name: 'Edge', iconComponent: Zap }
   ];
 </script>
 
@@ -22,7 +23,9 @@
       <div class="browsers-grid">
         {#each browsers as browser}
           <div class="browser-item">
-            <span class="browser-icon" aria-hidden="true">{browser.icon}</span>
+            <span class="browser-icon" aria-hidden="true">
+              <svelte:component this={browser.iconComponent} size={32} />
+            </span>
             <span class="browser-name">{browser.name}</span>
             <span class="support-badge supported">Supported</span>
           </div>
@@ -78,7 +81,10 @@
   }
 
   .browser-icon {
-    font-size: var(--font-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
   }
 
   .browser-name {

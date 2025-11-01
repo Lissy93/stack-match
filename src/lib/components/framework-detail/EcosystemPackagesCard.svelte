@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Package as PackageIcon, Star } from 'lucide-svelte';
+
   export let ecosystem: any;
 
   interface Package {
@@ -36,12 +38,12 @@
             <div class="package-stats">
               {#if pkg.downloads}
                 <span class="stat" title="Monthly downloads">
-                  📦 {formatDownloads(pkg.downloads)}
+                  <PackageIcon size={14} /> {formatDownloads(pkg.downloads)}
                 </span>
               {/if}
               {#if pkg.stars}
                 <span class="stat" title="GitHub stars">
-                  ⭐ {pkg.stars.toLocaleString()}
+                  <Star size={14} /> {pkg.stars.toLocaleString()}
                 </span>
               {/if}
             </div>
@@ -119,6 +121,9 @@
     font-size: var(--font-xs);
     color: var(--text-tertiary);
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
   }
 
   .package-description {

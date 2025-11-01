@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import BaseCard from './BaseCard.svelte';
+  import { Users } from 'lucide-svelte';
 
   export let contributors: any = undefined;
   export let frameworkId: string | undefined = undefined;
@@ -52,7 +53,10 @@
     {#if totalContributors > 0}
       <div class="stat-highlight">
         <div class="stat-value">{totalContributors.toLocaleString()}</div>
-        <div class="stat-label">Contributors</div>
+        <div class="stat-label">
+          <Users size={16} />
+          Contributors
+        </div>
       </div>
     {:else}
       <div class="no-data">
@@ -64,7 +68,10 @@
     {#if totalContributors > 0}
       <div class="stat-highlight">
         <div class="stat-value">{totalContributors.toLocaleString()}</div>
-        <div class="stat-label">Total Contributors</div>
+        <div class="stat-label">
+          <Users size={16} />
+          Total Contributors
+        </div>
       </div>
     {/if}
 

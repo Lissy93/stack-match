@@ -5,6 +5,7 @@
   import NoData from './NoData.svelte';
   import { formatNumber } from '$lib/utils';
   import type { StackOverflowData } from '$lib/types';
+  import { MessageCircleQuestion } from 'lucide-svelte';
 
   export let tag: string | undefined;
 
@@ -45,7 +46,10 @@
     <div class="content">
       <div class="stat-highlight">
         <div class="stat-value">{formatNumber(data.count)}</div>
-        <div class="stat-label">Questions</div>
+        <div class="stat-label">
+          <MessageCircleQuestion size={16} />
+          Questions
+        </div>
       </div>
 
       <a

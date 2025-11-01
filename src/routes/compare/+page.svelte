@@ -17,6 +17,7 @@
   import ExampleProjectCard from '$lib/components/framework-detail/ExampleProjectCard.svelte';
   import LicenseCard from '$lib/components/framework-detail/LicenseCard.svelte';
   import { getSimpleIconUrl } from '$lib/utils/branding-utils';
+  import { X, Globe, Github, Package, Sparkles } from 'lucide-svelte';
 
   export let data;
 
@@ -60,7 +61,10 @@
   });
 
   async function loadComparisonData() {
-    if (selectedFrameworks.length === 0) return;
+    if (selectedFrameworks.length === 0) {
+      comparisonData = [];
+      return;
+    }
 
     loading = true;
     try {
@@ -78,14 +82,18 @@
   function toggleFramework(frameworkId: string) {
     const index = selectedFrameworks.indexOf(frameworkId);
     if (index > -1) {
-      if (selectedFrameworks.length > 2) {
-        selectedFrameworks = selectedFrameworks.filter(id => id !== frameworkId);
-      }
+      selectedFrameworks = selectedFrameworks.filter(id => id !== frameworkId);
     } else {
       if (selectedFrameworks.length < 6) {
         selectedFrameworks = [...selectedFrameworks, frameworkId];
       }
     }
+    updateURL();
+    loadComparisonData();
+  }
+
+  function removeFramework(frameworkId: string) {
+    selectedFrameworks = selectedFrameworks.filter(id => id !== frameworkId);
     updateURL();
     loadComparisonData();
   }
@@ -140,7 +148,7 @@
     <div class="framework-chips">
       {#each availableFrameworks as framework}
         {@const isSelected = selectedFrameworks.includes(framework.id)}
-        {@const canToggle = isSelected ? selectedFrameworks.length > 2 : selectedFrameworks.length < 6}
+        {@const canToggle = isSelected || selectedFrameworks.length < 6}
         <button
           class="framework-chip"
           class:selected={isSelected}
@@ -161,7 +169,7 @@
         </button>
       {/each}
     </div>
-    <p class="selector-hint">Select 2-6 frameworks to compare</p>
+    <p class="selector-hint">Select up to 6 frameworks to compare</p>
   </div>
 
   {#if loading}
@@ -177,10 +185,24 @@
         <div class="grid-header"></div>
         {#each comparisonData as framework}
           <div class="grid-header framework-header">
-            {#if framework.metadata?.logo}
-              <img src={framework.metadata.logo} alt={framework.metadata?.name} class="framework-logo" />
-            {/if}
-            <h3>{framework.metadata?.name || framework.id}</h3>
+            <div class="framework-header-content">
+              <a href="/{framework.id}" class="framework-info">
+                <img
+                  src={getSimpleIconUrl(framework.metadata?.branding?.iconName || framework.id, '#ffffff')}
+                  alt="{framework.metadata?.name} icon"
+                  class="framework-icon"
+                />
+                <h3>{framework.metadata?.name || framework.id}</h3>
+              </a>
+              <button
+                type="button"
+                class="remove-btn"
+                on:click={() => removeFramework(framework.id)}
+                aria-label="Remove {framework.metadata?.name} from comparison"
+              >
+                <X size={16} />
+              </button>
+            </div>
           </div>
         {/each}
 
@@ -338,21 +360,21 @@
             <div class="cell-content links-cell">
               {#if framework.metadata?.links?.website}
                 <a href={framework.metadata.links.website} target="_blank" rel="noopener noreferrer" class="link-btn">
-                  🌐 Website
+                  <Globe size={16} /> Website
                 </a>
               {/if}
               {#if framework.metadata?.links?.github}
                 <a href={framework.metadata.links.github} target="_blank" rel="noopener noreferrer" class="link-btn">
-                  💻 GitHub
+                  <Github size={16} /> GitHub
                 </a>
               {/if}
               {#if framework.npm?.name}
                 <a href="https://www.npmjs.com/package/{framework.npm.name}" target="_blank" rel="noopener noreferrer" class="link-btn">
-                  📦 npm
+                  <Package size={16} /> npm
                 </a>
               {/if}
               <a href="/{framework.id}" class="link-btn primary">
-                View Details →
+                <Sparkles size={16} /> View Full Details →
               </a>
             </div>
           </div>
@@ -400,7 +422,8 @@
 
 <style>
   .compare-page {
-    max-width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
     padding: var(--gap-xl) var(--gap-lg);
   }
 
@@ -571,15 +594,61 @@
     text-align: center;
   }
 
-  .framework-logo {
-    width: 48px;
-    height: 48px;
+  .framework-header-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-sm);
+    width: 100%;
+  }
+
+  .framework-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--gap-sm);
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+  }
+
+  .framework-info:hover {
+    opacity: 0.8;
+  }
+
+  .framework-info:hover h3 {
+    text-decoration: underline;
+  }
+
+  .framework-icon {
+    width: auto;
+    height: 24px;
     object-fit: contain;
   }
 
   .framework-header h3 {
     margin: 0;
     font-size: var(--font-base);
+  }
+
+  .remove-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: var(--gap-xs);
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .remove-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+    color: #ef4444;
   }
 
   .row-label {
@@ -641,6 +710,10 @@
     font-size: var(--font-xs);
     text-align: center;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: anchor-center;
+    gap: var(--gap-sm);
+    justify-content: center;
   }
 
   .link-btn:hover {
@@ -753,6 +826,10 @@
   .collapse-btn:hover {
     background: var(--surface-tertiary);
     border-color: var(--accent-primary);
+  }
+
+  :global(.license-section li) {
+    padding-left: 1rem !important;
   }
 
   @media (max-width: 1024px) {

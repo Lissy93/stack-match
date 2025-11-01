@@ -1,6 +1,7 @@
 <script lang="ts">
   import { formatNumber } from '$lib/utils';
   import BaseCard from './BaseCard.svelte';
+  import { Check, X } from 'lucide-svelte';
 
   export let npm: any;
 
@@ -103,8 +104,12 @@
 
     <div class="stat-row">
       <span class="stat-label">TypeScript Support</span>
-      <span class="stat-value" class:has-support={typeScriptSupport} class:no-support={!typeScriptSupport}>
-        {typeScriptSupport ? '✓ Yes' : '✗ No'}
+      <span class="stat-value typescript-support" class:has-support={typeScriptSupport} class:no-support={!typeScriptSupport}>
+        {#if typeScriptSupport}
+          <Check size={16} /> Yes
+        {:else}
+          <X size={16} /> No
+        {/if}
       </span>
     </div>
   </div>
@@ -176,6 +181,12 @@
   .stat-value.primary {
     color: var(--accent-primary);
     font-size: var(--font-lg);
+  }
+
+  .stat-value.typescript-support {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
   }
 
   .keywords {

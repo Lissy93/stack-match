@@ -1,5 +1,6 @@
 <script lang="ts">
   import data from '../../../data.json';
+  import { Globe, Github } from 'lucide-svelte';
 
   export let example: {
     title?: string;
@@ -85,8 +86,8 @@
             rel="noopener noreferrer"
             class="btn btn-primary"
           >
-            <span class="link-icon">🌐</span>
-            Visit Website
+            <Globe size={18} />
+            <span>Visit Website</span>
           </a>
         {/if}
         {#if repo}
@@ -96,8 +97,8 @@
             rel="noopener noreferrer"
             class="btn btn-secondary"
           >
-            <span class="link-icon">💻</span>
-            View Source
+            <Github size={18} />
+            <span>View Source</span>
           </a>
         {/if}
       </div>
@@ -119,6 +120,7 @@
   .star-badge {
     filter: invert(1) brightness(1.25) sepia(3) hue-rotate(212deg);
     height: 22px;
+    max-width: 100%;
     width: auto;
   }
 
@@ -295,10 +297,6 @@
     transform: translateY(-1px);
   }
 
-  .link-icon {
-    font-size: var(--font-base);
-    line-height: 1;
-  }
 
   @media (max-width: 768px) {
     .project-header {

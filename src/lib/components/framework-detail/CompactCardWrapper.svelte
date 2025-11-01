@@ -9,9 +9,8 @@
 
 <style>
   .compact-wrapper {
-    /* Remove card backgrounds and borders - grid provides structure */
-    --gap-lg: var(--gap-sm);
-    --gap-md: var(--gap-xs);
+    --gap-lg: var(--gap-md);
+    --gap-md: var(--gap-sm);
     height: 100%;
   }
 
