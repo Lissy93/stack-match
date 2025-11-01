@@ -1,4 +1,6 @@
 <script lang="ts">
+  import data from '../../../data.json';
+
   export let example: {
     title?: string;
     description?: string;
@@ -6,68 +8,140 @@
     website?: string;
     logo?: string;
   } | undefined = undefined;
+  export let frameworkId: string | undefined = undefined;
+  export let small: boolean = false;
 
-  $: hasExample = example && example.title && example.repo;
-  $: title = example?.title || '';
-  $: description = example?.description || '';
-  $: repo = example?.repo || '';
-  $: website = example?.website || '';
-  $: logo = example?.logo || '';
+  // If example is not provided but frameworkId is, fetch from data.json
+  $: actualExample = example || (frameworkId ? data.meta.find((m: any) => m.id === frameworkId)?.example : undefined);
+
+  $: hasExample = actualExample && actualExample.title && actualExample.repo;
+  $: title = actualExample?.title || '';
+  $: description = actualExample?.description || '';
+  $: repo = actualExample?.repo || '';
+  $: website = actualExample?.website || '';
+  $: logo = actualExample?.logo || '';
+
+  // Extract repo name from GitHub URL for the star badge
+  $: repoName = repo ? repo.match(/github\.com\/[^\/]+\/([^\/]+)/)?.[1] || '' : '';
+  $: starBadgeUrl = repoName ? `https://img.shields.io/github/stars/lissy93/${repoName}?label=lissy93%2F${repoName}` : '';
+  $: githubUrl = repoName ? `https://github.com/lissy93/${repoName}` : repo;
 </script>
 
 {#if hasExample}
-  <div class="card example-project-card">
-    <div class="card-header">
-      <h3>Example Project</h3>
-    </div>
+  <div class="card example-project-card" class:compact={small}>
+    {#if !small}
+      <div class="card-header">
+        <h3>Example Project</h3>
+      </div>
+    {/if}
 
-    <div class="project-header">
+    <a
+      href={repo}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="project-header"
+    >
       {#if logo}
-        <div class="project-logo">
+        <div class="project-logo" class:small>
           <img src={logo} alt="{title} logo" />
         </div>
       {/if}
 
       <div class="project-info">
-        <h4 class="project-title">{title}</h4>
+        <h4 class="project-title" class:small>{title}</h4>
         {#if description}
-          <p class="project-description">{description}</p>
+          <p class="project-description" class:small>{description}</p>
+        {/if}
+        {#if !small && starBadgeUrl}
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="star-badge-link"
+          >
+            <img src={starBadgeUrl} alt="{title} GitHub stars" class="star-badge" />
+          </a>
         {/if}
       </div>
-    </div>
+    </a>
 
-    <div class="project-links">
-      {#if website}
-        <a
-          href={website}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn-primary"
-        >
-          <span class="link-icon">🌐</span>
-          Visit Website
-        </a>
-      {/if}
-      {#if repo}
-        <a
-          href={repo}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn-secondary"
-        >
-          <span class="link-icon">💻</span>
-          View Source
-        </a>
-      {/if}
-    </div>
+    {#if small && starBadgeUrl}
+      <a
+        href={githubUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="star-badge-link"
+      >
+        <img src={starBadgeUrl} alt="{title} GitHub stars" class="star-badge" />
+      </a>
+    {/if}
+
+    {#if !small}
+      <div class="project-links">
+        {#if website}
+          <a
+            href={website}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
+            <span class="link-icon">🌐</span>
+            Visit Website
+          </a>
+        {/if}
+        {#if repo}
+          <a
+            href={repo}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-secondary"
+          >
+            <span class="link-icon">💻</span>
+            View Source
+          </a>
+        {/if}
+      </div>
+    {/if}
   </div>
 {/if}
 
 <style>
+  .star-badge-link {
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+  }
+
+  .star-badge-link:hover {
+    transform: translateY(-1px);
+  }
+
+  .star-badge {
+    filter: invert(1) brightness(1.25) sepia(3) hue-rotate(212deg);
+    height: 22px;
+    width: auto;
+  }
+
+  .no-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--gap-md);
+    color: var(--text-tertiary);
+    font-style: italic;
+    font-size: var(--font-sm);
+  }
+
   .example-project-card {
     display: flex;
     flex-direction: column;
     gap: var(--gap-lg);
+  }
+
+  .example-project-card.compact {
+    gap: var(--gap-sm);
+    justify-content: space-between;
+    height: 100%;
   }
 
   .card-header {
@@ -85,6 +159,21 @@
     display: flex;
     gap: var(--gap-lg);
     align-items: center;
+    text-decoration: none;
+    color: inherit;
+    padding: var(--gap-sm);
+    margin: calc(-1 * var(--gap-sm));
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+  }
+
+  .project-header:hover {
+    background: var(--surface-tertiary);
+    transform: translateY(-1px);
+  }
+
+  .project-header:hover .project-title {
+    color: var(--accent-primary);
   }
 
   .project-logo {
@@ -98,6 +187,12 @@
     align-items: center;
     justify-content: center;
     border: 1px solid var(--border-primary);
+  }
+
+  .project-logo.small {
+    width: 40px;
+    height: 40px;
+    padding: var(--gap-xs);
   }
 
   .project-logo img {
@@ -121,6 +216,10 @@
     color: var(--text-primary);
   }
 
+  .project-title.small {
+    font-size: var(--font-sm);
+  }
+
   .project-description {
     margin: 0;
     color: var(--text-secondary);
@@ -128,11 +227,21 @@
     line-height: 1.5;
   }
 
+  .project-description.small {
+    font-size: var(--font-xs);
+    line-height: 1.4;
+  }
+
   .project-links {
     display: flex;
     gap: var(--gap-md);
     flex-wrap: wrap;
     padding-top: var(--gap-sm);
+  }
+
+  .project-links.compact {
+    gap: var(--gap-xs);
+    padding-top: 0;
   }
 
   .btn {
@@ -147,6 +256,19 @@
     transition: all 0.2s ease;
     border: 1px solid transparent;
     cursor: pointer;
+  }
+
+  .btn-compact {
+    padding: var(--gap-xs) var(--gap-sm);
+    font-size: var(--font-base);
+    background: var(--surface-tertiary);
+    border-color: var(--border-primary);
+  }
+
+  .btn-compact:hover {
+    background: var(--surface-secondary);
+    border-color: var(--accent-primary);
+    transform: scale(1.1);
   }
 
   .btn-primary {

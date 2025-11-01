@@ -317,11 +317,11 @@
         "browserSupport": "https://svelte.dev/docs/introduction#browser-support"
       },
       "example": {
-        "title": "Portainer Templates",
-        "description": "Automated Docker deployment specs",
-        "repo": "https://github.com/Lissy93/portainer-templates",
-        "website": "https://portainer-templates.as93.net/",
-        "logo": "https://storage.googleapis.com/as93-screenshots/project-logos/portainer-templates.png"
+        "title": "Networking Toolbox",
+        "description": "100+ offline-first networking tools and utilities",
+        "repo": "https://github.com/Lissy93/networking-toolbox",
+        "website": "https://networkingtoolbox.net/",
+        "logo": "https://github.com/Lissy93/networking-toolbox/blob/main/static/icon.png?raw=true"
       }
     },
     {
@@ -592,7 +592,13 @@
         "npmPackage": "marko",
         "video": ""
       },
-      "example": {}
+      "example": {
+        "title": "Permissionator",
+        "description": "A Linux chmod calculator, for generating safe file permissions",
+        "repo": "https://github.com/Lissy93/permissionator",
+        "website": "https://permissionator.as93.net/",
+        "logo": "https://github.com/Lissy93/permissionator/blob/main/public/logo.png?raw=true"
+      }
     },
     {
       "id": "ember",

@@ -70,7 +70,7 @@
   </svelte:fragment>
 
   <div class="overview-content">
-    {#if metadata?.branding?.logo}
+    <!-- {#if metadata?.branding?.logo}
       <div class="framework-logo" style="border-color: {brandColor}">
         <img
           src={metadata.branding.logo}
@@ -85,7 +85,7 @@
 
     {#if metadata?.longDescription}
       <p class="long-description">{metadata.longDescription}</p>
-    {/if}
+    {/if} -->
 
     <div class="meta-grid">
       {#if metadata?.category}

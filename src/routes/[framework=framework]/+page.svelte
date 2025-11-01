@@ -187,10 +187,15 @@
         <DownloadTrendsCard downloadTrends={frameworkData.download_trends} brandColor={brandColor} />
       {/if}
 
-      {#if frameworkData.metadata?.github?.fullName}
-        <div class="card-large">
-          <StarHistoryCard repoFullName={frameworkData.metadata.github.fullName} />
-        </div>
+      {#if frameworkData.metadata?.github?.fullName || frameworkData.metadata?.links?.github}
+        {@const githubUrl = frameworkData.metadata?.links?.github}
+        {@const repoMatch = githubUrl?.match(/github\.com\/([^\/]+\/[^\/]+)/)}
+        {@const repoFullName = frameworkData.metadata?.github?.fullName || repoMatch?.[1]}
+        {#if repoFullName}
+          <div class="card-large">
+            <StarHistoryCard repoFullName={repoFullName} />
+          </div>
+        {/if}
       {/if}
 
       {#if frameworkData.github?.contributors?.top_contributors && frameworkData.github.contributors.top_contributors.length > 0}

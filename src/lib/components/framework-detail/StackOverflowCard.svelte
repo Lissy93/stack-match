@@ -45,7 +45,7 @@
     <div class="content">
       <div class="stat-highlight">
         <div class="stat-value">{formatNumber(data.count)}</div>
-        <div class="stat-label">Questions Tagged</div>
+        <div class="stat-label">Questions</div>
       </div>
 
       <a

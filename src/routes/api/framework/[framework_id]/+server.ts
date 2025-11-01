@@ -13,6 +13,7 @@ import {
   CACHE_TTL,
 } from "$lib/api-cache";
 import { GITHUB_TOKEN } from "$env/static/private";
+import rawData from '../../../../data.json';
 
 // Environment variables for API keys (optional - some APIs work without auth)
 // GITHUB_TOKEN is imported from $env/static/private
@@ -899,10 +900,13 @@ export const GET: RequestHandler = async ({ params, request }) => {
     // Calculate ecosystem health
     const ecosystem = calculateEcosystemHealth(github, npm, bundle, security);
 
+    // Get full metadata from rawData instead of processed frameworkMeta
+    const fullMetadata = rawData.meta.find((m: any) => m.id === frameworkId) || frameworkMeta;
+
     const response: FrameworkStats = {
       id: frameworkId,
       name: frameworkMeta.name,
-      metadata: frameworkMeta,
+      metadata: fullMetadata,
       github: github as FrameworkStats["github"],
       npm: npm as NPMData,
       bundle: bundle as BundleData,

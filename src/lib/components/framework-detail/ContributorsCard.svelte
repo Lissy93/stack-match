@@ -1,11 +1,36 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import BaseCard from './BaseCard.svelte';
 
-  export let contributors: any;
+  export let contributors: any = undefined;
+  export let frameworkId: string | undefined = undefined;
+  export let small: boolean = false;
 
-  $: topContributors = contributors?.top_contributors || [];
-  $: totalContributors = contributors?.total_contributors || 0;
-  $: totalCommits = contributors?.total_commits || 0;
+  let loading = false;
+  let fetchedContributors: any = null;
+
+  // If contributors is not provided but frameworkId is, fetch the data
+  onMount(async () => {
+    if (!contributors && frameworkId) {
+      loading = true;
+      try {
+        const response = await fetch(`/api/framework/${frameworkId}`);
+        if (response.ok) {
+          const data = await response.json();
+          fetchedContributors = data.github?.contributors;
+        }
+      } catch (error) {
+        console.error('Failed to fetch contributors:', error);
+      } finally {
+        loading = false;
+      }
+    }
+  });
+
+  $: actualContributors = contributors || fetchedContributors;
+  $: topContributors = actualContributors?.top_contributors || [];
+  $: totalContributors = actualContributors?.total_contributors || 0;
+  $: totalCommits = actualContributors?.total_commits || 0;
 
   function getContributionPercentage(contributions: number): number {
     if (totalCommits === 0) return 0;
@@ -20,56 +45,75 @@
 </script>
 
 <BaseCard title="Contributors">
-  {#if totalContributors > 0}
-    <div class="total-contributors">
-      <span class="contributor-count">{totalContributors.toLocaleString()}</span>
-      <span class="contributor-label">Total Contributors</span>
-    </div>
-  {/if}
-
-  {#if topContributors.length > 0}
-    <div class="contributors-list">
-      <h4>Top Contributors</h4>
-      {#each topContributors as contributor}
-        {@const percentage = getContributionPercentage(contributor.contributions)}
-        {@const percentageColor = getPercentageColor(percentage)}
-        <a
-          href="https://github.com/{contributor.login}"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="contributor-item"
-        >
-          <div class="contributor-content">
-            <img
-              src={contributor.avatar_url}
-              alt="{contributor.login}'s avatar"
-              class="contributor-avatar"
-              loading="lazy"
-            />
-            <div class="contributor-info">
-              <span class="contributor-name">{contributor.login}</span>
-              <span class="contributor-commits">
-                {contributor.contributions.toLocaleString()} commits · {percentage.toFixed(1)}%
-              </span>
-            </div>
-          </div>
-          <div class="contribution-bar">
-            <div
-              class="contribution-fill"
-              style="width: {percentage}%; background-color: {percentageColor}"
-            ></div>
-          </div>
-        </a>
-      {/each}
-    </div>
+  {#if loading}
+    <div class="loading">Loading contributors...</div>
+  {:else if small}
+    <!-- Small mode: only show total contributors stat -->
+    {#if totalContributors > 0}
+      <div class="stat-highlight">
+        <div class="stat-value">{totalContributors.toLocaleString()}</div>
+        <div class="stat-label">Contributors</div>
+      </div>
+    {:else}
+      <div class="no-data">
+        <p>No contributor data available</p>
+      </div>
+    {/if}
   {:else}
-    <div class="no-data">
-      <p>No contributor data available</p>
-    </div>
+    <!-- Full mode: show total + top contributors -->
+    {#if totalContributors > 0}
+      <div class="stat-highlight">
+        <div class="stat-value">{totalContributors.toLocaleString()}</div>
+        <div class="stat-label">Total Contributors</div>
+      </div>
+    {/if}
+
+    {#if topContributors.length > 0}
+      <div class="contributors-list">
+        <h4>Top Contributors</h4>
+        {#each topContributors as contributor}
+          {@const percentage = getContributionPercentage(contributor.contributions)}
+          {@const percentageColor = getPercentageColor(percentage)}
+          <a
+            href="https://github.com/{contributor.login}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contributor-item"
+          >
+            <div class="contributor-content">
+              <img
+                src={contributor.avatar_url}
+                alt="{contributor.login}'s avatar"
+                class="contributor-avatar"
+                loading="lazy"
+              />
+              <div class="contributor-info">
+                <span class="contributor-name">{contributor.login}</span>
+                <span class="contributor-commits">
+                  {contributor.contributions.toLocaleString()} commits · {percentage.toFixed(1)}%
+                </span>
+              </div>
+            </div>
+            <div class="contribution-bar">
+              <div
+                class="contribution-fill"
+                style="width: {percentage}%; background-color: {percentageColor}"
+              ></div>
+            </div>
+          </a>
+        {/each}
+      </div>
+    {:else if !totalContributors}
+      <div class="no-data">
+        <p>No contributor data available</p>
+      </div>
+    {/if}
   {/if}
 </BaseCard>
 
 <style>
+  @import './shared-card-styles.css';
+
   h4 {
     font-size: var(--font-sm);
     color: var(--text-secondary);
@@ -78,33 +122,20 @@
     margin: 0 0 var(--gap-sm) 0;
   }
 
-  .total-contributors {
+  .loading {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding: var(--gap-lg);
-    background: var(--accent-secondary);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--gap-md);
-  }
-
-  .contributor-count {
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--accent-primary);
-    line-height: 1;
-  }
-
-  .contributor-label {
-    font-size: var(--font-sm);
-    color: var(--text-secondary);
-    margin-top: var(--gap-xs);
+    justify-content: center;
+    padding: var(--gap-xl);
+    color: var(--text-tertiary);
+    font-style: italic;
   }
 
   .contributors-list {
     display: flex;
     flex-direction: column;
     gap: var(--gap-sm);
+    margin-top: var(--gap-lg);
   }
 
   .contributor-item {

@@ -22,6 +22,7 @@
   onMount(async () => {
     if (!packageName) {
       loading = false;
+      error = 'No package name available';
       return;
     }
 
@@ -29,12 +30,14 @@
       const response = await fetch(`https://libraries.io/api/npm/${packageName}`);
       if (response.ok) {
         librariesData = await response.json();
+      } else if (response.status === 404) {
+        error = 'Package not found';
       } else {
         error = 'Unable to fetch SourceRank data';
       }
     } catch (e) {
       error = 'Unable to fetch SourceRank data';
-      console.error('Libraries.io fetch error:', e);
+      console.debug('Libraries.io fetch error:', e);
     } finally {
       loading = false;
     }
@@ -100,12 +103,6 @@
           <span class="metric-value">{librariesData.contributions_count.toLocaleString()}</span>
         </div>
       {/if}
-    </div>
-
-    <div class="info-footer">
-      <p>
-        SourceRank is a quality score calculated by <a href="https://libraries.io/npm/{packageName}" target="_blank" rel="noopener noreferrer">Libraries.io</a> based on various metrics
-      </p>
     </div>
   {:else}
     <div class="no-data">
@@ -175,6 +172,7 @@
     background: var(--surface-secondary);
     border-radius: var(--radius-full);
     overflow: hidden;
+    border-radius: 6px;
   }
 
   .rank-fill {

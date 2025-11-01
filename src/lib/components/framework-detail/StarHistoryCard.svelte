@@ -1,14 +1,22 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  export let repoFullName: string | undefined;
+  export let repoFullName: string | undefined = undefined;
+  export let repos: string[] | undefined = undefined;
+  export let title: string = 'Star History';
+  export let description: string | undefined = undefined;
+  export let legend: string = 'top-left';
 
-  $: chartUrl = repoFullName
-    ? `https://api.star-history.com/svg?repos=${repoFullName}&type=Date&theme=dark`
+  // Use repos array if provided, otherwise fall back to single repoFullName
+  $: reposList = repos || (repoFullName ? [repoFullName] : []);
+  $: reposParam = reposList.join(',');
+
+  $: chartUrl = reposParam
+    ? `https://api.star-history.com/svg?repos=${reposParam}&type=Date&theme=dark&legend=${legend}`
     : null;
 
-  $: starHistoryUrl = repoFullName
-    ? `https://star-history.com/#${repoFullName}&Date`
+  $: starHistoryUrl = reposParam
+    ? `https://star-history.com/#${reposParam}&Date`
     : null;
 
   let imageLoaded = false;
@@ -46,10 +54,15 @@
 
 <div class="card card-large star-history-card">
   <div class="card-header">
-    <h3>Star History</h3>
+    <div class="header-content">
+      <h3>{title}</h3>
+      {#if description}
+        <p class="description">{description}</p>
+      {/if}
+    </div>
   </div>
 
-  {#if !repoFullName}
+  {#if reposList.length === 0}
     <div class="no-data">
       <p>No repository information available</p>
     </div>
@@ -73,7 +86,7 @@
       <img
         bind:this={imgElement}
         src={chartUrl}
-        alt="GitHub star history for {repoFullName}"
+        alt="GitHub star history for {reposParam}"
         class:loaded={imageLoaded}
         on:load={handleImageLoad}
         on:error={handleImageError}
@@ -97,18 +110,31 @@
     gap: var(--gap-md);
   }
 
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+
   h3 {
     margin: 0;
     font-size: var(--font-lg);
   }
 
+  .description {
+    margin: 0;
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
   .chart-container {
     position: relative;
-    width: 100%;
-    min-height: 180px;
+    min-height: 140px;
     background: var(--surface-tertiary);
     border-radius: var(--radius-md);
     overflow: hidden;
+    width: fit-content;
   }
 
   .chart-container img {
@@ -118,6 +144,8 @@
     filter: brightness(1.36) saturate(2);
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
+    margin-bottom: -8px;
+    max-width: 48rem;
   }
 
   .chart-container img.loaded {

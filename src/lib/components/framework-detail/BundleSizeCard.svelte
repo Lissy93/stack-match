@@ -18,45 +18,64 @@
 </script>
 
 <BaseCard title="Bundle Size">
-  {#if bundle?.gzip !== undefined}
-    <div class="size-display {sizeClass}">
-      <div class="size-value">{formatBytes(bundle.gzip)}</div>
-      <div class="size-label">Minified + Gzipped</div>
+  {#if bundle?.gzip === undefined && bundle?.size === undefined && bundle?.dependency_count === undefined}
+    <div class="no-data">
+      <p>Bundle size data not available</p>
     </div>
-  {/if}
-
-  <div class="size-details">
-    {#if bundle?.size !== undefined}
-      <div class="size-item">
-        <span class="size-item-label">Minified</span>
-        <span class="size-item-value">{formatBytes(bundle.size)}</span>
+  {:else}
+    {#if bundle?.gzip !== undefined}
+      <div class="size-display {sizeClass}">
+        <div class="size-value">{formatBytes(bundle.gzip)}</div>
+        <div class="size-label">Minified + Gzipped</div>
       </div>
     {/if}
 
-    {#if bundle?.dependency_count !== undefined}
-      <div class="size-item">
-        <span class="size-item-label">Dependencies</span>
-        <span class="size-item-value">{bundle.dependency_count}</span>
-      </div>
-    {/if}
-  </div>
+    <div class="size-details">
+      {#if bundle?.size !== undefined}
+        <div class="size-item">
+          <span class="size-item-label">Minified</span>
+          <span class="size-item-value">{formatBytes(bundle.size)}</span>
+        </div>
+      {/if}
 
-  {#if bundle?.dependencies && bundle.dependencies.length > 0}
-    <details class="dependencies-section">
-      <summary>Top Dependencies ({bundle.dependencies.length})</summary>
-      <ul class="dependencies-list">
-        {#each bundle.dependencies.slice(0, 5) as dep}
-          <li>
-            <span class="dep-name">{dep.name}</span>
-            <span class="dep-size">{formatBytes(dep.size)}</span>
-          </li>
-        {/each}
-      </ul>
-    </details>
+      {#if bundle?.dependency_count !== undefined}
+        <div class="size-item">
+          <span class="size-item-label">Dependencies</span>
+          <span class="size-item-value">{bundle.dependency_count}</span>
+        </div>
+      {/if}
+    </div>
+
+    {#if bundle?.dependencies && bundle.dependencies.length > 0}
+      <details class="dependencies-section">
+        <summary>Top Dependencies ({bundle.dependencies.length})</summary>
+        <ul class="dependencies-list">
+          {#each bundle.dependencies.slice(0, 5) as dep}
+            <li>
+              <span class="dep-name">{dep.name}</span>
+              <span class="dep-size">{formatBytes(dep.size)}</span>
+            </li>
+          {/each}
+        </ul>
+      </details>
+    {/if}
   {/if}
 </BaseCard>
 
 <style>
+  .no-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--gap-xl);
+    color: var(--text-tertiary);
+    font-style: italic;
+    font-size: var(--font-sm);
+  }
+
+  .no-data p {
+    margin: 0;
+  }
 
   .size-display {
     display: flex;

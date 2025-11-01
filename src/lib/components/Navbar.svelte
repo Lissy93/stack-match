@@ -73,6 +73,7 @@
       </div>
 
       <div class="navbar-actions">
+        <a href="/compare" class="btn btn-secondary">Compare</a>
         <a href="/" class="btn btn-primary">Compare All</a>
       </div>
     </div>
@@ -274,6 +275,26 @@
     transform: translateY(-1px);
   }
 
+  .btn-secondary {
+    padding: var(--gap-sm) var(--gap-lg);
+    background: var(--surface-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--font-sm);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .btn-secondary:hover {
+    background: var(--surface-secondary);
+    border-color: var(--accent-primary);
+    transform: translateY(-1px);
+  }
+
   .mobile-overlay {
     display: none;
   }
@@ -348,7 +369,8 @@
       gap: var(--gap-md);
     }
 
-    .btn-primary {
+    .btn-primary,
+    .btn-secondary {
       width: 100%;
       text-align: center;
       padding: var(--gap-md);

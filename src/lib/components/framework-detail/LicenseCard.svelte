@@ -46,7 +46,6 @@
   {:else if licenseDetails}
     <div class="license-header">
       <div class="license-name">
-        <span class="license-badge">{licenseDetails.spdx_id || license.name}</span>
         <h4>{licenseDetails.name}</h4>
       </div>
       {#if licenseDetails.html_url}
@@ -117,7 +116,6 @@
     {/if}
   {:else if license}
     <div class="license-fallback">
-      <span class="license-badge">{license.key?.toUpperCase()}</span>
       <p class="license-name-text">{license.name}</p>
       {#if rateLimited}
         <p class="rate-limit-notice">

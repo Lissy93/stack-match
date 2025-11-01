@@ -489,7 +489,7 @@
     }
 
     .month-name {
-      font-size: 10px;
+      font-size: var(--font-sm);
     }
 
     .day-label-inline {
