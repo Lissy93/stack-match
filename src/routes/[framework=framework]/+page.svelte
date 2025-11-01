@@ -19,6 +19,10 @@
   import StarHistoryCard from '$lib/components/framework-detail/StarHistoryCard.svelte';
   import LinksCard from '$lib/components/framework-detail/LinksCard.svelte';
   import ExampleProjectCard from '$lib/components/framework-detail/ExampleProjectCard.svelte';
+  import StackOverflowCard from '$lib/components/framework-detail/StackOverflowCard.svelte';
+  import OpenCollectiveCard from '$lib/components/framework-detail/OpenCollectiveCard.svelte';
+  import JsDelivrStatsCard from '$lib/components/framework-detail/JsDelivrStatsCard.svelte';
+  import BrowserCompatCard from '$lib/components/framework-detail/BrowserCompatCard.svelte';
   import { getSimpleIconUrl, addAlpha, getContrastColor } from '$lib/utils/branding-utils';
 
   export let data: PageData;
@@ -88,6 +92,7 @@
           </div>
           <div class="header-title">
             <h1>{frameworkData.name}</h1>
+            <p class="description-short">{staticData?.meta?.description || frameworkData.metadata?.description || ''}</p>
           </div>
         </div>
 
@@ -111,7 +116,9 @@
       </div>
 
       <div class="header-description">
-        <p>{frameworkData.metadata?.description || ''}</p>
+        {#if staticData?.meta?.longDescription}
+          <p class="description-long">{staticData.meta.longDescription}</p>
+        {/if}
       </div>
     </header>
 
@@ -146,6 +153,10 @@
         <InstallMetricsCard installMetrics={frameworkData.install_metrics} />
       {/if}
 
+      {#if staticData?.meta?.openCollective}
+        <OpenCollectiveCard slug={staticData.meta.openCollective} />
+      {/if}
+
       {#if frameworkData.security?.vulnerabilities}
         <SecurityCard security={frameworkData.security} />
       {/if}
@@ -163,7 +174,6 @@
       {#if frameworkData.ecosystem?.packages && frameworkData.ecosystem.packages.length > 0}
         <EcosystemPackagesCard ecosystem={frameworkData.ecosystem} />
       {/if}
-
 
       {#if frameworkData.github?.license}
         <LicenseCard license={frameworkData.github.license} />
@@ -186,7 +196,22 @@
       {#if frameworkData.github?.contributors && frameworkData.github.contributors.length > 0}
         <ContributorsCard contributors={frameworkData.github.contributors} />
       {/if}
-      
+
+      {#if frameworkData.metadata?.name}
+        <StackOverflowCard tag={frameworkData.metadata.name.toLowerCase()} />
+      {/if}
+
+      {#if frameworkData.npm?.name}
+        <JsDelivrStatsCard packageName={frameworkData.npm.name} />
+      {/if}
+
+      {#if frameworkData.npm?.name}
+        <BrowserCompatCard
+          packageName={frameworkData.npm.name}
+          browserSupportUrl={staticData?.meta?.links?.browserSupport}
+        />
+      {/if}
+
       {#if staticData?.meta?.example}
         <div class="card-large">
           <ExampleProjectCard example={staticData.meta.example} />

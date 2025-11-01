@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { getSimpleIconUrl } from '$lib/utils/branding-utils';
+  import data from '../../data.json';
 
   interface Framework {
     id: string;
@@ -12,7 +13,11 @@
     };
   }
 
-  let frameworks: Framework[] = [];
+  let frameworks: Framework[] = data.meta.map((meta: any) => ({
+    id: meta.id,
+    name: meta.name,
+    branding: meta.branding,
+  }));
   let mobileMenuOpen = false;
   let scrolled = false;
 
@@ -20,24 +25,6 @@
   $: isHomePage = $page.url.pathname === '/';
 
   onMount(() => {
-    // Fetch framework data
-    const loadFrameworks = async () => {
-      try {
-        const response = await fetch('/data.json');
-        if (response.ok) {
-          const data = await response.json();
-          frameworks = data.meta.map((meta: any) => ({
-            id: meta.id,
-            name: meta.name,
-            branding: meta.branding,
-          }));
-        }
-      } catch (error) {
-        console.error('Failed to load framework data:', error);
-      }
-    };
-
-    loadFrameworks();
 
     // Handle scroll event for navbar styling
     const handleScroll = () => {
@@ -134,7 +121,6 @@
   }
 
   .navbar-container {
-    max-width: 1400px;
     margin: 0 auto;
     padding: 0 var(--gap-lg);
     display: flex;
@@ -253,7 +239,7 @@
   }
 
   /* Show framework names on large screens */
-  @media (min-width: 1400px) {
+  @media (min-width: 2000px) {
     .framework-name {
       display: inline;
     }

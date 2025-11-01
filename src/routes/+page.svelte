@@ -12,28 +12,15 @@
   import { fetchFrameworkStats, fetchFrameworkCommentary, saveShortlistToStorage, loadShortlistFromStorage, throttle } from '$lib/utils';
   import { getSimpleIconUrl } from '$lib/utils/branding-utils';
   import type { FrameworkData, Weights } from '$lib/types';
+  import data from '../data.json';
 
   let showGithubButton = true;
   let lastScrollY = 0;
   let heroElement: HTMLElement;
 
   // Load framework data from JSON
-  async function loadFrameworkData(): Promise<void> {
-    try {
-      const response = await fetch('/data.json');
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      
-      const data: FrameworkData = await response.json();
-      if (!data.frameworks || !data.meta) {
-        throw new Error('Invalid data structure');
-      }
-      
-      frameworkData.set(data);
-    } catch (error) {
-      console.error('Failed to load framework data:', error);
-      // Set empty data as fallback
-      frameworkData.set({ frameworks: [], meta: [] });
-    }
+  function loadFrameworkData(): void {
+    frameworkData.set(data as FrameworkData);
   }
 
   // Load external data

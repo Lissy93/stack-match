@@ -1,17 +1,13 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad, EntryGenerator } from './$types';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import data from '../../data.json';
 
 export const load: PageServerLoad = async ({ params, fetch, url }) => {
   const frameworkId = params.framework;
 
   try {
-    // Fetch both API data and static data in parallel
-    const [apiResponse, staticResponse] = await Promise.all([
-      fetch(`${url.origin}/api/framework/${frameworkId}`),
-      fetch(`${url.origin}/data.json`)
-    ]);
+    // Fetch API data
+    const apiResponse = await fetch(`${url.origin}/api/framework/${frameworkId}`);
 
     // Handle API response
     let frameworkData = null;
@@ -31,16 +27,13 @@ export const load: PageServerLoad = async ({ params, fetch, url }) => {
       };
     }
 
-    // Handle static data response
-    let staticData = null;
-    if (staticResponse.ok) {
-      const data = await staticResponse.json();
-      const framework = data.frameworks.find((f: any) => f.name === frameworkId);
-      const meta = data.meta.find((m: any) => m.id === frameworkId);
+    // Handle static data from import
+    const framework = data.frameworks.find((f: any) => f.name === frameworkId);
+    const meta = data.meta.find((m: any) => m.id === frameworkId);
 
-      if (framework || meta) {
-        staticData = { framework, meta };
-      }
+    let staticData = null;
+    if (framework || meta) {
+      staticData = { framework, meta };
     }
 
     // If we couldn't find the framework in static data, throw 404
@@ -70,20 +63,7 @@ export const load: PageServerLoad = async ({ params, fetch, url }) => {
 // Enable prerendering for all framework pages
 export const prerender = true;
 
-// Provide entries for prerendering by reading data.json from filesystem
+// Provide entries for prerendering
 export const entries: EntryGenerator = () => {
-  try {
-    // Read data.json from the static directory during build
-    const dataPath = join(process.cwd(), 'static', 'data.json');
-    const fileContent = readFileSync(dataPath, 'utf-8');
-    const data = JSON.parse(fileContent);
-
-    // Return all framework IDs for prerendering
-    return data.meta.map((meta: any) => ({ framework: meta.id }));
-  } catch (err) {
-    console.error('Failed to read data.json for prerendering:', err);
-    // Return empty array if we can't read the file - this will disable prerendering
-    // but won't break the build
-    return [];
-  }
+  return data.meta.map((meta: any) => ({ framework: meta.id }));
 };

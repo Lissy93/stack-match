@@ -141,14 +141,25 @@
 }
 
 .header-description {
-  padding-left: calc(80px + var(--gap-lg));
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
 }
 
-.header-description p {
-  color: var(--text-secondary);
+.header-description .description-short {
+  color: var(--text-primary);
   font-size: var(--font-lg);
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.header-description .description-long {
+  color: var(--text-secondary);
+  font-size: var(--font-base);
   margin: 0;
   line-height: 1.6;
+  opacity: 0.9;
 }
 
 .btn-branded {

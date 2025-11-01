@@ -73,23 +73,6 @@ self.addEventListener('fetch', (event) => {
       }
     }
 
-    // For data.json, use network-first with cache fallback
-    if (url.pathname === '/data.json') {
-      try {
-        const response = await fetch(event.request);
-        if (response.ok) {
-          cache.put(event.request, response.clone());
-        }
-        return response;
-      } catch (err) {
-        const cachedResponse = await cache.match(event.request);
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-        throw err;
-      }
-    }
-
     // For pages, use network-first strategy
     try {
       const response = await fetch(event.request);
