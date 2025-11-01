@@ -42,7 +42,7 @@
     !frameworkData.bundle?.size && 'Bundle size data',
     !frameworkData.security?.vulnerabilities && 'Security audit',
     (!frameworkData.github?.commit_activity || !Array.isArray(frameworkData.github?.commit_activity)) && 'Commit activity',
-    (!frameworkData.github?.contributors || frameworkData.github?.contributors?.length === 0) && 'Contributors data',
+    (!frameworkData.github?.contributors?.top_contributors || frameworkData.github.contributors.top_contributors.length === 0) && 'Contributors data',
     (!frameworkData.ecosystem?.packages || frameworkData.ecosystem?.packages?.length === 0) && 'Ecosystem packages',
     !frameworkData.github?.license && 'License information',
   ].filter(Boolean) : [];
@@ -193,7 +193,7 @@
         </div>
       {/if}
 
-      {#if frameworkData.github?.contributors && frameworkData.github.contributors.length > 0}
+      {#if frameworkData.github?.contributors?.top_contributors && frameworkData.github.contributors.top_contributors.length > 0}
         <ContributorsCard contributors={frameworkData.github.contributors} />
       {/if}
 

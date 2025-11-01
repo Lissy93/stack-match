@@ -232,8 +232,11 @@ export const frameworkCache = new APICache();
 export const rateLimiter = new RateLimiter(100, 60 * 1000); // 100 requests per minute
 
 // Cache key generators
+// Cache version - increment this to invalidate all caches when data structure changes
+const CACHE_VERSION = "v2";
+
 export function getCacheKey(type: string, ...params: string[]): string {
-  return `${type}:${params.join(":")}`;
+  return `${CACHE_VERSION}:${type}:${params.join(":")}`;
 }
 
 export function getGitHubCacheKey(

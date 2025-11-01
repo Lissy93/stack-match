@@ -78,6 +78,7 @@ interface GitHubCommitActivity {
 
 interface GitHubContributorsData {
   total_contributors: number;
+  total_commits: number;
   top_contributors: Array<{
     login: string;
     contributions: number;
@@ -311,6 +312,47 @@ async function fetchGitHubData(
 
   // Fetch contributors
   try {
+    // Get total contributors count from Link header
+    const contributorsCountResponse = await fetchWithRetry(
+      `https://api.github.com/repos/${owner}/${repo}/contributors?per_page=1`,
+      { headers },
+    );
+
+    let totalContributors = 0;
+    if (contributorsCountResponse.ok) {
+      const linkHeader = contributorsCountResponse.headers.get('Link');
+      if (linkHeader) {
+        const match = linkHeader.match(/page=(\d+)>; rel="last"/);
+        if (match) {
+          totalContributors = parseInt(match[1], 10);
+        }
+      } else {
+        // If no Link header, there's only one page
+        totalContributors = 1;
+      }
+    }
+
+    // Get total commits count from Link header
+    const commitsCountResponse = await fetchWithRetry(
+      `https://api.github.com/repos/${owner}/${repo}/commits?per_page=1`,
+      { headers },
+    );
+
+    let totalCommits = 0;
+    if (commitsCountResponse.ok) {
+      const linkHeader = commitsCountResponse.headers.get('Link');
+      if (linkHeader) {
+        const match = linkHeader.match(/page=(\d+)>; rel="last"/);
+        if (match) {
+          totalCommits = parseInt(match[1], 10);
+        }
+      } else {
+        // If no Link header, there's only one page
+        totalCommits = 1;
+      }
+    }
+
+    // Fetch top 10 contributors
     const contributorsResponse = await fetchWithRetry(
       `https://api.github.com/repos/${owner}/${repo}/contributors?per_page=10`,
       { headers },
@@ -318,9 +360,11 @@ async function fetchGitHubData(
 
     if (contributorsResponse.ok) {
       const contributors = await contributorsResponse.json();
+
       result.contributors = {
-        total_contributors: contributors.length,
-        top_contributors: contributors.slice(0, 5).map((c: any) => ({
+        total_contributors: totalContributors,
+        total_commits: totalCommits,
+        top_contributors: contributors.slice(0, 10).map((c: any) => ({
           login: c.login,
           contributions: c.contributions,
           avatar_url: c.avatar_url,

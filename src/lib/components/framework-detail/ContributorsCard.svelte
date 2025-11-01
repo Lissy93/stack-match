@@ -5,11 +5,11 @@
 
   $: topContributors = contributors?.top_contributors || [];
   $: totalContributors = contributors?.total_contributors || 0;
-  $: totalCommits = topContributors.reduce((sum: number, c: any) => sum + c.contributions, 0);
+  $: totalCommits = contributors?.total_commits || 0;
 
   function getContributionPercentage(contributions: number): number {
     if (totalCommits === 0) return 0;
-    return Math.round((contributions / totalCommits) * 100);
+    return (contributions / totalCommits) * 100;
   }
 
   function getPercentageColor(percentage: number): string {
@@ -22,7 +22,7 @@
 <BaseCard title="Contributors">
   {#if totalContributors > 0}
     <div class="total-contributors">
-      <span class="contributor-count">{totalContributors}</span>
+      <span class="contributor-count">{totalContributors.toLocaleString()}</span>
       <span class="contributor-label">Total Contributors</span>
     </div>
   {/if}
@@ -49,7 +49,7 @@
             <div class="contributor-info">
               <span class="contributor-name">{contributor.login}</span>
               <span class="contributor-commits">
-                {contributor.contributions} commits · {percentage}%
+                {contributor.contributions.toLocaleString()} commits · {percentage.toFixed(1)}%
               </span>
             </div>
           </div>
@@ -71,15 +71,11 @@
 
 <style>
   h4 {
-    margin: 0;
-  }
-
-  h4 {
     font-size: var(--font-sm);
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: var(--gap-sm);
+    margin: 0 0 var(--gap-sm) 0;
   }
 
   .total-contributors {
@@ -89,6 +85,7 @@
     padding: var(--gap-lg);
     background: var(--accent-secondary);
     border-radius: var(--radius-lg);
+    margin-bottom: var(--gap-md);
   }
 
   .contributor-count {

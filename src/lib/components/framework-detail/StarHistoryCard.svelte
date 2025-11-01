@@ -47,16 +47,6 @@
 <div class="card card-large star-history-card">
   <div class="card-header">
     <h3>Star History</h3>
-    {#if starHistoryUrl}
-      <a
-        href={starHistoryUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="btn btn-secondary btn-sm"
-      >
-        View on Star History
-      </a>
-    {/if}
   </div>
 
   {#if !repoFullName}
@@ -110,11 +100,6 @@
   h3 {
     margin: 0;
     font-size: var(--font-lg);
-  }
-
-  .btn-sm {
-    padding: var(--gap-sm) var(--gap-md);
-    font-size: var(--font-sm);
   }
 
   .chart-container {
