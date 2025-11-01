@@ -120,6 +120,9 @@
         metadata={frameworkData.metadata}
         ecosystem={frameworkData.ecosystem}
         github={frameworkData.github}
+        npm={frameworkData.npm}
+        bundle={frameworkData.bundle}
+        security={frameworkData.security}
         brandColor={brandColor}
       />
 

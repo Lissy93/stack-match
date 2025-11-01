@@ -4,11 +4,58 @@
   export let metadata: any;
   export let ecosystem: any;
   export let github: any;
+  export let npm: any = undefined;
+  export let bundle: any = undefined;
+  export let security: any = undefined;
   export let brandColor: string = '#3b82f6';
 
   $: healthClass = ecosystem?.overall_health >= 75 ? 'health-excellent' :
                    ecosystem?.overall_health >= 50 ? 'health-good' :
                    ecosystem?.overall_health >= 25 ? 'health-fair' : 'health-poor';
+
+  // Helper functions for formatting
+  function formatNumber(num: number): string {
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+    return num.toString();
+  }
+
+  function formatBytes(bytes: number): string {
+    if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${bytes} B`;
+  }
+
+  function getDaysSince(dateString: string): number {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  function formatDaysAgo(days: number): string {
+    if (days === 0) return 'Today';
+    if (days === 1) return 'Yesterday';
+    if (days < 7) return `${days} days ago`;
+    if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
+    if (days < 365) return `${Math.floor(days / 30)} months ago`;
+    return `${Math.floor(days / 365)} years ago`;
+  }
+
+  function getBundleSizeClass(bytes: number): string {
+    if (bytes < 50 * 1024) return 'size-excellent'; // < 50KB
+    if (bytes < 200 * 1024) return 'size-good'; // < 200KB
+    if (bytes < 500 * 1024) return 'size-fair'; // < 500KB
+    return 'size-poor'; // >= 500KB
+  }
+
+  $: bundleSizeClass = bundle?.gzip ? getBundleSizeClass(bundle.gzip) : '';
+  $: lastPushDays = github?.pushed_at ? getDaysSince(github.pushed_at) : null;
+  $: totalVulnerabilities = security?.vulnerabilities ?
+    (security.vulnerabilities.critical || 0) +
+    (security.vulnerabilities.high || 0) +
+    (security.vulnerabilities.moderate || 0) +
+    (security.vulnerabilities.low || 0) : null;
 </script>
 
 <BaseCard size="large" headerSlot={true}>
@@ -66,6 +113,80 @@
         <div class="meta-item">
           <span class="meta-label">Language</span>
           <span class="meta-value">{github.language}</span>
+        </div>
+      {/if}
+
+      {#if npm?.version}
+        <div class="meta-item">
+          <span class="meta-label">NPM Version</span>
+          <span class="meta-value version-badge">{npm.version}</span>
+        </div>
+      {/if}
+
+      {#if npm?.downloads?.weekly}
+        <div class="meta-item">
+          <span class="meta-label">Weekly Downloads</span>
+          <span class="meta-value">{formatNumber(npm.downloads.weekly)}</span>
+        </div>
+      {/if}
+
+      {#if github?.stars}
+        <div class="meta-item">
+          <span class="meta-label">GitHub Stars</span>
+          <span class="meta-value star-count">⭐ {formatNumber(github.stars)}</span>
+        </div>
+      {/if}
+
+      {#if github?.forks}
+        <div class="meta-item">
+          <span class="meta-label">Forks</span>
+          <span class="meta-value">{formatNumber(github.forks)}</span>
+        </div>
+      {/if}
+
+      {#if lastPushDays !== null}
+        <div class="meta-item">
+          <span class="meta-label">Last Updated</span>
+          <span class="meta-value activity-indicator" class:recent={lastPushDays < 30}>
+            {formatDaysAgo(lastPushDays)}
+          </span>
+        </div>
+      {/if}
+
+      {#if bundle?.gzip}
+        <div class="meta-item">
+          <span class="meta-label">Bundle Size</span>
+          <span class="meta-value size-badge {bundleSizeClass}">
+            {formatBytes(bundle.gzip)} (gzip)
+          </span>
+        </div>
+      {/if}
+
+      {#if totalVulnerabilities !== null}
+        <div class="meta-item">
+          <span class="meta-label">Vulnerabilities</span>
+          <span class="meta-value vuln-badge" class:safe={totalVulnerabilities === 0}>
+            {totalVulnerabilities === 0 ? '✓ None' : totalVulnerabilities}
+          </span>
+        </div>
+      {/if}
+
+      {#if npm?.dependencies?.total !== undefined}
+        <div class="meta-item">
+          <span class="meta-label">Dependencies</span>
+          <span class="meta-value">{npm.dependencies.total}</span>
+        </div>
+      {/if}
+
+      {#if github?.latest_release}
+        <div class="meta-item">
+          <span class="meta-label">Latest Release</span>
+          <span class="meta-value release-info">
+            {github.latest_release.tag_name}
+            <span class="release-date">
+              ({formatDaysAgo(getDaysSince(github.latest_release.published_at))})
+            </span>
+          </span>
         </div>
       {/if}
     </div>
@@ -201,6 +322,75 @@
 
   .topic-tag:hover {
     border-color: var(--brand-color, var(--accent-primary));
+  }
+
+  /* New badge styles */
+  .version-badge {
+    font-family: 'Monaco', 'Courier New', monospace;
+    background: var(--surface-tertiary);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-sm);
+  }
+
+  .star-count {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .activity-indicator.recent {
+    color: #22c55e;
+    font-weight: 600;
+  }
+
+  .size-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-sm);
+  }
+
+  .size-excellent {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+  }
+
+  .size-good {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--accent-primary);
+  }
+
+  .size-fair {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+  }
+
+  .size-poor {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--text-danger);
+  }
+
+  .vuln-badge.safe {
+    color: #22c55e;
+    font-weight: 600;
+  }
+
+  .vuln-badge:not(.safe) {
+    color: var(--text-danger);
+    font-weight: 600;
+  }
+
+  .release-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .release-date {
+    font-size: var(--font-xs);
+    color: var(--text-tertiary);
+    font-weight: 400;
   }
 
   @media (max-width: 768px) {

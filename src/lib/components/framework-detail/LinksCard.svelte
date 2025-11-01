@@ -114,13 +114,6 @@
       });
 
       allLinks.push({
-        label: 'npmjs.com Stats',
-        url: `https://www.npmjs.com/package/${npmName}?activeTab=versions`,
-        icon: '📊',
-        category: 'package'
-      });
-
-      allLinks.push({
         label: 'Snyk Advisor',
         url: `https://snyk.io/advisor/npm-package/${npmName}`,
         icon: '🔒',
@@ -344,6 +337,20 @@
     community: links.filter(l => l.category === 'community'),
     tools: links.filter(l => l.category === 'tools'),
   };
+
+  function getDomainFromUrl(url: string): string {
+    try {
+      const urlObj = new URL(url);
+      return urlObj.hostname;
+    } catch {
+      return '';
+    }
+  }
+
+  function getFaviconUrl(url: string): string {
+    const domain = getDomainFromUrl(url);
+    return domain ? `https://favicon.im/${domain}` : '';
+  }
 </script>
 
 <div class="card card-wide links-card">
@@ -445,7 +452,19 @@
                 rel="noopener noreferrer"
                 class="link-item"
               >
-                <span class="link-icon">{link.icon}</span>
+                <span class="link-icon">
+                  <img
+                    src={getFaviconUrl(link.url)}
+                    alt={link.icon}
+                    class="favicon"
+                    loading="lazy"
+                    on:error={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.nextElementSibling.style.display = 'inline';
+                    }}
+                  />
+                  <span class="emoji-fallback" style="display: none;">{link.icon}</span>
+                </span>
                 <span class="link-label">{link.label}</span>
                 <span class="external-icon">↗</span>
               </a>
@@ -547,6 +566,21 @@
     font-size: var(--font-lg);
     flex-shrink: 0;
     line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+
+  .favicon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+  }
+
+  .emoji-fallback {
+    font-size: var(--font-lg);
   }
 
   .link-label {

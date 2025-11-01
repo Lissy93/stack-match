@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+
   export let repoFullName: string | undefined;
 
   $: chartUrl = repoFullName
@@ -11,6 +13,7 @@
 
   let imageLoaded = false;
   let imageError = false;
+  let imgElement: HTMLImageElement;
 
   function handleImageLoad() {
     imageLoaded = true;
@@ -18,6 +21,26 @@
 
   function handleImageError() {
     imageError = true;
+  }
+
+  // Check if image is already loaded (e.g., from cache)
+  function checkImageLoaded() {
+    if (imgElement && imgElement.complete && imgElement.naturalHeight !== 0) {
+      imageLoaded = true;
+    }
+  }
+
+  onMount(() => {
+    checkImageLoaded();
+  });
+
+  // Also check when chartUrl changes
+  $: if (chartUrl && imgElement) {
+    // Reset state when URL changes
+    imageLoaded = false;
+    imageError = false;
+    // Check after a brief delay to let the image start loading
+    setTimeout(checkImageLoaded, 100);
   }
 </script>
 
@@ -58,6 +81,7 @@
         </div>
       {/if}
       <img
+        bind:this={imgElement}
         src={chartUrl}
         alt="GitHub star history for {repoFullName}"
         class:loaded={imageLoaded}
@@ -96,22 +120,23 @@
   .chart-container {
     position: relative;
     width: 100%;
-    min-height: 400px;
+    min-height: 180px;
     background: var(--surface-tertiary);
     border-radius: var(--radius-md);
     overflow: hidden;
   }
 
   .chart-container img {
-    display: none;
     width: 100%;
     height: auto;
     border-radius: var(--radius-md);
     filter: brightness(1.36) saturate(2);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
   }
 
   .chart-container img.loaded {
-    display: block;
+    opacity: 1;
   }
 
   .loading {
