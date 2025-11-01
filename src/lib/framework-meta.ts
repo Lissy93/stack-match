@@ -468,6 +468,146 @@ export const FRAMEWORK_METADATA: Record<string, FrameworkMetadata> = {
     category: "meta-framework",
     type: "ssr",
   },
+
+  jquery: {
+    id: "jquery",
+    name: "jQuery",
+    github: {
+      owner: "jquery",
+      repo: "jquery",
+      fullName: "jquery/jquery",
+    },
+    npm: {
+      packageName: "jquery",
+    },
+    bundle: {
+      bundlephobiaName: "jquery",
+    },
+    website: "https://jquery.com",
+    docs: "https://api.jquery.com",
+    category: "library",
+    type: "spa",
+  },
+
+  marko: {
+    id: "marko",
+    name: "Marko",
+    github: {
+      owner: "marko-js",
+      repo: "marko",
+      fullName: "marko-js/marko",
+    },
+    npm: {
+      packageName: "marko",
+    },
+    bundle: {
+      bundlephobiaName: "marko",
+    },
+    website: "https://markojs.com",
+    docs: "https://markojs.com/docs",
+    category: "framework",
+    type: "hybrid",
+  },
+
+  nue: {
+    id: "nue",
+    name: "Nue",
+    github: {
+      owner: "nuejs",
+      repo: "nue",
+      fullName: "nuejs/nue",
+    },
+    npm: {
+      packageName: "nue",
+    },
+    bundle: {
+      bundlephobiaName: "nue",
+    },
+    website: "https://nuejs.org",
+    docs: "https://nuejs.org/docs",
+    category: "framework",
+    type: "spa",
+  },
+
+  rax: {
+    id: "rax",
+    name: "Rax",
+    github: {
+      owner: "alibaba",
+      repo: "rax",
+      fullName: "alibaba/rax",
+    },
+    npm: {
+      packageName: "rax",
+    },
+    bundle: {
+      bundlephobiaName: "rax",
+    },
+    website: "https://rax.js.org",
+    docs: "https://rax.js.org/docs",
+    category: "framework",
+    type: "hybrid",
+  },
+
+  riot: {
+    id: "riot",
+    name: "Riot",
+    github: {
+      owner: "riot",
+      repo: "riot",
+      fullName: "riot/riot",
+    },
+    npm: {
+      packageName: "riot",
+    },
+    bundle: {
+      bundlephobiaName: "riot",
+    },
+    website: "https://riot.js.org",
+    docs: "https://riot.js.org/documentation",
+    category: "library",
+    type: "spa",
+  },
+
+  vanilla: {
+    id: "vanilla",
+    name: "Vanilla JS",
+    github: {
+      owner: "javascript",
+      repo: "javascript",
+      fullName: "javascript/javascript",
+    },
+    npm: {
+      packageName: "vanilla-js",
+    },
+    bundle: {
+      bundlephobiaName: "vanilla-js",
+    },
+    website: "http://vanilla-js.com",
+    docs: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+    category: "library",
+    type: "spa",
+  },
+
+  vanjs: {
+    id: "vanjs",
+    name: "Van.js",
+    github: {
+      owner: "vanjs-org",
+      repo: "van",
+      fullName: "vanjs-org/van",
+    },
+    npm: {
+      packageName: "vanjs-core",
+    },
+    bundle: {
+      bundlephobiaName: "vanjs-core",
+    },
+    website: "https://vanjs.org",
+    docs: "https://vanjs.org/tutorial",
+    category: "library",
+    type: "spa",
+  },
 };
 
 // Helper functions

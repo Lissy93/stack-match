@@ -107,6 +107,7 @@
     width: 100%;
     height: auto;
     border-radius: var(--radius-md);
+    filter: brightness(1.36) saturate(2);
   }
 
   .chart-container img.loaded {

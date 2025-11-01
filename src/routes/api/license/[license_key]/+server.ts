@@ -1,8 +1,7 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { frameworkCache, fetchWithRetry, CACHE_TTL } from "$lib/api-cache";
-
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+import { GITHUB_TOKEN } from "$env/static/private";
 
 interface GitHubLicenseResponse {
   key: string;

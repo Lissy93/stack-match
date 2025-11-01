@@ -228,7 +228,7 @@
 </BaseCard>
 
 <style>
-  :global(.commit-heatmap-card) {
+  .heatmap-wrapper {
     --cell-size: 12px;
     --cell-gap: 3px;
   }

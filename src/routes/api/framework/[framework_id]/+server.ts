@@ -12,9 +12,10 @@ import {
   getSecurityCacheKey,
   CACHE_TTL,
 } from "$lib/api-cache";
+import { GITHUB_TOKEN } from "$env/static/private";
 
 // Environment variables for API keys (optional - some APIs work without auth)
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+// GITHUB_TOKEN is imported from $env/static/private
 
 // GitHub API response interface
 interface GitHubRepoResponse {

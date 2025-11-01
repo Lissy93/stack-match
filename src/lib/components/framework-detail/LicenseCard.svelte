@@ -7,6 +7,7 @@
   let licenseDetails: any = null;
   let loading = true;
   let showLicenseText = false;
+  let rateLimited = false;
 
   onMount(async () => {
     if (license?.key) {
@@ -16,9 +17,16 @@
         const response = await fetch(`/api/license/${license.key}`);
         if (response.ok) {
           licenseDetails = await response.json();
+        } else if (response.status === 403) {
+          // GitHub API rate limit - show basic info
+          rateLimited = true;
+          console.debug('License details rate limited, using basic info');
+        } else {
+          console.debug(`License API returned ${response.status}, using basic info`);
         }
       } catch (error) {
-        console.error('Failed to fetch license details:', error);
+        // Network error - silently fall back to basic info
+        console.debug('Failed to fetch license details:', error);
       } finally {
         loading = false;
       }
@@ -110,7 +118,12 @@
   {:else if license}
     <div class="license-fallback">
       <span class="license-badge">{license.key?.toUpperCase()}</span>
-      <p>{license.name}</p>
+      <p class="license-name-text">{license.name}</p>
+      {#if rateLimited}
+        <p class="rate-limit-notice">
+          Full license details temporarily unavailable. Visit the GitHub repository for complete information.
+        </p>
+      {/if}
     </div>
   {:else}
     <p class="no-license">No license information available</p>
@@ -257,9 +270,20 @@
     border-radius: var(--radius-md);
   }
 
-  .license-fallback p {
+  .license-fallback .license-name-text {
     margin: 0;
     color: var(--text-secondary);
+    font-size: var(--font-base);
+  }
+
+  .rate-limit-notice {
+    margin: var(--gap-sm) 0 0 0;
+    padding: var(--gap-sm);
+    background: var(--surface-secondary);
+    border-radius: var(--radius-sm);
+    color: var(--text-tertiary);
+    font-size: var(--font-xs);
+    font-style: italic;
   }
 
   .no-license {

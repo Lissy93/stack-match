@@ -175,22 +175,28 @@
       {/if}
 
       {#if frameworkData.metadata?.github?.fullName}
-        <StarHistoryCard repoFullName={frameworkData.metadata.github.fullName} />
+        <div class="card-tall card-large">
+          <StarHistoryCard repoFullName={frameworkData.metadata.github.fullName} />
+        </div>
       {/if}
 
       {#if frameworkData.github?.contributors && frameworkData.github.contributors.length > 0}
         <ContributorsCard contributors={frameworkData.github.contributors} />
       {/if}
-
-      {#if staticData?.meta?.links?.video}
-        <VideoCard
-          videoId={staticData.meta.links.video}
-          frameworkName={frameworkData.name}
-        />
+      
+      {#if staticData?.meta?.example}
+        <div class="card-large">
+          <ExampleProjectCard example={staticData.meta.example} />
+        </div>
       {/if}
 
-      {#if staticData?.meta?.example}
-        <ExampleProjectCard example={staticData.meta.example} />
+      {#if staticData?.meta?.links?.video}
+        <div class="card-large">
+          <VideoCard
+            videoId={staticData.meta.links.video}
+            frameworkName={frameworkData.name}
+          />
+        </div>
       {/if}
 
       <LinksCard frameworkData={frameworkData} staticData={staticData} />
