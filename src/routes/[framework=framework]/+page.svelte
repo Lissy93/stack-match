@@ -188,13 +188,15 @@
       {/if}
 
       {#if frameworkData.metadata?.github?.fullName}
-        <div class="card-tall card-large">
+        <div class="card-large">
           <StarHistoryCard repoFullName={frameworkData.metadata.github.fullName} />
         </div>
       {/if}
 
       {#if frameworkData.github?.contributors?.top_contributors && frameworkData.github.contributors.top_contributors.length > 0}
-        <ContributorsCard contributors={frameworkData.github.contributors} />
+        <div class="card-x-tall">
+          <ContributorsCard contributors={frameworkData.github.contributors} />
+        </div>
       {/if}
 
       {#if frameworkData.metadata?.name}

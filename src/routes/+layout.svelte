@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import Navbar from '$lib/components/Navbar.svelte';
+	import { navigating } from '$app/stores';
 </script>
 
 <svelte:head>
@@ -71,6 +72,15 @@
 
 <Navbar />
 
+{#if $navigating}
+	<div class="loading-overlay">
+		<div class="loading-content">
+			<div class="spinner"></div>
+			<p>Loading framework data...</p>
+		</div>
+	</div>
+{/if}
+
 <main class="main-content">
 	<slot />
 </main>
@@ -79,5 +89,63 @@
 	.main-content {
 		padding-top: 60px;
 		min-height: 100vh;
+	}
+
+	.loading-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(4px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 9999;
+		animation: fadeIn 0.2s ease-out;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	.loading-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--gap-lg);
+		padding: var(--gap-2xl);
+		background: var(--surface-primary);
+		border-radius: var(--radius-xl);
+		border: 1px solid var(--border-primary);
+		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+	}
+
+	.spinner {
+		width: 48px;
+		height: 48px;
+		border: 4px solid var(--border-primary);
+		border-top-color: var(--accent-primary);
+		border-radius: 50%;
+		animation: spin 0.8s linear infinite;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	.loading-content p {
+		margin: 0;
+		font-size: var(--font-base);
+		color: var(--text-secondary);
+		font-weight: 500;
 	}
 </style>

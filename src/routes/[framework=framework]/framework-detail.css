@@ -29,6 +29,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-lg);
+  background: var(--brand-color-rgba);
+  background: linear-gradient(136deg ,
+  var(--brand-color-rgba) 0%,
+  color-mix(in srgb, var(--brand-color-rgba), transparent 30%) 83%,
+  color-mix(in srgb, var(--brand-color-rgba), transparent 60%) 100%
+  );
 }
 
 .header-bg {
@@ -174,20 +180,26 @@
   box-shadow: 0 4px 12px var(--brand-color-rgba-medium);
 }
 
+/* Responsive grid: 1 col (mobile) → 2 col (tablet) → 3 col (desktop) → 4 col (xl) */
 .bento-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
+  grid-auto-flow: dense;
   gap: var(--gap-lg);
   margin-bottom: var(--gap-2xl);
 }
 
-/* Bento grid item sizing variations */
+/* Card sizing - automatically clamped by grid columns */
 .bento-grid > :global(.card-large) {
   grid-column: span 2;
 }
 
 .bento-grid > :global(.card-tall) {
   grid-row: span 2;
+}
+
+.bento-grid > :global(.card-x-tall) {
+  grid-row: span 3;
 }
 
 .bento-grid > :global(.card-wide) {
@@ -263,22 +275,26 @@
   margin-top: var(--gap-xs);
 }
 
-/* Responsive adjustments */
-@media (max-width: 1200px) {
+/* Breakpoints - adjust grid columns only */
+@media (min-width: 640px) {
   .bento-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-
-  .bento-grid > :global(.card-large) {
-    grid-column: span 1;
-  }
-
-  /* Keep card-wide spanning full width on medium screens */
-  .bento-grid > :global(.card-wide) {
-    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
+@media (min-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1536px) {
+  .bento-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Header responsive adjustments */
 @media (max-width: 768px) {
   .framework-detail-page {
     padding: var(--gap-lg) var(--gap-md);
@@ -324,10 +340,10 @@
   }
 
   .bento-grid {
-    grid-template-columns: 1fr;
     gap: var(--gap-md);
   }
 
+  /* Disable tall cards on mobile */
   .bento-grid > :global(.card-tall) {
     grid-row: span 1;
   }

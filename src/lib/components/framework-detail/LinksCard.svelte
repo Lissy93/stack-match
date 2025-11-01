@@ -19,11 +19,13 @@
     const npmName = framework.npm?.name;
     const githubRepo = metadata?.github?.fullName;
 
+    console.log(framework)
+
     // Official Links
-    if (metadata?.links?.website) {
+    if (metadata?.website) {
       allLinks.push({
         label: 'Official Website',
-        url: metadata.links.website,
+        url: metadata?.website,
         icon: '🌐',
         category: 'official'
       });
@@ -44,7 +46,7 @@
         label: 'GitHub Repository',
         url: `https://github.com/${githubRepo}`,
         icon: '💻',
-        category: 'repository'
+        category: 'official'
       });
 
       allLinks.push({
@@ -89,7 +91,7 @@
         label: 'npm Package',
         url: `https://www.npmjs.com/package/${npmName}`,
         icon: '📦',
-        category: 'package'
+        category: 'official'
       });
 
       allLinks.push({
@@ -132,43 +134,10 @@
       });
     }
 
-    // Community Links
-    if (metadata?.links?.chat) {
-      allLinks.push({
-        label: 'Community Chat',
-        url: metadata.links.chat,
-        icon: '💬',
-        category: 'community'
-      });
-    }
-
-    if (metadata?.links?.forum) {
-      allLinks.push({
-        label: 'Forum',
-        url: metadata.links.forum,
-        icon: '💬',
-        category: 'community'
-      });
-    }
-
-    if (metadata?.links?.twitter) {
-      allLinks.push({
-        label: 'Twitter',
-        url: metadata.links.twitter,
-        icon: '🐦',
-        category: 'community'
-      });
-    }
+   
 
     // Additional Tools
     if (githubRepo) {
-      allLinks.push({
-        label: 'GitHub Topics',
-        url: `https://github.com/topics/${framework.metadata?.name?.toLowerCase() || framework.id}`,
-        icon: '🏷️',
-        category: 'community'
-      });
-
       allLinks.push({
         label: 'Libraries.io',
         url: `https://libraries.io/github/${githubRepo}`,
@@ -181,34 +150,6 @@
         url: `https://deps.dev/project/github/${githubRepo}`,
         icon: '🔍',
         category: 'tools'
-      });
-
-      allLinks.push({
-        label: 'Stargazers',
-        url: `https://github.com/${githubRepo}/stargazers`,
-        icon: '⭐',
-        category: 'community'
-      });
-
-      allLinks.push({
-        label: 'Forks Network',
-        url: `https://github.com/${githubRepo}/forks`,
-        icon: '🔱',
-        category: 'community'
-      });
-
-      allLinks.push({
-        label: 'Watchers',
-        url: `https://github.com/${githubRepo}/watchers`,
-        icon: '👁️',
-        category: 'community'
-      });
-
-      allLinks.push({
-        label: 'Insights',
-        url: `https://github.com/${githubRepo}/pulse`,
-        icon: '📊',
-        category: 'repository'
       });
 
       allLinks.push({
