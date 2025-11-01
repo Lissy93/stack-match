@@ -18,9 +18,7 @@
     const metadata = framework.metadata;
     const npmName = framework.npm?.name;
     const githubRepo = metadata?.github?.fullName;
-
-    console.log(framework)
-
+    
     // Official Links
     if (metadata?.website) {
       allLinks.push({
@@ -400,8 +398,10 @@
                     class="favicon"
                     loading="lazy"
                     on:error={(e) => {
+                      // @ts-ignore - Type assertion for DOM elements
                       e.currentTarget.style.display = 'none';
-                      e.currentTarget.nextElementSibling.style.display = 'inline';
+                      // @ts-ignore
+                      if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'inline';
                     }}
                   />
                   <span class="emoji-fallback" style="display: none;">{link.icon}</span>

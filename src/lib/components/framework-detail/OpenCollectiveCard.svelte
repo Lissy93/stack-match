@@ -1,30 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import BaseCard from './BaseCard.svelte';
+  import LoadingSpinner from './LoadingSpinner.svelte';
+  import NoData from './NoData.svelte';
+  import type { OpenCollectiveData } from '$lib/types';
 
   export let slug: string | undefined;
 
   let loading = true;
   let error = false;
-  let data: {
-    name: string;
-    totalAmountReceived: number;
-    yearlyBudget: number;
-    currency: string;
-    backerCount: number;
-    sponsorCount: number;
-    url: string;
-    balance: number;
-    monthlySpending: number;
-    totalAmountSpent: number;
-    contributorsCount: number;
-    runwayMonths: number | null;
-    recurringContributions: {
-      monthly: number;
-      yearly: number;
-    };
-    createdAt: string;
-  } | null = null;
+  let data: OpenCollectiveData | null = null;
 
   function formatCurrency(amount: number, currency: string): string {
     if (amount === null || amount === undefined) return 'N/A';
@@ -76,20 +61,13 @@
   });
 </script>
 
-<BaseCard title="Community Funding" size="medium">
+<BaseCard title="Community Funding">
   {#if !slug}
-    <div class="no-data">
-      <p>No Open Collective information</p>
-    </div>
+    <NoData>No Open Collective information</NoData>
   {:else if loading}
-    <div class="loading">
-      <div class="spinner"></div>
-      <p>Loading funding data...</p>
-    </div>
+    <LoadingSpinner>Loading funding data...</LoadingSpinner>
   {:else if error || !data}
-    <div class="no-data">
-      <p>Unable to load funding data</p>
-    </div>
+    <NoData>Unable to load funding data</NoData>
   {:else}
     <div class="content">
       <div class="stats-grid">
@@ -178,6 +156,8 @@
 </BaseCard>
 
 <style>
+  @import './shared-card-styles.css';
+
   .content {
     display: flex;
     flex-direction: column;
@@ -230,53 +210,6 @@
     color: #ef4444; /* Red */
   }
 
-  .btn {
-    padding: var(--gap-xs) var(--gap-md);
-    width: fit-content;
-    margin: 0 auto;
-    font-size: var(--font-xs);
-    color: var(--text-secondary);
-    background: transparent;
-    border: none;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all var(--transition-normal);
-    text-align: center;
-  }
-
-  .btn:hover {
-    color: var(--accent-primary);
-    transform: translateX(2px);
-  }
-
-  .loading, .no-data {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: var(--gap-xl);
-    gap: var(--gap-md);
-    color: var(--text-tertiary);
-    min-height: 150px;
-  }
-
-  .spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid var(--border-primary);
-    border-top-color: var(--accent-primary);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .no-data p {
-    margin: 0;
-    font-style: italic;
-  }
 
   @media (max-width: 768px) {
     .stats-grid {

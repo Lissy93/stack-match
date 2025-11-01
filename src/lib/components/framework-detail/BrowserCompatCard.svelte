@@ -12,7 +12,7 @@
   ];
 </script>
 
-<BaseCard title="Browser Support" size="medium">
+<BaseCard title="Browser Support">
   {#if !packageName}
     <div class="no-data">
       <p>No package information available</p>
@@ -27,10 +27,6 @@
             <span class="support-badge supported">Supported</span>
           </div>
         {/each}
-      </div>
-
-      <div class="note">
-        Modern frameworks typically support all evergreen browsers
       </div>
 
       {#if browserSupportUrl}

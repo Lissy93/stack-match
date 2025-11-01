@@ -10,7 +10,7 @@ interface CacheEntry<T> {
 class APICache {
   private cache = new Map<string, CacheEntry<any>>();
   private readonly cleanupInterval = 5 * 60 * 1000; // 5 minutes
-  private cleanupTimer?: NodeJS.Timeout;
+  private cleanupTimer?: ReturnType<typeof setInterval>;
 
   constructor() {
     // Start periodic cleanup
