@@ -137,6 +137,35 @@
     font-style: italic;
   }
 
+  .stat-highlight {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-sm);
+    padding: var(--gap-xl);
+    background: var(--surface-tertiary);
+    border-radius: var(--radius-lg);
+    width: 100%;
+  }
+
+  .stat-value {
+    font-size: var(--font-3xl);
+    font-weight: 700;
+    color: var(--accent-primary);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
+  }
+
   .contributors-list {
     display: flex;
     flex-direction: column;
