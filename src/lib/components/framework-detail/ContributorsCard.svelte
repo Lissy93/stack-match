@@ -119,7 +119,6 @@
 </BaseCard>
 
 <style>
-  @import './shared-card-styles.css';
 
   h4 {
     font-size: var(--font-sm);

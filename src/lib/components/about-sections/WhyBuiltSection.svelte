@@ -16,5 +16,60 @@
 </section>
 
 <style lang="scss">
-  @import './about-shared.scss';
+  .about-section {
+    padding: 0;
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .section-content {
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--gap-2xl);
+      transition: all var(--transition-normal);
+
+      &:hover {
+        box-shadow: var(--shadow-md);
+      }
+    }
+
+    h2 {
+      font-size: var(--font-2xl);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 var(--gap-lg) 0;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      font-size: var(--font-base);
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin: 0 0 var(--gap-md) 0;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .about-section {
+      h2 {
+        font-size: var(--font-xl);
+      }
+
+      .section-content {
+        padding: var(--gap-lg);
+      }
+    }
+  }
 </style>

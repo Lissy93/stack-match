@@ -210,26 +210,9 @@
     color: var(--text-primary);
   }
 
-  .info-footer {
-    padding-top: var(--gap-md);
-    border-top: 1px solid var(--border-primary);
-  }
 
-  .info-footer p {
-    margin: 0;
-    font-size: var(--font-xs);
-    color: var(--text-tertiary);
-    line-height: 1.5;
-  }
 
-  .info-footer a {
-    color: var(--accent-primary);
-    text-decoration: none;
-  }
 
-  .info-footer a:hover {
-    text-decoration: underline;
-  }
 
   .no-data {
     display: flex;

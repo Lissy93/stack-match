@@ -91,10 +91,6 @@
     transition: transform var(--transition-fast);
   }
 
-  .stat-primary {
-    /* background: var(--accent-secondary); */
-  }
-
   .stat-icon {
     display: flex;
     align-items: center;

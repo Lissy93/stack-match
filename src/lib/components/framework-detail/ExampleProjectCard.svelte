@@ -124,15 +124,6 @@
     width: auto;
   }
 
-  .no-data {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--gap-md);
-    color: var(--text-tertiary);
-    font-style: italic;
-    font-size: var(--font-sm);
-  }
 
   .example-project-card {
     display: flex;
@@ -241,10 +232,6 @@
     padding-top: var(--gap-sm);
   }
 
-  .project-links.compact {
-    gap: var(--gap-xs);
-    padding-top: 0;
-  }
 
   .btn {
     display: inline-flex;
@@ -260,18 +247,7 @@
     cursor: pointer;
   }
 
-  .btn-compact {
-    padding: var(--gap-xs) var(--gap-sm);
-    font-size: var(--font-base);
-    background: var(--surface-tertiary);
-    border-color: var(--border-primary);
-  }
 
-  .btn-compact:hover {
-    background: var(--surface-secondary);
-    border-color: var(--accent-primary);
-    transform: scale(1.1);
-  }
 
   .btn-primary {
     background: var(--accent-primary);

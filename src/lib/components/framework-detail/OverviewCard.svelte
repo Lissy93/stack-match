@@ -7,7 +7,7 @@
   export let npm: any = undefined;
   export let bundle: any = undefined;
   export let security: any = undefined;
-  export let brandColor: string = '#3b82f6';
+  export const brandColor: string = '#3b82f6';
 
   $: healthClass = ecosystem?.overall_health >= 75 ? 'health-excellent' :
                    ecosystem?.overall_health >= 50 ? 'health-good' :
@@ -256,14 +256,6 @@
     margin-bottom: var(--gap-md);
   }
 
-  .framework-logo img {
-    width: 80px;
-    height: 80px;
-    border-radius: var(--radius-lg);
-    border: 3px solid;
-    padding: var(--gap-sm);
-    background: var(--surface-tertiary);
-  }
 
   .description {
     color: var(--text-secondary);

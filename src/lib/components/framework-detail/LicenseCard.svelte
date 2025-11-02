@@ -154,18 +154,6 @@
     flex: 1;
   }
 
-  .license-badge {
-    display: inline-block;
-    padding: var(--gap-xs) var(--gap-sm);
-    background: var(--accent-secondary);
-    color: var(--accent-primary);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-xs);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    width: fit-content;
-  }
 
   .license-name h4 {
     margin: 0;

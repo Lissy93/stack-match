@@ -442,13 +442,6 @@
     margin-bottom: 0;
   }
 
-  .section-title {
-    font-size: var(--font-xl);
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: var(--gap-lg);
-  }
-
   .section-title-toggle {
     display: flex;
     align-items: center;

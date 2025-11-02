@@ -107,13 +107,6 @@
     color: #22c55e;
   }
 
-  .note {
-    font-size: var(--font-sm);
-    color: var(--text-tertiary);
-    text-align: center;
-    font-style: italic;
-    padding: 0 var(--gap-md);
-  }
 
   .btn {
     padding: var(--gap-xs) var(--gap-md);

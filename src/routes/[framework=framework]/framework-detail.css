@@ -292,32 +292,12 @@
   gap: var(--gap-xs);
 }
 
-.header-description .description-short {
-  color: var(--text-primary);
-  font-size: var(--font-lg);
-  font-weight: 600;
-  margin: 0;
-  line-height: 1.5;
-}
-
 .header-description .description-long {
   color: var(--text-secondary);
   font-size: var(--font-base);
   margin: 0;
   line-height: 1.6;
   opacity: 0.9;
-}
-
-.btn-branded {
-  background: var(--brand-color) !important;
-  color: var(--text-color) !important;
-  border: 1px solid var(--brand-color) !important;
-}
-
-.btn-branded:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--brand-color-rgba-medium);
 }
 
 /* Responsive grid: 1 col (mobile) → 2 col (tablet) → 3 col (desktop) → 4 col (xl) */

@@ -67,5 +67,4 @@
 </BaseCard>
 
 <style>
-  @import './shared-card-styles.css';
 </style>

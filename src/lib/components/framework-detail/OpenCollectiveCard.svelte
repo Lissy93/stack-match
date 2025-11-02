@@ -156,7 +156,6 @@
 </BaseCard>
 
 <style>
-  @import './shared-card-styles.css';
 
   .content {
     display: flex;
