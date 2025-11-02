@@ -47,7 +47,7 @@
       step="1"
       {value}
       class="slider"
-      style="background: linear-gradient(to right, var(--accent-primary) 0%, var(--accent-primary) {percentage}%, var(--surface-tertiary) {percentage}%, var(--surface-tertiary) 100%)"
+      style="background: linear-gradient(to right, {valueColor} 0%, {valueColor} {percentage}%, var(--surface-tertiary) {percentage}%, var(--surface-tertiary) 100%); --slider-color: {valueColor};"
       on:input={handleInput}
       aria-label="{capitalize(attribute)} importance level"
     />
@@ -60,6 +60,26 @@
 </div>
 
 <style lang="scss">
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
   .slider-container {
     display: flex;
     flex-direction: column;
@@ -69,9 +89,11 @@
     border-bottom: 1px solid var(--border-primary);
     padding: var(--gap-2xs) var(--gap-2xs) var(--gap-sm) var(--gap-2xs);
     border-radius: var(--radius-xs);
+    animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) backwards;
 
     &:hover {
       box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
     }
   }
 
@@ -92,7 +114,12 @@
       font-size: var(--font-sm);
       min-width: 1.5rem;
       text-align: right;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
+  }
+
+  .slider-container:active .value-indicator {
+    animation: pulse 0.3s ease-out;
   }
 
   .slider-track {
@@ -106,10 +133,15 @@
       border-radius: 9999px;
       outline: none;
       cursor: pointer;
-      transition: all var(--transition-normal);
+      transition: box-shadow var(--transition-normal), height 0.2s ease;
 
       &:hover {
         box-shadow: var(--shadow-sm);
+        height: 0.5rem;
+      }
+
+      &:active {
+        height: 0.5rem;
       }
 
       &:focus {
@@ -122,15 +154,19 @@
         width: 1.25rem;
         height: 1.25rem;
         border-radius: 50%;
-        background: var(--accent-primary);
+        background: var(--slider-color);
         cursor: pointer;
-        transition: all var(--transition-normal);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         border: 3px solid var(--surface-secondary);
         box-shadow: var(--shadow-sm);
 
         &:hover {
-          transform: scale(1.1);
-          box-shadow: var(--shadow-md);
+          transform: scale(1.15);
+          box-shadow: 0 4px 12px color-mix(in srgb, var(--slider-color) 40%, transparent);
+        }
+
+        &:active {
+          transform: scale(1.05);
         }
       }
 
@@ -138,15 +174,19 @@
         width: 1.25rem;
         height: 1.25rem;
         border-radius: 50%;
-        background: var(--accent-primary);
+        background: var(--slider-color);
         cursor: pointer;
-        transition: all var(--transition-normal);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         border: 3px solid var(--surface-secondary);
         box-shadow: var(--shadow-sm);
 
         &:hover {
-          transform: scale(1.1);
-          box-shadow: var(--shadow-md);
+          transform: scale(1.15);
+          box-shadow: 0 4px 12px color-mix(in srgb, var(--slider-color) 40%, transparent);
+        }
+
+        &:active {
+          transform: scale(1.05);
         }
       }
     }

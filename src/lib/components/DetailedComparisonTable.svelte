@@ -248,7 +248,7 @@
             </a>
           {/if}
           <a href="/{framework.id}" class="link-btn primary">
-            <Sparkles size={16} /> View Full Details �
+            <Sparkles size={16} /> View Full Details →
           </a>
         </div>
       </div>

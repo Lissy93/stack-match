@@ -4,6 +4,7 @@
   import { ArrowRight, Github } from 'lucide-svelte';
 
   export let heroElement: HTMLElement | undefined = undefined;
+  export let hideFrameworkList: boolean = false;
 </script>
 
 <div class="hero-wrapper">
@@ -38,7 +39,7 @@
       </p>
     </div>
 
-    {#if $frameworkData?.meta}
+    {#if !hideFrameworkList && $frameworkData?.meta}
       <nav class="frameworks-nav" aria-label="Framework quick links">
         {#each $frameworkData.meta.filter(fw => fw.id !== 'vanilla') as framework, i}
           <a
@@ -96,6 +97,17 @@
     to { opacity: 1; transform: translateX(0); }
   }
 
+  @keyframes slideDownFade {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .hero-wrapper {
     margin: 0 auto var(--gap-xl) auto;
   }
@@ -142,6 +154,7 @@
     transition: all 0.3s ease;
     z-index: 10;
     box-shadow: var(--shadow-md);
+    animation: slideDownFade 0.6s cubic-bezier(0.4, 0, 0.2, 1) 1.3s backwards;
 
     &:hover {
       background: var(--surface-tertiary);

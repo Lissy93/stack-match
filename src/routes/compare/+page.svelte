@@ -156,7 +156,7 @@
 
 <div class="compare-page">
   <!-- Hero -->
-  <Hero bind:heroElement />
+  <Hero bind:heroElement hideFrameworkList={true} />
 
   <!-- Framework Selector -->
   <div class="framework-selector">
