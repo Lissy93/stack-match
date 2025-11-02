@@ -27,6 +27,7 @@
   import { goto } from '$app/navigation';
   import { ChevronDown } from 'lucide-svelte';
   import rawData from '../../data.json';
+  import { generateFrameworkMetaTags, generateFrameworkSchema, generateBreadcrumbSchema } from '$lib/seo';
 
   export let data: PageData;
 
@@ -97,11 +98,80 @@
     (!frameworkData.ecosystem?.packages || frameworkData.ecosystem?.packages?.length === 0) && 'Ecosystem packages',
     !frameworkData.github?.license && 'License information',
   ].filter(Boolean) : [];
+
+  // SEO meta tags
+  $: metaTags = staticData?.meta ? generateFrameworkMetaTags({
+    id: frameworkId,
+    name: staticData.meta.name || frameworkId,
+    description: staticData.meta.description || '',
+    longDescription: staticData.meta.longDescription,
+    branding: staticData.meta.branding
+  }) : null;
+
+  // Structured data
+  $: frameworkSchema = staticData?.meta ? generateFrameworkSchema({
+    id: frameworkId,
+    name: staticData.meta.name || frameworkId,
+    description: staticData.meta.description || '',
+    links: staticData.meta.links
+  }, {
+    github: frameworkData?.github,
+    npm: frameworkData?.npm
+  }) : null;
+
+  $: breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: 'https://stack-match.vercel.app/' },
+    { name: staticData?.meta?.name || frameworkId, url: `https://stack-match.vercel.app/${frameworkId}` }
+  ]);
 </script>
 
 <svelte:head>
-  <title>{frameworkData?.name || frameworkId} - Framework Details | Stack Match</title>
-  <meta name="description" content="Detailed statistics and ecosystem health for {frameworkData?.name || frameworkId}" />
+  {#if metaTags}
+    <!-- Primary Meta Tags -->
+    <title>{metaTags.title}</title>
+    <meta name="title" content={metaTags.title} />
+    <meta name="description" content={metaTags.description} />
+    <meta name="keywords" content={metaTags.keywords} />
+    <meta name="author" content="Alicia Sykes" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={metaTags.canonical} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={metaTags.openGraph.type} />
+    <meta property="og:url" content={metaTags.openGraph.url} />
+    <meta property="og:title" content={metaTags.openGraph.title} />
+    <meta property="og:description" content={metaTags.openGraph.description} />
+    <meta property="og:image" content={metaTags.openGraph.image} />
+    <meta property="og:image:width" content={metaTags.openGraph.imageWidth} />
+    <meta property="og:image:height" content={metaTags.openGraph.imageHeight} />
+    <meta property="og:image:alt" content={metaTags.openGraph.imageAlt} />
+    <meta property="og:site_name" content={metaTags.openGraph.siteName} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content={metaTags.twitter.card} />
+    <meta property="twitter:url" content={metaTags.twitter.url} />
+    <meta property="twitter:title" content={metaTags.twitter.title} />
+    <meta property="twitter:description" content={metaTags.twitter.description} />
+    <meta property="twitter:image" content={metaTags.twitter.image} />
+    <meta property="twitter:creator" content={metaTags.twitter.creator} />
+  {:else}
+    <!-- Fallback Meta Tags -->
+    <title>{frameworkData?.name || frameworkId} - Framework Details | Stack Match</title>
+    <meta name="description" content="Detailed statistics and ecosystem health for {frameworkData?.name || frameworkId}" />
+  {/if}
+
+  <!-- Structured Data -->
+  {#if frameworkSchema}
+    <script type="application/ld+json">
+      {JSON.stringify(frameworkSchema)}
+    </script>
+  {/if}
+
+  {#if breadcrumbSchema}
+    <script type="application/ld+json">
+      {JSON.stringify(breadcrumbSchema)}
+    </script>
+  {/if}
 </svelte:head>
 
 <svelte:window on:click={handleClickOutside} />

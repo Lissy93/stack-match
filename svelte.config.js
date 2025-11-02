@@ -1,4 +1,5 @@
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import * as sass from 'sass-embedded'; 
 
 // Import all possible adapters
 import autoAdapter from "@sveltejs/adapter-auto";
@@ -10,7 +11,7 @@ function getAdapter() {
   if (process.env.VERCEL || process.env.ADAPTER === "vercel") {
     console.log("🔧 Using Vercel adapter with Node.js 20 runtime");
     return vercelAdapter({
-      runtime: "nodejs20.x",
+      runtime: "nodejs22.x",
     });
   }
 
@@ -37,7 +38,9 @@ function getAdapter() {
 const config = {
   // Consult https://svelte.dev/docs/kit/integrations
   // for more information about preprocessors
-  preprocess: vitePreprocess(),
+  preprocess: [ 
+    vitePreprocess(),
+  ],
 
   kit: {
     // Use conditional adapter selection
