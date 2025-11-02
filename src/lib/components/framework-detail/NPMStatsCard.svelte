@@ -27,28 +27,7 @@
     });
   }
 
-  function hasTypeScriptSupport(): boolean {
-    // Check if package has types field or @types package
-    if (!npm) return false;
-
-    // Check for types or typings field in package.json
-    if (npm.types || npm.typings) return true;
-
-    // Check if package name starts with @types/
-    if (npm.name?.startsWith('@types/')) return true;
-
-    // Check if types are in dependencies
-    const allDeps = [
-      ...(npm.dependencies || []),
-      ...(npm.devDependencies || []),
-    ];
-
-    return allDeps.some((dep: string) =>
-      dep.startsWith('@types/') || dep === 'typescript'
-    );
-  }
-
-  $: typeScriptSupport = hasTypeScriptSupport();
+  $: typeScriptSupport = npm?.has_typescript_support ?? false;
 </script>
 
 <BaseCard title="NPM Statistics">

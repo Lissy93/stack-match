@@ -1,7 +1,7 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { frameworkCache, fetchWithRetry, CACHE_TTL } from "$lib/api-cache";
-import { GITHUB_TOKEN } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
 interface GitHubLicenseResponse {
   key: string;
@@ -50,8 +50,8 @@ export const GET: RequestHandler = async ({ params }) => {
       "User-Agent": "Stack-Match-App",
     };
 
-    if (GITHUB_TOKEN) {
-      headers["Authorization"] = `Bearer ${GITHUB_TOKEN}`;
+    if (env.GITHUB_TOKEN) {
+      headers["Authorization"] = `Bearer ${env.GITHUB_TOKEN}`;
     }
 
     const response = await fetchWithRetry(

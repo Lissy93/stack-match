@@ -12,11 +12,11 @@ import {
   getSecurityCacheKey,
   CACHE_TTL,
 } from "$lib/api-cache";
-import { GITHUB_TOKEN } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import rawData from '../../../../data.json';
 
 // Environment variables for API keys (optional - some APIs work without auth)
-// GITHUB_TOKEN is imported from $env/static/private
+// GITHUB_TOKEN is accessed via env.GITHUB_TOKEN from $env/dynamic/private
 
 // GitHub API response interface
 interface GitHubRepoResponse {
@@ -127,6 +127,9 @@ interface NPMData {
   }>;
   created: string;
   modified: string;
+  types?: string;
+  typings?: string;
+  has_typescript_support: boolean;
 }
 
 interface BundleData {
@@ -227,8 +230,8 @@ async function fetchGitHubData(
     "User-Agent": "Stack-Match-App",
   };
 
-  if (GITHUB_TOKEN) {
-    headers["Authorization"] = `Bearer ${GITHUB_TOKEN}`;
+  if (env.GITHUB_TOKEN) {
+    headers["Authorization"] = `Bearer ${env.GITHUB_TOKEN}`;
   }
 
   const result: Partial<FrameworkStats["github"]> = {};
@@ -441,6 +444,18 @@ async function fetchNPMData(
         packageData.peerDependencies || {},
       ).length;
       result.maintainers = packageData.maintainers || [];
+      result.types = packageData.types;
+      result.typings = packageData.typings;
+
+      // Check for TypeScript support
+      const hasTypesField = !!(packageData.types || packageData.typings);
+      const isTypesPackage = packageData.name?.startsWith('@types/');
+      const hasTypeScriptDep = Object.keys(packageData.dependencies || {}).includes('typescript') ||
+                               Object.keys(packageData.devDependencies || {}).includes('typescript');
+      const hasTypesInDeps = Object.keys({...(packageData.dependencies || {}), ...(packageData.devDependencies || {})})
+                               .some((dep: string) => dep.startsWith('@types/') || dep === 'typescript');
+
+      result.has_typescript_support = hasTypesField || isTypesPackage || hasTypeScriptDep || hasTypesInDeps;
     } else {
       errors.push({
         source: "npm-package",
