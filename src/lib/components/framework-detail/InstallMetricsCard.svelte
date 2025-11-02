@@ -1,5 +1,6 @@
 <script lang="ts">
   import BaseCard from './BaseCard.svelte';
+  import { Download } from 'lucide-svelte';
 
   export let installMetrics: any | undefined;
 
@@ -30,7 +31,7 @@
 </script>
 
 {#if !hideCard}
-<BaseCard title="Install Metrics">
+<BaseCard title="Install Metrics" icon={Download}>
   {#if phobiaData}
     <div class="metrics-grid">
       <div class="metric-item">

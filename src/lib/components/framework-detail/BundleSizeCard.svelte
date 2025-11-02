@@ -1,5 +1,6 @@
 <script lang="ts">
   import BaseCard from './BaseCard.svelte';
+  import { Package2 } from 'lucide-svelte';
 
   export let bundle: any;
 
@@ -17,7 +18,7 @@
                  bundle?.gzip < 300000 ? 'size-fair' : 'size-large';
 </script>
 
-<BaseCard title="Bundle Size">
+<BaseCard title="Bundle Size" icon={Package2}>
   {#if bundle?.gzip === undefined && bundle?.size === undefined && bundle?.dependency_count === undefined}
     <div class="no-data">
       <p>Bundle size data not available</p>

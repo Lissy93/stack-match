@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Video } from 'lucide-svelte';
+
   export let videoId: string | undefined;
   export let frameworkName: string;
 
@@ -7,7 +9,10 @@
 
 {#if videoId}
   <div class="card video-card">
-    <h3>Video Tutorial</h3>
+    <h3>
+      <span class="title-icon"><Video size={20} /></span>
+      Video Tutorial
+    </h3>
 
     {#if !showVideo}
       <button
@@ -48,8 +53,18 @@
   }
 
   h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
     margin: 0;
     font-size: var(--font-lg);
+  }
+
+  .title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
   }
 
   .video-thumbnail {

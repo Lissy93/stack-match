@@ -1,5 +1,6 @@
 <script lang="ts">
   import BaseCard from './BaseCard.svelte';
+  import { Activity } from 'lucide-svelte';
 
   export let commitActivity: any[] | undefined;
 
@@ -23,7 +24,7 @@
   $: avgCommitsPerWeek = commitActivity ? Math.round(totalCommits / commitActivity.length) : 0;
 </script>
 
-<BaseCard title="Commit Activity" size="wide">
+<BaseCard title="Commit Activity" size="wide" icon={Activity}>
   {#if weekData.length > 0}
     <div class="activity-stats">
       <div class="stat">

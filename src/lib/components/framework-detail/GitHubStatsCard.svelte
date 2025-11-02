@@ -1,7 +1,7 @@
 <script lang="ts">
   import { formatNumber } from '$lib/utils';
   import BaseCard from './BaseCard.svelte';
-  import { Star, GitFork, Eye, Bug } from 'lucide-svelte';
+  import { Star, GitFork, Eye, Bug, Github } from 'lucide-svelte';
 
   export let github: any;
 
@@ -12,7 +12,7 @@
   }
 </script>
 
-<BaseCard title="GitHub Statistics">
+<BaseCard title="GitHub Statistics" icon={Github}>
 
   <div class="stats-grid">
     <div class="stat-item stat-primary">

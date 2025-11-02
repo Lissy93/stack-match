@@ -1,6 +1,6 @@
 <script lang="ts">
   import BaseCard from './BaseCard.svelte';
-  import { LockKeyhole, Check } from 'lucide-svelte';
+  import { LockKeyhole, Check, ShieldCheck } from 'lucide-svelte';
 
   export let security: any;
 
@@ -10,7 +10,7 @@
                      totalVulns < 15 ? 'security-fair' : 'security-poor';
 </script>
 
-<BaseCard title="Security">
+<BaseCard title="Security" icon={ShieldCheck}>
 
   <div class="security-score {securityClass}">
     <div class="score-icon"><LockKeyhole size={48} /></div>

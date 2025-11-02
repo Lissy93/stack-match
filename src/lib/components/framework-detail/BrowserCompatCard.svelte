@@ -1,6 +1,6 @@
 <script lang="ts">
   import BaseCard from './BaseCard.svelte';
-  import { Chrome, Flame, Compass, Zap } from 'lucide-svelte';
+  import { Chrome, Flame, Compass, Zap, Globe } from 'lucide-svelte';
 
   export let packageName: string | undefined;
   export let browserSupportUrl: string | undefined;
@@ -13,7 +13,7 @@
   ];
 </script>
 
-<BaseCard title="Browser Support">
+<BaseCard title="Browser Support" icon={Globe}>
   {#if !packageName}
     <div class="no-data">
       <p>No package information available</p>

@@ -35,7 +35,7 @@
   });
 </script>
 
-<BaseCard title="Stack Overflow Activity">
+<BaseCard title="Stack Overflow Activity" icon={MessageCircleQuestion}>
   {#if !tag}
     <NoData>No tag information available</NoData>
   {:else if loading}

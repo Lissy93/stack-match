@@ -19,6 +19,7 @@
   import StarHistoryCard from '$lib/components/framework-detail/StarHistoryCard.svelte';
   import LinksCard from '$lib/components/framework-detail/LinksCard.svelte';
   import ExampleProjectCard from '$lib/components/framework-detail/ExampleProjectCard.svelte';
+  import AuthorReview from '$lib/components/framework-detail/AuthorReview.svelte';
   import StackOverflowCard from '$lib/components/framework-detail/StackOverflowCard.svelte';
   import OpenCollectiveCard from '$lib/components/framework-detail/OpenCollectiveCard.svelte';
   import JsDelivrStatsCard from '$lib/components/framework-detail/JsDelivrStatsCard.svelte';
@@ -336,7 +337,6 @@
         <SourceRankCard packageName={frameworkData.npm.name} />
       {/if}
 
-
       <EcosystemHealthCard
         ecosystem={frameworkData.ecosystem}
         lastUpdated={frameworkData.last_updated}
@@ -404,6 +404,10 @@
           />
         </div>
       {/if}
+
+      <div class="card-wide">
+        <AuthorReview frameworkId={frameworkId} example={staticData?.meta?.example} />
+      </div>
 
       <LinksCard frameworkData={frameworkData} staticData={staticData} />
     </div>

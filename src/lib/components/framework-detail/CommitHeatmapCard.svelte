@@ -1,5 +1,6 @@
 <script lang="ts">
   import BaseCard from './BaseCard.svelte';
+  import { Calendar } from 'lucide-svelte';
 
   export let commitActivity: any[] | undefined;
   export let brandColor: string | undefined = undefined;
@@ -131,7 +132,10 @@
 
 <BaseCard title="Commit Activity" size="wide" headerSlot={true}>
   <div slot="header" class="card-header-content">
-    <h3>Commit Activity</h3>
+    <h3>
+      <span class="title-icon"><Calendar size={20} /></span>
+      Commit Activity
+    </h3>
     <div class="stats">
       <div class="stat-item">
         <span class="stat-value">{totalCommits.toLocaleString()}</span>
@@ -243,8 +247,18 @@
   }
 
   .card-header-content h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
     margin: 0;
     font-size: var(--font-lg);
+  }
+
+  .card-header-content .title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
   }
 
   .stats {

@@ -8,7 +8,15 @@
   <div class="footer-content">
     <div class="footer-left">
       <span class="copyright">
-        Stack Match is released under the
+        <a
+          href="/"
+          aria-label="Stack Match homepage"
+          title="The data-driven comparison of frontend frameworks"
+        >
+          Stack Match
+        </a>
+        <span class="separator" aria-hidden="true">•</span>
+        Released under the
         <a
           href="https://github.com/Lissy93/stack-match/blob/main/LICENSE"
           target="_blank"

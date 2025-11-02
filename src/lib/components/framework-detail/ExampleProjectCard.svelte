@@ -1,6 +1,6 @@
 <script lang="ts">
   import data from '../../../data.json';
-  import { Globe, Github } from 'lucide-svelte';
+  import { Globe, Github, Rocket } from 'lucide-svelte';
 
   export let example: {
     title?: string;
@@ -32,7 +32,10 @@
   <div class="card example-project-card" class:compact={small}>
     {#if !small}
       <div class="card-header">
-        <h3>Example Project</h3>
+        <h3>
+          <span class="title-icon"><Rocket size={20} /></span>
+          Example Project
+        </h3>
       </div>
     {/if}
 
@@ -144,8 +147,18 @@
   }
 
   h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
     margin: 0;
     font-size: var(--font-lg);
+  }
+
+  .title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
   }
 
   .project-header {

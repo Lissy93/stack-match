@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { Star } from 'lucide-svelte';
 
   export let repoFullName: string | undefined = undefined;
   export let repos: string[] | undefined = undefined;
@@ -55,7 +56,10 @@
 <div class="card card-large star-history-card">
   <div class="card-header">
     <div class="header-content">
-      <h3>{title}</h3>
+      <h3>
+        <span class="title-icon"><Star size={20} /></span>
+        {title}
+      </h3>
       {#if description}
         <p class="description">{description}</p>
       {/if}
@@ -117,8 +121,18 @@
   }
 
   h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
     margin: 0;
     font-size: var(--font-lg);
+  }
+
+  .title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
   }
 
   .description {

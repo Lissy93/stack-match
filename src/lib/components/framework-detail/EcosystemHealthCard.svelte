@@ -1,5 +1,6 @@
 <script lang="ts">
   import BaseCard from './BaseCard.svelte';
+  import { HeartPulse } from 'lucide-svelte';
 
   export let ecosystem: any;
   export let lastUpdated: string;
@@ -32,7 +33,7 @@
   }
 </script>
 
-<BaseCard title="Ecosystem Health Scores" size="large">
+<BaseCard title="Ecosystem Health Scores" icon={HeartPulse}>
   {#if ecosystem?.overall_health !== undefined}
     <div class="overall-health">
       <div class="health-circle" style="--health-color: {getHealthColor(ecosystem.overall_health)}">

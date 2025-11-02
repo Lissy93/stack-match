@@ -5,7 +5,7 @@
   import NoData from './NoData.svelte';
   import { formatNumber } from '$lib/utils';
   import type { JsDelivrData } from '$lib/types';
-  import { CloudDownload } from 'lucide-svelte';
+  import { CloudDownload, Cloud } from 'lucide-svelte';
 
   export let packageName: string | undefined;
 
@@ -35,7 +35,7 @@
   });
 </script>
 
-<BaseCard title="CDN Usage">
+<BaseCard title="CDN Usage" icon={Cloud}>
   {#if !packageName}
     <NoData>No package information available</NoData>
   {:else if loading}

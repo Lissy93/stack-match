@@ -4,6 +4,7 @@
   import LoadingSpinner from './LoadingSpinner.svelte';
   import NoData from './NoData.svelte';
   import type { OpenCollectiveData } from '$lib/types';
+  import { Heart } from 'lucide-svelte';
 
   export let slug: string | undefined;
 
@@ -61,7 +62,7 @@
   });
 </script>
 
-<BaseCard title="Community Funding">
+<BaseCard title="Community Funding" icon={Heart}>
   {#if !slug}
     <NoData>No Open Collective information</NoData>
   {:else if loading}

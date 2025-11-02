@@ -41,7 +41,7 @@
   }
 </script>
 
-<BaseCard title="License">
+<BaseCard title="License" icon={Scale}>
   {#if loading}
     <div class="loading">Loading license details...</div>
   {:else if licenseDetails}

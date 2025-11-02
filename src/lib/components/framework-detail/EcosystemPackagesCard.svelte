@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Package as PackageIcon, Star } from 'lucide-svelte';
+  import { Package as PackageIcon, Star, Boxes } from 'lucide-svelte';
 
   export let ecosystem: any;
 
@@ -22,7 +22,10 @@
 </script>
 
 <div class="card card-wide ecosystem-packages-card">
-  <h3>Ecosystem Packages</h3>
+  <h3>
+    <span class="title-icon"><Boxes size={20} /></span>
+    Ecosystem Packages
+  </h3>
 
   {#if packages.length > 0}
     <div class="packages-grid">
@@ -69,8 +72,18 @@
   }
 
   h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
     margin: 0;
     font-size: var(--font-lg);
+  }
+
+  .title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
   }
 
   .packages-grid {

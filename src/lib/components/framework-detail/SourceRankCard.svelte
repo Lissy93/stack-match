@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import BaseCard from './BaseCard.svelte';
+  import { TrendingUp } from 'lucide-svelte';
 
   export let packageName: string | undefined;
 
@@ -60,7 +61,7 @@
   }
 </script>
 
-<BaseCard title="SourceRank Quality Score">
+<BaseCard title="SourceRank Quality Score" icon={TrendingUp}>
   {#if loading}
     <div class="loading">
       <div class="loading-spinner"></div>

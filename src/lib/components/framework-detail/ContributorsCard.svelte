@@ -45,7 +45,7 @@
   }
 </script>
 
-<BaseCard title="Contributors">
+<BaseCard title="Contributors" icon={Users}>
   {#if loading}
     <div class="loading">Loading contributors...</div>
   {:else if small}

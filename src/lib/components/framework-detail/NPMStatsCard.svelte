@@ -1,7 +1,7 @@
 <script lang="ts">
   import { formatNumber } from '$lib/utils';
   import BaseCard from './BaseCard.svelte';
-  import { Check, X } from 'lucide-svelte';
+  import { Check, X, Package } from 'lucide-svelte';
 
   export let npm: any;
 
@@ -30,7 +30,7 @@
   $: typeScriptSupport = npm?.has_typescript_support ?? false;
 </script>
 
-<BaseCard title="NPM Statistics">
+<BaseCard title="NPM Statistics" icon={Package}>
 
   <div class="version-info">
     {#if npm?.version}

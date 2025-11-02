@@ -1,6 +1,7 @@
 <script lang="ts">
   import { formatNumber } from '$lib/utils';
   import BaseCard from './BaseCard.svelte';
+  import { TrendingDown } from 'lucide-svelte';
 
   export let downloadTrends: any | undefined;
   export let brandColor: string | undefined = undefined;
@@ -74,7 +75,10 @@
 {#if !hideCard}
 <BaseCard title="Download Trends" size="wide" headerSlot={true}>
   <div slot="header" class="card-header-content">
-    <h3>Download Trends</h3>
+    <h3>
+      <span class="title-icon"><TrendingDown size={20} /></span>
+      Download Trends
+    </h3>
     <div class="stats">
       {#if trendsData}
         <div class="stat-item">
@@ -168,8 +172,18 @@
   }
 
   .card-header-content h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
     margin: 0;
     font-size: var(--font-lg);
+  }
+
+  .card-header-content .title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
   }
 
   .stats {

@@ -1,5 +1,6 @@
 <script lang="ts">
   import BaseCard from './BaseCard.svelte';
+  import { Award } from 'lucide-svelte';
 
   export let scores: any;
 
@@ -50,7 +51,10 @@
 
 <BaseCard title="Framework Ratings" size="large" headerSlot={true}>
   <div slot="header" class="card-header-content">
-    <h3>Framework Ratings</h3>
+    <h3>
+      <span class="title-icon"><Award size={20} /></span>
+      Framework Ratings
+    </h3>
     <div class="avg-score">
       <span class="avg-value">{avgScore}</span>
       <span class="avg-label">/10 avg</span>
@@ -92,8 +96,18 @@
   }
 
   .card-header-content h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
     margin: 0;
     font-size: var(--font-lg);
+  }
+
+  .card-header-content .title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
   }
 
   .avg-score {
