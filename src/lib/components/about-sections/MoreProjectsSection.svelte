@@ -13,6 +13,9 @@
       url: 'https://github.com/Lissy93'
     }
   ];
+
+  const sponsorText = 'This work has been made possible thanks to my very kind sponsors on GitHub.';
+  const sponsorButtonText = 'Sponsor';
 </script>
 
 <section class="about-section">
@@ -40,7 +43,7 @@
     <div class="sponsor-note">
       <div class="sponsor-text">
         <Heart size={16} />
-        <span>This work has been made possible thanks to my very kind sponsors on GitHub.</span>
+        <span>{sponsorText}</span>
       </div>
       <a
         href="https://github.com/sponsors/Lissy93"
@@ -49,7 +52,7 @@
         class="sponsor-button"
       >
         <Sparkles size={14} />
-        <span>Sponsor</span>
+        <span>{sponsorButtonText}</span>
       </a>
     </div>
     <iframe class="sponsors-grid" src="https://readme-contribs.as93.net/sponsors/lissy93?perRow=12&shape=circle&textColor=ffffff" title="sponsors"></iframe>

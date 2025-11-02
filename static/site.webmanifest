@@ -4,10 +4,13 @@
   "description": "Compare 18+ frontend frameworks including React, Vue, Angular, Svelte with performance metrics, bundle size analysis, and scoring system",
   "start_url": "/",
   "scope": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#0a0f1c",
-  "theme_color": "#6366f1",
+  "theme_color": "#f33471",
   "orientation": "any",
+  "dir": "ltr",
+  "lang": "en-US",
   "icons": [
     {
       "src": "/favicon-16x16.png",
@@ -44,9 +47,25 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshot.png",
+      "src": "/screenshots/home.png",
       "sizes": "1920x1080",
-      "type": "image/png"
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Stack Match - Home page with framework comparison"
+    },
+    {
+      "src": "/screenshots/compare.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Stack Match - Side-by-side framework comparison"
+    },
+    {
+      "src": "/screenshots/framework.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Stack Match - Detailed framework statistics and metrics"
     }
   ],
   "shortcuts": [

@@ -102,12 +102,6 @@
     gap: var(--gap-xs);
   }
 
-  .stat-note {
-    font-size: var(--font-xs);
-    color: var(--text-tertiary);
-    font-style: italic;
-  }
-
   @media (max-width: 768px) {
     .stat-value {
       font-size: var(--font-2xl);

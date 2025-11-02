@@ -1,7 +1,7 @@
 import type { RequestHandler } from './$types';
 import data from '../../data.json';
 
-const SITE_URL = 'https://stack-match.vercel.app';
+const SITE_URL = 'https://stack-match.as93.net';
 
 interface SitemapUrl {
   loc: string;

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import Navbar from '$lib/components/Navbar.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	import { navigating, page } from '$app/stores';
 
 	// Determine if navbar should be shown
@@ -17,14 +18,14 @@
 	<meta name="keywords" content="frontend frameworks, React vs Vue, Angular comparison, Svelte performance, JavaScript frameworks, frontend development, framework comparison tool, web development, performance metrics, bundle size" />
 	<meta name="author" content="Alicia Sykes" />
 	<meta name="robots" content="index, follow" />
-	<link rel="canonical" href="https://stack-match.vercel.app/" />
+	<link rel="canonical" href="https://stack-match.as93.net/" />
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://stack-match.vercel.app/" />
+	<meta property="og:url" content="https://stack-match.as93.net/" />
 	<meta property="og:title" content="Stack Match - Find Your Perfect Frontend Framework" />
 	<meta property="og:description" content="Interactive tool to compare 18+ frontend frameworks. Analyze React, Vue, Angular, Svelte and more with performance metrics, bundle sizes, and customizable scoring." />
-	<meta property="og:image" content="https://stack-match.vercel.app/og_image.png" />
+	<meta property="og:image" content="https://stack-match.as93.net/og_image.png" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
 	<meta property="og:image:alt" content="Stack Match - Interactive frontend framework comparison tool" />
@@ -32,10 +33,10 @@
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
-	<meta property="twitter:url" content="https://stack-match.vercel.app/" />
+	<meta property="twitter:url" content="https://stack-match.as93.net/" />
 	<meta property="twitter:title" content="Stack Match - Find Your Perfect Frontend Framework" />
 	<meta property="twitter:description" content="Interactive tool to compare 18+ frontend frameworks. Analyze React, Vue, Angular, Svelte and more with performance metrics and customizable scoring." />
-	<meta property="twitter:image" content="https://stack-match.vercel.app/og_image.png" />
+	<meta property="twitter:image" content="https://stack-match.as93.net/og_image.png" />
 	<meta property="twitter:creator" content="@aliciasykes" />
 
 	<!-- Additional Meta Tags -->
@@ -51,7 +52,7 @@
 			"@type": "WebApplication",
 			"name": "Stack Match",
 			"description": "Interactive tool to compare frontend frameworks based on performance, maintainability, bundle size, and other key metrics",
-			"url": "https://stack-match.vercel.app/",
+			"url": "https://stack-match.as93.net/",
 			"author": {
 				"@type": "Person",
 				"name": "Alicia Sykes",
@@ -64,7 +65,7 @@
 				"price": "0",
 				"priceCurrency": "USD"
 			},
-			"screenshot": "https://stack-match.vercel.app/og_image.png",
+			"screenshot": "https://stack-match.as93.net/og_image.png",
 			"aggregateRating": {
 				"@type": "AggregateRating",
 				"ratingValue": "4.8",
@@ -88,13 +89,23 @@
 	</div>
 {/if}
 
-<main class="main-content" class:has-navbar={showNavbar}>
-	<slot />
-</main>
+<div class="layout-wrapper">
+	<main class="main-content" class:has-navbar={showNavbar}>
+		<slot />
+	</main>
+
+	<Footer />
+</div>
 
 <style>
-	.main-content {
+	.layout-wrapper {
+		display: flex;
+		flex-direction: column;
 		min-height: 100vh;
+	}
+
+	.main-content {
+		flex: 1;
 	}
 
 	.main-content.has-navbar {

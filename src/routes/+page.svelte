@@ -365,20 +365,6 @@
   {:else}
     <EmptyComparisonState />
   {/if}
-  
-  <!-- Footer -->
-  <footer class="app-footer">
-    <p class="footer-text">
-      <a href="https://github.com/lissy93/stack-match" target="_blank" rel="noopener noreferrer">
-        Stack Match
-      </a>
-      is licensed under MIT. © 
-      <a href="https://github.com/lissy93" target="_blank" rel="noopener noreferrer">
-        Alicia Sykes
-      </a>
-      2025.
-    </p>
-  </footer>
 </main>
 
 <style>
@@ -659,32 +645,6 @@
     margin: 0;
   }
 
-  .app-footer {
-    margin-top: var(--gap-xl);
-    padding: var(--gap-lg) 0;
-    text-align: center;
-    border-top: 1px solid var(--border-primary);
-  }
-
-  .footer-text {
-    font-size: var(--font-sm);
-    color: var(--text-secondary);
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  .footer-text a {
-    color: var(--accent-primary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-  }
-
-  .footer-text a:hover {
-    color: var(--accent-gradient);
-    text-decoration: underline;
-  }
-
   /* Mobile adjustments */
   @media (max-width: 768px) {
     .comparison-section {
@@ -715,14 +675,5 @@
   }
 
   @media (max-width: 480px) {
-    .app-footer {
-      margin-top: var(--gap-xl);
-      padding: var(--gap-lg) 0;
-    }
-
-    .footer-text {
-      font-size: 0.8125rem;
-      line-height: 1.4;
-    }
   }
 </style>

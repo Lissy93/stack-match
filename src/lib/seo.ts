@@ -6,7 +6,7 @@
 export const SITE_CONFIG = {
   name: 'Stack Match',
   shortName: 'Stack Match',
-  url: 'https://stack-match.vercel.app',
+  url: 'https://stack-match.as93.net',
   description: 'Compare 18+ frontend frameworks including React, Vue, Angular, Svelte. Interactive tool with performance metrics, bundle size analysis, and scoring system. Make data-driven decisions for your next project.',
   author: 'Alicia Sykes',
   twitterHandle: '@aliciasykes',

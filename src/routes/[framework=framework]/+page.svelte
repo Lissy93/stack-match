@@ -120,8 +120,8 @@
   }) : null;
 
   $: breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: 'https://stack-match.vercel.app/' },
-    { name: staticData?.meta?.name || frameworkId, url: `https://stack-match.vercel.app/${frameworkId}` }
+    { name: 'Home', url: 'https://stack-match.as93.net/' },
+    { name: staticData?.meta?.name || frameworkId, url: `https://stack-match.as93.net/${frameworkId}` }
   ]);
 </script>
 
