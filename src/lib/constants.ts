@@ -120,9 +120,12 @@ export type PresetName = keyof typeof PRESETS;
 
 // Color themes for score visualization
 export const SCORE_COLORS = {
-  high: "hsl(142, 76%, 36%)", // Green
-  medium: "hsl(38, 92%, 50%)", // Orange
-  low: "hsl(0, 84%, 60%)", // Red
+  high: "hsl(142, 76%, 36%)", // Green (7-10)
+  mediumHigh: "hsl(210, 100%, 50%)", // Blue (5-6)
+  mediumLow: "hsl(38, 92%, 50%)", // Orange (3-4)
+  low: "hsl(0, 84%, 60%)", // Red (0-2)
+  // Legacy alias for backward compatibility
+  medium: "hsl(38, 92%, 50%)",
 } as const;
 
 // API endpoints

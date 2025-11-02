@@ -23,11 +23,12 @@ export function computeScore(framework: Framework, weights: Weights): number {
   return totalWeight > 0 ? (score / totalWeight) * 100 : 0;
 }
 
-// Get color based on score
+// Get color based on score (4-level scale)
 export function getScoreColor(score: number): string {
-  if (score >= 8) return SCORE_COLORS.high;
-  if (score >= 5) return SCORE_COLORS.medium;
-  return SCORE_COLORS.low;
+  if (score >= 7) return SCORE_COLORS.high; // Green (7-10)
+  if (score >= 5) return SCORE_COLORS.mediumHigh; // Blue (5-6)
+  if (score >= 3) return SCORE_COLORS.mediumLow; // Orange (3-4)
+  return SCORE_COLORS.low; // Red (0-2)
 }
 
 // Capitalize attribute names for display

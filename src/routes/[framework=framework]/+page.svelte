@@ -24,8 +24,54 @@
   import JsDelivrStatsCard from '$lib/components/framework-detail/JsDelivrStatsCard.svelte';
   import BrowserCompatCard from '$lib/components/framework-detail/BrowserCompatCard.svelte';
   import { getSimpleIconUrl, addAlpha, getContrastColor } from '$lib/utils/branding-utils';
+  import { goto } from '$app/navigation';
+  import { ChevronDown } from 'lucide-svelte';
+  import rawData from '../../data.json';
 
   export let data: PageData;
+
+  let dropdownOpen = false;
+  let compareButtonElement: HTMLButtonElement;
+  let dropdownPosition = { top: 0, left: 0, right: 'auto' };
+
+  function toggleDropdown() {
+    dropdownOpen = !dropdownOpen;
+    if (dropdownOpen && compareButtonElement) {
+      const rect = compareButtonElement.getBoundingClientRect();
+      const dropdownWidth = 280; // min-width from CSS
+      const spaceOnRight = window.innerWidth - rect.right;
+      const isMobile = window.innerWidth <= 768;
+
+      if (isMobile) {
+        // On mobile, center the dropdown or make it full-width with padding
+        const padding = 16;
+        dropdownPosition = {
+          top: rect.bottom + 8,
+          left: padding,
+          right: 'auto'
+        };
+      } else {
+        // On desktop, align to the right of the button
+        dropdownPosition = {
+          top: rect.bottom + 8,
+          left: spaceOnRight >= dropdownWidth ? rect.right - dropdownWidth : rect.left,
+          right: 'auto'
+        };
+      }
+    }
+  }
+
+  function handleCompareWith(compareFrameworkId: string) {
+    dropdownOpen = false;
+    goto(`/compare?frameworks=${frameworkId},${compareFrameworkId}`);
+  }
+
+  function handleClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.compare-dropdown')) {
+      dropdownOpen = false;
+    }
+  }
 
   $: ({ frameworkId, frameworkData, staticData, apiError } = data);
   $: error = apiError?.message || null;
@@ -34,6 +80,11 @@
   $: brandColorRgba = addAlpha(brandColor, 0.1);
   $: brandColorRgbaMedium = addAlpha(brandColor, 0.2);
   $: textColor = getContrastColor(brandColor);
+
+  // Get all available frameworks for comparison dropdown
+  $: availableFrameworks = (rawData?.meta || [])
+    .filter(fw => fw.id !== frameworkId && fw.id !== 'vanilla')
+    .sort((a, b) => (a.name || a.id).localeCompare(b.name || b.id));
 
   // Track missing data sections
   $: missingDataSections = frameworkData ? [
@@ -52,6 +103,8 @@
   <title>{frameworkData?.name || frameworkId} - Framework Details | Stack Match</title>
   <meta name="description" content="Detailed statistics and ecosystem health for {frameworkData?.name || frameworkId}" />
 </svelte:head>
+
+<svelte:window on:click={handleClickOutside} />
 
 <div class="framework-detail-page">
   {#if error}
@@ -93,24 +146,72 @@
           <div class="header-title">
             <h1>{frameworkData.name}</h1>
             <p class="description-short">{staticData?.meta?.description || frameworkData.metadata?.description || ''}</p>
+
+            <div class="header-links" style="--link-brand-color: {brandColor};">
+              {#if frameworkData.metadata?.links?.website}
+                <a href={frameworkData.metadata.links.website} target="_blank" rel="noopener noreferrer" class="btn btn-sm header-link-btn">
+                  Website
+                </a>
+              {/if}
+              {#if frameworkData.metadata?.links?.docs}
+                <a href={frameworkData.metadata.links.docs} target="_blank" rel="noopener noreferrer" class="btn btn-sm header-link-btn">
+                  Docs
+                </a>
+              {/if}
+              {#if frameworkData.metadata?.links?.github || frameworkData.metadata?.github?.fullName}
+                <a href={frameworkData.metadata.links?.github || `https://github.com/${frameworkData.metadata.github.fullName}`} target="_blank" rel="noopener noreferrer" class="btn btn-sm header-link-btn">
+                  GitHub
+                </a>
+              {/if}
+            </div>
           </div>
         </div>
 
         <div class="header-actions">
-          {#if frameworkData.metadata?.links?.website}
-            <a href={frameworkData.metadata.links.website} target="_blank" rel="noopener noreferrer" class="btn btn-branded">
-              Website
-            </a>
-          {/if}
-          {#if frameworkData.metadata?.links?.docs}
-            <a href={frameworkData.metadata.links.docs} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-              Docs
-            </a>
-          {/if}
-          {#if frameworkData.metadata?.github?.fullName}
-            <a href="https://github.com/{frameworkData.metadata.github.fullName}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
-              GitHub
-            </a>
+          <div class="compare-dropdown">
+            <button
+              bind:this={compareButtonElement}
+              type="button"
+              class="btn compare-btn"
+              on:click={toggleDropdown}
+              aria-haspopup="true"
+              aria-expanded={dropdownOpen}
+              style="--btn-brand-color: {brandColor}; --btn-text-color: {textColor};"
+            >
+              <span>Compare with</span>
+              <span class="chevron" class:open={dropdownOpen}>
+                <ChevronDown size={16} />
+              </span>
+            </button>
+          </div>
+
+          {#if dropdownOpen}
+            <div
+              class="dropdown-menu"
+              role="menu"
+              style="top: {dropdownPosition.top}px; left: {dropdownPosition.left}px; {window.innerWidth <= 768 ? 'right: 16px; min-width: auto;' : ''}"
+            >
+              <div class="dropdown-header">
+                <span class="dropdown-title">Select a framework to compare</span>
+              </div>
+              <div class="dropdown-list">
+                {#each availableFrameworks as framework}
+                  <button
+                    type="button"
+                    class="dropdown-item"
+                    role="menuitem"
+                    on:click={() => handleCompareWith(framework.id)}
+                  >
+                    <img
+                      src={getSimpleIconUrl(framework.branding.iconName, framework.branding.color)}
+                      alt={framework.name}
+                      class="framework-icon"
+                    />
+                    <span>{framework.name}</span>
+                  </button>
+                {/each}
+              </div>
+            </div>
           {/if}
         </div>
       </div>

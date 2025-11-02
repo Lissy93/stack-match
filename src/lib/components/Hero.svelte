@@ -1,7 +1,7 @@
 <script lang="ts">
   import { frameworkData } from '$lib/stores';
   import { getSimpleIconUrl } from '$lib/utils/branding-utils';
-  import { ArrowRight } from 'lucide-svelte';
+  import { ArrowRight, Github } from 'lucide-svelte';
 
   export let heroElement: HTMLElement | undefined = undefined;
 </script>
@@ -10,19 +10,31 @@
   <header class="hero" bind:this={heroElement}>
     <div class="animated-bg"></div>
 
+    <a
+      href="https://github.com/lissy93/stack-match"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="github-button"
+      aria-label="View on GitHub"
+    >
+      <Github size={20} />
+      <span class="github-text">View on GitHub</span>
+    </a>
+
     <div class="hero-main">
-      <div class="title-group">
+      <a href="/" class="title-group">
         <div class="icon-pulse">
           <img src="/logo.png" alt="Stack Match Logo" />
         </div>
         <h1>Stack Match</h1>
-      </div>
+      </a>
       <p class="tagline">
         Compare frontend JavaScript frameworks, to find the best fit for your project
       </p>
       <p class="another-tagline">
         Data comes from <a href="https://github.com/Lissy93/framework-benchmarks" target="_blank" rel="noopener noreferrer">framework-benchmarks</a>,
         combined with analysis of source, bundle, downloads, community stats and more.
+        Learn more <a href="/about">about the methodology</a>.
       </p>
     </div>
 
@@ -85,7 +97,7 @@
   }
 
   .hero-wrapper {
-    margin: 0 auto var(--gap-2xl) auto;
+    margin: 0 auto var(--gap-xl) auto;
   }
 
   .hero {
@@ -112,6 +124,38 @@
     }
   }
 
+  .github-button {
+    position: absolute;
+    top: var(--gap-lg);
+    right: var(--gap-lg);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: var(--font-sm);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: var(--shadow-md);
+
+    &:hover {
+      background: var(--surface-tertiary);
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      color: var(--text-primary);
+    }
+  }
+
+  .github-text {
+    white-space: nowrap;
+  }
+
   .animated-bg {
     position: absolute;
     inset: 0;
@@ -134,6 +178,13 @@
     display: flex;
     align-items: center;
     gap: var(--gap-md);
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity var(--transition-normal);
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 
   .icon-pulse {
@@ -312,6 +363,17 @@
     h1 { font-size: var(--font-2xl); }
     .tagline { font-size: var(--font-sm); }
     .fw-link img { width: 28px; height: 28px; }
+
+    .github-button {
+      top: var(--gap-md);
+      right: var(--gap-md);
+      padding: 0.625rem 0.875rem;
+      font-size: 0.8125rem;
+    }
+
+    .github-text {
+      display: none;
+    }
   }
 
   @media (max-width: 480px) {
@@ -323,5 +385,9 @@
     .frameworks-nav { grid-template-columns: repeat(6, 1fr); gap: var(--gap-xs); }
     .fw-link img { width: 24px; height: 24px; }
     .compare-text { font-size: 0.65rem; }
+
+    .github-button {
+      padding: 0.5rem;
+    }
   }
 </style>

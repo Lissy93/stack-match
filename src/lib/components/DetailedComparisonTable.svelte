@@ -18,6 +18,22 @@
   export let onRemoveFramework: (id: string) => void = () => {};
 
   let expandedLicenses: Set<string> = new Set();
+  let topScrollContainer: HTMLElement;
+  let bottomScrollContainer: HTMLElement;
+
+  function syncScroll(source: HTMLElement, target: HTMLElement) {
+    return (e: Event) => {
+      target.scrollLeft = source.scrollLeft;
+    };
+  }
+
+  $: if (topScrollContainer && bottomScrollContainer) {
+    const topHandler = syncScroll(topScrollContainer, bottomScrollContainer);
+    const bottomHandler = syncScroll(bottomScrollContainer, topScrollContainer);
+
+    topScrollContainer.addEventListener('scroll', topHandler);
+    bottomScrollContainer.addEventListener('scroll', bottomHandler);
+  }
 
   function toggleLicense(frameworkId: string) {
     const newExpanded = new Set(expandedLicenses);
@@ -30,8 +46,15 @@
   }
 </script>
 
-<div class="comparison-grid-container">
-  <div class="comparison-grid" style="--cols: {frameworks.length + 1};">
+<div class="comparison-grid-wrapper">
+  <!-- Top scrollbar -->
+  <div class="comparison-grid-container top-scroll" bind:this={topScrollContainer}>
+    <div class="scroll-content" style="--cols: {frameworks.length + 1};"></div>
+  </div>
+
+  <!-- Main content -->
+  <div class="comparison-grid-container main-scroll" bind:this={bottomScrollContainer}>
+    <div class="comparison-grid" style="--cols: {frameworks.length + 1};">
     <!-- Header Row -->
     <div class="grid-header"></div>
     {#each frameworks as framework}
@@ -190,7 +213,7 @@
             on:click={() => toggleLicense(framework.id)}
             aria-label="Collapse license details"
           >
-            ² Collapse
+            ï¿½ Collapse
           </button>
         {:else}
           <button
@@ -225,23 +248,42 @@
             </a>
           {/if}
           <a href="/{framework.id}" class="link-btn primary">
-            <Sparkles size={16} /> View Full Details ’
+            <Sparkles size={16} /> View Full Details ï¿½
           </a>
         </div>
       </div>
     {/each}
   </div>
+  </div>
 </div>
 
 <style>
+  .comparison-grid-wrapper {
+    position: relative;
+  }
+
   .comparison-grid-container {
     overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .comparison-grid-container.top-scroll {
+    height: 20px;
+    margin-bottom: var(--gap-md);
+  }
+
+  .comparison-grid-container.main-scroll {
     margin-bottom: var(--gap-2xl);
+  }
+
+  .scroll-content {
+    height: 1px;
+    width: calc(150px + (var(--cols) - 1) * 250px);
   }
 
   .comparison-grid {
     display: grid;
-    grid-template-columns: 200px repeat(calc(var(--cols) - 1), minmax(250px, 1fr));
+    grid-template-columns: 150px repeat(calc(var(--cols) - 1), minmax(250px, 1fr));
     gap: 1px;
     background: var(--border-primary);
     border: 1px solid var(--border-primary);
@@ -441,7 +483,11 @@
 
   @media (max-width: 768px) {
     .comparison-grid {
-      grid-template-columns: 150px repeat(calc(var(--cols) - 1), minmax(200px, 1fr));
+      grid-template-columns: 120px repeat(calc(var(--cols) - 1), minmax(200px, 1fr));
+    }
+
+    .scroll-content {
+      width: calc(120px + (var(--cols) - 1) * 200px);
     }
   }
 </style>

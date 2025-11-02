@@ -1,7 +1,12 @@
 <script lang="ts">
 	import '../app.css';
 	import Navbar from '$lib/components/Navbar.svelte';
-	import { navigating } from '$app/stores';
+	import { navigating, page } from '$app/stores';
+
+	// Determine if navbar should be shown
+	$: isHomePage = $page.url.pathname === '/';
+	$: isComparePage = $page.url.pathname === '/compare';
+	$: showNavbar = !isHomePage && !isComparePage;
 </script>
 
 <svelte:head>
@@ -70,7 +75,9 @@
 	</script>
 </svelte:head>
 
-<Navbar />
+{#if showNavbar}
+	<Navbar />
+{/if}
 
 {#if $navigating}
 	<div class="loading-overlay">
@@ -81,14 +88,17 @@
 	</div>
 {/if}
 
-<main class="main-content">
+<main class="main-content" class:has-navbar={showNavbar}>
 	<slot />
 </main>
 
 <style>
 	.main-content {
-		padding-top: 60px;
 		min-height: 100vh;
+	}
+
+	.main-content.has-navbar {
+		padding-top: 60px;
 	}
 
 	.loading-overlay {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import Tooltip from './Tooltip.svelte';
   import { ATTR_DESCRIPTIONS } from '../constants';
-  import { capitalize } from '../utils';
+  import { capitalize, getScoreColor } from '../utils';
   import type { Attribute } from '../constants';
 
   export let attribute: Attribute;
@@ -13,8 +13,19 @@
     onChange(parseInt(target.value));
   }
 
+  function setLow() {
+    onChange(1);
+  }
+
+  function setHigh() {
+    onChange(10);
+  }
+
   // Calculate percentage for gradient
   $: percentage = ((value - 1) / 9) * 100;
+
+  // Get color for the value indicator
+  $: valueColor = getScoreColor(value);
 </script>
 
 <div class="slider-container">
@@ -24,7 +35,7 @@
         {capitalize(attribute)}
       </label>
     </Tooltip>
-    <span class="value-indicator">{value}</span>
+    <span class="value-indicator" style="color: {valueColor}">{value}</span>
   </div>
 
   <div class="slider-track">
@@ -43,8 +54,8 @@
   </div>
 
   <div class="slider-labels">
-    <span class="slider-label">Low</span>
-    <span class="slider-label">High</span>
+    <button type="button" class="slider-label" on:click={setLow}>Low</button>
+    <button type="button" class="slider-label" on:click={setHigh}>High</button>
   </div>
 </div>
 
@@ -53,14 +64,13 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-sm);
-    padding: var(--gap-md);
     background: var(--surface-secondary);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border-primary);
     transition: all var(--transition-normal);
+    border-bottom: 1px solid var(--border-primary);
+    padding: var(--gap-2xs) var(--gap-2xs) var(--gap-sm) var(--gap-2xs);
+    border-radius: var(--radius-xs);
 
     &:hover {
-      border-color: var(--accent-primary);
       box-shadow: var(--shadow-md);
     }
   }
@@ -80,7 +90,6 @@
     .value-indicator {
       font-weight: 700;
       font-size: var(--font-sm);
-      color: var(--accent-primary);
       min-width: 1.5rem;
       text-align: right;
     }
@@ -152,6 +161,17 @@
       font-size: var(--font-xs);
       color: var(--text-tertiary);
       font-weight: 500;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: var(--gap-xs);
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: var(--accent-primary);
+        background: var(--surface-tertiary);
+      }
     }
   }
 </style>

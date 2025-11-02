@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { slide } from 'svelte/transition';
   import AttributeSlider from '$lib/components/AttributeSlider.svelte';
   import PresetButtons from '$lib/components/PresetButtons.svelte';
   import FrameworkCard from '$lib/components/FrameworkCard.svelte';
@@ -8,15 +9,12 @@
   import SearchInput from '$lib/components/SearchInput.svelte';
   import EmptyComparisonState from '$lib/components/EmptyComparisonState.svelte';
   import Hero from '$lib/components/Hero.svelte';
-  import { Github } from 'lucide-svelte';
   import { weights, searchQuery, shortlist, expandedCards, sortedFrameworks, frameworkData, frameworkStats, frameworkCommentary } from '$lib/stores';
   import { ATTRIBUTES, PRESETS } from '$lib/constants';
-  import { fetchFrameworkStats, fetchFrameworkCommentary, saveShortlistToStorage, loadShortlistFromStorage, throttle } from '$lib/utils';
+  import { fetchFrameworkStats, fetchFrameworkCommentary, saveShortlistToStorage, loadShortlistFromStorage } from '$lib/utils';
   import type { FrameworkData, Weights } from '$lib/types';
   import data from '../data.json';
 
-  let showGithubButton = true;
-  let lastScrollY = 0;
   let heroElement: HTMLElement;
 
   // Comparison view state
@@ -24,6 +22,18 @@
   let comparisonView: ComparisonView = 'summary';
   let detailedComparisonData: any[] = [];
   let loadingDetailedData = false;
+
+  // Presets visibility
+  let showPresets = false;
+  let showPriorities = true;
+
+  function togglePresets() {
+    showPresets = !showPresets;
+  }
+
+  function togglePriorities() {
+    showPriorities = !showPriorities;
+  }
 
   // Load framework data from JSON
   function loadFrameworkData(): void {
@@ -196,43 +206,6 @@
   onMount(() => {
     loadFrameworkData();
     loadExternalData();
-
-    // Set up scroll listener for GitHub button visibility
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const isAtBottom = currentScrollY + windowHeight >= documentHeight - 100;
-
-      // Get hero height for reference
-      const heroHeight = heroElement?.offsetHeight || 500;
-
-      // Show button if:
-      // - At top (within hero section)
-      // - Scrolling up
-      // - At bottom of page
-      if (currentScrollY < heroHeight * 0.8) {
-        showGithubButton = true;
-      } else if (isAtBottom) {
-        showGithubButton = true;
-      } else if (currentScrollY < lastScrollY && currentScrollY > heroHeight * 0.8) {
-        showGithubButton = true;
-      } else {
-        showGithubButton = false;
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    // Throttle scroll handler to improve performance (max once every 100ms)
-    const throttledScroll = throttle(handleScroll, 100);
-
-    window.addEventListener('scroll', throttledScroll, { passive: true });
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('scroll', throttledScroll);
-    };
   });
 </script>
 
@@ -243,44 +216,45 @@
 <main class="app-container">
   <!-- Skip Navigation -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
-  
-  <!-- GitHub Button -->
-  <a 
-    href="https://github.com/lissy93/stack-match" 
-    target="_blank" 
-    rel="noopener noreferrer"
-    class="github-button"
-    class:hidden={!showGithubButton}
-    aria-label="View on GitHub"
-  >
-    <Github size={20} />
-    <span class="github-text">View on GitHub</span>
-  </a>
 
   <!-- Hero -->
   <Hero bind:heroElement />
 
-
-  <!-- Presets -->
-  <section class="control-section presets-section">
-    <PresetButtons onPresetSelect={handlePresetSelect} {activePreset} />
-  </section>
-
   <div class="main-content">
     <!-- Sidebar - Controls -->
     <aside class="sidebar" aria-label="Framework selection controls">
+      <!-- Presets Section -->
+      <section class="control-section presets-section">
+        <PresetButtons
+          onPresetSelect={handlePresetSelect}
+          {activePreset}
+          {showPresets}
+          onToggle={togglePresets}
+        />
+      </section>
+
       <!-- Attribute Sliders -->
       <section class="control-section">
-        <h2 class="section-title">Your Priorities</h2>
-        <div class="sliders-grid">
-          {#each ATTRIBUTES as attribute}
-            <AttributeSlider
-              {attribute}
-              value={$weights[attribute]}
-              onChange={handleWeightChange(attribute)}
-            />
-          {/each}
-        </div>
+        <button
+          type="button"
+          class="section-title-toggle"
+          on:click={togglePriorities}
+          aria-expanded={showPriorities}
+        >
+          <span class="toggle-icon" class:expanded={showPriorities}>▶</span>
+          Your Priorities
+        </button>
+        {#if showPriorities}
+          <div class="sliders-grid" transition:slide={{ duration: 300 }}>
+            {#each ATTRIBUTES as attribute}
+              <AttributeSlider
+                {attribute}
+                value={$weights[attribute]}
+                onChange={handleWeightChange(attribute)}
+              />
+            {/each}
+          </div>
+        {/if}
       </section>
     </aside>
 
@@ -291,7 +265,8 @@
         <div class="results-title-section">
           <h2 class="results-title">Framework Results</h2>
           <p class="results-subtitle">
-            {$sortedFrameworks.length} frameworks ranked by your preferences
+            {$sortedFrameworks.length} frameworks ranked by your preferences.<br>
+            Select "compare" to see detailed side-by-side analysis.
           </p>
         </div>
         <SearchInput 
@@ -417,35 +392,6 @@
     position: relative;
   }
 
-  .github-button {
-    position: fixed;
-    top: var(--gap-lg);
-    right: var(--gap-lg);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    background: var(--surface-secondary);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-lg);
-    color: var(--text-primary);
-    text-decoration: none;
-    font-size: var(--font-sm);
-    font-weight: 500;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(8px);
-    z-index: 100;
-    box-shadow: var(--shadow-md);
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .github-button.hidden {
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none;
-  }
-
   .skip-link {
     position: fixed;
     top: -100px;
@@ -465,18 +411,6 @@
 
   .skip-link:focus {
     top: 0;
-  }
-
-  .github-button:hover {
-    background: var(--surface-tertiary);
-    border-color: var(--accent-primary);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-lg);
-    color: var(--text-primary);
-  }
-
-  .github-text {
-    white-space: nowrap;
   }
 
   .main-content {
@@ -499,8 +433,8 @@
     border: 1px solid var(--border-primary);
     margin-bottom: var(--gap-xl);
     &.presets-section {
-      /* margin-bottom: 1rem; */
-      padding: 1rem var(--gap-xl) 0 var(--gap-xl);
+      padding: var(--gap-lg);
+      /* margin-bottom: 0; */
     }
   }
 
@@ -515,9 +449,40 @@
     margin-bottom: var(--gap-lg);
   }
 
+  .section-title-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    font-size: var(--font-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    transition: opacity 0.2s ease;
+    text-align: left;
+    width: 100%;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .toggle-icon {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+
+    &.expanded {
+      transform: rotate(90deg);
+    }
+  }
+
   .sliders-grid {
     display: grid;
     gap: var(--gap-md);
+    margin-top: var(--gap-lg);
   }
 
   .content-area {
@@ -727,19 +692,8 @@
     text-decoration: underline;
   }
 
-  /* Mobile adjustments for GitHub button */
+  /* Mobile adjustments */
   @media (max-width: 768px) {
-    .github-button {
-      top: var(--gap-md);
-      right: var(--gap-md);
-      padding: 0.625rem 0.875rem;
-      font-size: 0.8125rem;
-    }
-
-    .github-text {
-      display: none;
-    }
-
     .comparison-section {
       padding: 1rem;
       margin-left: -1rem;
@@ -768,10 +722,6 @@
   }
 
   @media (max-width: 480px) {
-    .github-button {
-      padding: 0.5rem;
-    }
-
     .app-footer {
       margin-top: var(--gap-xl);
       padding: var(--gap-lg) 0;

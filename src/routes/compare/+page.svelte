@@ -3,16 +3,24 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import type { FrameworkMeta } from '$lib/types';
+  import Hero from '$lib/components/Hero.svelte';
+  import ComparisonTable from '$lib/components/ComparisonTable.svelte';
   import DetailedComparisonTable from '$lib/components/DetailedComparisonTable.svelte';
   import StarHistoryCard from '$lib/components/framework-detail/StarHistoryCard.svelte';
   import { getSimpleIconUrl } from '$lib/utils/branding-utils';
 
   export let data;
 
+  let heroElement: HTMLElement;
+
   let availableFrameworks: FrameworkMeta[] = (data.frameworks || []).filter(f => f.id !== 'vanilla');
   let selectedFrameworks: string[] = [];
   let comparisonData: any[] = [];
   let loading = false;
+
+  // Comparison view state
+  type ComparisonView = 'summary' | 'detailed';
+  let comparisonView: ComparisonView = 'detailed';
 
   // Parse URL params or use localStorage/defaults
   onMount(() => {
@@ -106,6 +114,39 @@
       return repoMatch?.[1];
     })
     .filter(Boolean);
+
+  // Prepare data for ComparisonTable (summary view)
+  // We need to get scores from data.json since API doesn't include them
+  $: shortlistedFrameworks = comparisonData
+    .map(d => {
+      // Find the matching framework scores from data.frameworkScores using the ID
+      const frameworkId = d.metadata?.id || d.id;
+      const frameworkScores = data.frameworkScores?.find((fw: any) => fw.name === frameworkId);
+
+      if (!frameworkScores) {
+        return null;
+      }
+
+      return {
+        framework: frameworkScores,
+        meta: d.metadata
+      };
+    })
+    .filter(Boolean) as Array<{ framework: any; meta: any }>;
+
+  // Handle view change
+  function handleViewChange(view: ComparisonView) {
+    comparisonView = view;
+  }
+
+  // Handle remove from comparison
+  function handleRemoveFromComparison(frameworkName: string) {
+    // Find framework by name
+    const framework = comparisonData.find(d => d.metadata?.name === frameworkName);
+    if (framework) {
+      removeFramework(framework.metadata?.id);
+    }
+  }
 </script>
 
 <svelte:head>
@@ -114,14 +155,12 @@
 </svelte:head>
 
 <div class="compare-page">
-  <div class="page-header">
-    <h1>Framework Comparison</h1>
-    <p class="subtitle">Compare frameworks side by side</p>
-  </div>
+  <!-- Hero -->
+  <Hero bind:heroElement />
 
   <!-- Framework Selector -->
   <div class="framework-selector">
-    <h2>Select Frameworks ({selectedFrameworks.length}/6)</h2>
+    <h2>Select Frameworks <span class="count">({selectedFrameworks.length}/6)</span></h2>
     <div class="framework-chips">
       {#each availableFrameworks as framework}
         {@const isSelected = selectedFrameworks.includes(framework.id)}
@@ -146,7 +185,6 @@
         </button>
       {/each}
     </div>
-    <p class="selector-hint">Select up to 6 frameworks to compare</p>
   </div>
 
   {#if loading}
@@ -155,8 +193,42 @@
       <p>Loading comparison data...</p>
     </div>
   {:else if comparisonData.length > 0}
-    <!-- Comparison Grid -->
-    <DetailedComparisonTable frameworks={comparisonData} onRemoveFramework={removeFramework} />
+    <!-- View Toggle -->
+    <div class="comparison-header">
+      <h2 class="comparison-title">Comparison Results</h2>
+      <div class="view-toggle" role="tablist" aria-label="Comparison view">
+        <button
+          type="button"
+          role="tab"
+          class="view-toggle-btn"
+          class:active={comparisonView === 'summary'}
+          aria-selected={comparisonView === 'summary'}
+          on:click={() => handleViewChange('summary')}
+        >
+          Summary
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="view-toggle-btn"
+          class:active={comparisonView === 'detailed'}
+          aria-selected={comparisonView === 'detailed'}
+          on:click={() => handleViewChange('detailed')}
+        >
+          Detailed
+        </button>
+      </div>
+    </div>
+
+    <!-- Comparison Content -->
+    {#if comparisonView === 'summary'}
+      <ComparisonTable
+        {shortlistedFrameworks}
+        onRemoveFromShortlist={handleRemoveFromComparison}
+      />
+    {:else}
+      <DetailedComparisonTable frameworks={comparisonData} onRemoveFramework={removeFramework} />
+    {/if}
 
     <!-- Comparison Charts -->
     <div class="comparison-charts">
@@ -197,63 +269,59 @@
 </div>
 
 <style>
+  :global(nav.navbar) {
+    display: none;
+  }
+
   .compare-page {
-    max-width: 1600px;
+    max-width: var(--container-max-width);
     margin: 0 auto;
-    padding: var(--gap-xl) var(--gap-lg);
-  }
-
-  .page-header {
-    text-align: center;
-    margin-bottom: var(--gap-2xl);
-  }
-
-  .page-header h1 {
-    font-size: var(--font-3xl);
-    margin-bottom: var(--gap-sm);
-  }
-
-  .subtitle {
-    color: var(--text-secondary);
-    font-size: var(--font-lg);
+    padding: var(--gap-xl);
+    padding-bottom: 0;
   }
 
   .framework-selector {
     background: var(--surface-secondary);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-lg);
-    padding: var(--gap-xl);
-    margin-bottom: var(--gap-2xl);
+    padding: var(--gap-lg) var(--gap-xl);
   }
 
   .framework-selector h2 {
-    font-size: var(--font-lg);
-    margin-bottom: var(--gap-lg);
+    font-size: var(--font-md);
+    font-weight: 600;
+    margin: 0 0 var(--gap-md) 0;
+    color: var(--text-primary);
+  }
+
+  .count {
+    color: var(--text-tertiary);
+    font-weight: 500;
   }
 
   .framework-chips {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: var(--gap-md);
-    margin-bottom: var(--gap-md);
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: var(--gap-sm);
   }
 
   .framework-chip {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--gap-sm);
-    padding: var(--gap-sm) var(--gap-md);
-    background: var(--surface-secondary);
-    border: 2px solid var(--border-primary);
-    border-radius: var(--radius-lg);
+    gap: var(--gap-xs);
+    padding: var(--gap-xs) var(--gap-sm);
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
     font-size: var(--font-sm);
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--transition-normal);
     color: var(--text-primary);
     position: relative;
     overflow: hidden;
+    min-height: 36px;
   }
 
   .framework-chip::before {
@@ -262,7 +330,7 @@
     inset: 0;
     background: var(--brand-color);
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--transition-normal);
     z-index: 0;
   }
 
@@ -275,7 +343,7 @@
     border-color: var(--brand-color);
     transform: translateY(-2px);
     background: color-mix(in srgb, var(--brand-color, var(--accent-primary)) 3%, transparent);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
   }
 
   .framework-chip:hover:not(.disabled)::before {
@@ -286,7 +354,7 @@
     background: color-mix(in srgb, var(--brand-color, var(--accent-primary)) 20%, transparent);
     color: white;
     border-color: var(--brand-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-sm);
   }
 
   .framework-chip.selected::before {
@@ -300,20 +368,14 @@
   }
 
   .chip-logo {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     object-fit: contain;
   }
 
   .check-icon {
-    font-weight: bold;
-  }
-
-  .selector-hint {
-    font-size: var(--font-sm);
-    color: var(--text-tertiary);
-    text-align: center;
-    margin: 0;
+    font-weight: 700;
+    font-size: var(--font-xs);
   }
 
   .loading-container {
@@ -398,34 +460,100 @@
     color: var(--text-tertiary);
   }
 
+  .comparison-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: var(--gap-lg) 0 0;
+    gap: var(--gap-lg);
+  }
+
+  .comparison-title {
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .view-toggle {
+    display: flex;
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem;
+    gap: 0.25rem;
+  }
+
+  .view-toggle-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    white-space: nowrap;
+  }
+
+  .view-toggle-btn:hover {
+    color: var(--text-primary);
+    background: var(--surface-tertiary);
+  }
+
+  .view-toggle-btn.active {
+    background: var(--accent-primary);
+    color: white;
+  }
+
   @media (max-width: 1024px) {
     .framework-chips {
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     }
   }
 
   @media (max-width: 768px) {
     .compare-page {
-      padding: var(--gap-lg) var(--gap-md);
+      padding: var(--gap-md);
     }
 
-    .page-header h1 {
-      font-size: var(--font-2xl);
+    .framework-selector {
+      padding: var(--gap-md);
     }
 
     .framework-chips {
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: var(--gap-sm);
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: var(--gap-xs);
     }
 
-    .framework-chip {
-      padding: var(--gap-sm) var(--gap-md);
+    .comparison-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--gap-md);
+    }
+
+    .comparison-title {
+      font-size: var(--font-xl);
+      text-align: center;
+    }
+
+    .view-toggle {
+      width: 100%;
+    }
+
+    .view-toggle-btn {
+      flex: 1;
     }
   }
 
   @media (max-width: 480px) {
     .framework-chips {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    .framework-chip {
+      font-size: var(--font-xs);
     }
   }
 </style>

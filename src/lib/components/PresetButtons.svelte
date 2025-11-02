@@ -1,11 +1,14 @@
 <script lang="ts">
   import { Zap, Building2, Package, BookOpen, Rocket, Sparkles, Target } from 'lucide-svelte';
+  import { slide } from 'svelte/transition';
   import { PRESETS } from '../constants';
   import type { PresetName } from '../constants';
   import type { Weights } from '../types';
 
   export let onPresetSelect: (preset: Weights) => void;
   export let activePreset: string | null = null;
+  export let showPresets = false;
+  export let onToggle: () => void = () => {};
 
   // Icon mapping for presets
   const presetIcons: Record<PresetName, any> = {
@@ -35,47 +38,75 @@
 </script>
 
 <div class="preset-container">
-  <h3 class="preset-title">Quick Presets</h3>
-  <div class="preset-grid">
-    {#each Object.keys(PRESETS) as presetName}
-      {@const IconComponent = getIconComponent(presetName)}
-      <button
-        type="button"
-        class="preset-btn"
-        class:selected={activePreset === presetName}
-        on:click={() => selectPreset(presetName)}
-        aria-label="Apply {formatPresetName(presetName)} preset"
-      >
-        <svelte:component this={IconComponent} size={16} />
-        <span class="preset-name">{formatPresetName(presetName)}</span>
-      </button>
-    {/each}
-  </div>
+  <button
+    type="button"
+    class="preset-title"
+    on:click={onToggle}
+    aria-expanded={showPresets}
+  >
+    <span class="toggle-icon" class:expanded={showPresets}>▶</span>
+    Quick Presets
+  </button>
+
+  {#if showPresets}
+    <div class="preset-grid" transition:slide={{ duration: 300 }}>
+      {#each Object.keys(PRESETS) as presetName}
+        {@const IconComponent = getIconComponent(presetName)}
+        <button
+          type="button"
+          class="preset-btn"
+          class:selected={activePreset === presetName}
+          on:click={() => selectPreset(presetName)}
+          aria-label="Apply {formatPresetName(presetName)} preset"
+        >
+          <svelte:component this={IconComponent} size={16} />
+          <span class="preset-name">{formatPresetName(presetName)}</span>
+        </button>
+      {/each}
+    </div>
+  {/if}
 </div>
 
 <style lang="scss">
   .preset-container {
-    margin-bottom: var(--gap-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .preset-title {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: var(--gap-xs);
+    gap: var(--gap-sm);
+    font-size: var(--font-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    transition: opacity 0.2s ease;
+    text-align: left;
 
-    .preset-title {
-      font-size: var(--font-base);
-      font-weight: 600;
-      color: var(--text-primary);
-      margin: 0;
-      min-width: 128px;
-      opacity: 0.85;
+    &:hover {
+      opacity: 0.7;
     }
+  }
 
-    .preset-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: var(--gap-sm);
-      width: 100%;
+  .toggle-icon {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+
+    &.expanded {
+      transform: rotate(90deg);
     }
+  }
+
+  .preset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--gap-sm);
   }
 
   .preset-btn {
