@@ -7,7 +7,7 @@
       "bundleSize": 9,
       "buildTimes": 9,
       "ecosystem": 5,
-      "scalability": 4,
+      "scalability": 3,
       "learningCurve": 9,
       "tooling": 6,
       "stability": 6,
@@ -16,9 +16,9 @@
     {
       "name": "angular",
       "performance": 7,
-      "maintainability": 6,
-      "bundleSize": 4,
-      "buildTimes": 5,
+      "maintainability": 7,
+      "bundleSize": 3,
+      "buildTimes": 3,
       "ecosystem": 9,
       "scalability": 10,
       "learningCurve": 5,
@@ -28,42 +28,42 @@
     },
     {
       "name": "backbone",
-      "performance": 4,
-      "maintainability": 5,
+      "performance": 2,
+      "maintainability": 3,
       "bundleSize": 8,
       "buildTimes": 8,
-      "ecosystem": 4,
-      "scalability": 5,
+      "ecosystem": 2,
+      "scalability": 3,
       "learningCurve": 6,
-      "tooling": 4,
-      "stability": 5,
-      "viability": 3
+      "tooling": 2,
+      "stability": 3,
+      "viability": 1
     },
     {
       "name": "ember",
-      "performance": 5,
+      "performance": 4,
       "maintainability": 7,
-      "bundleSize": 5,
-      "buildTimes": 4,
-      "ecosystem": 6,
+      "bundleSize": 4,
+      "buildTimes": 3,
+      "ecosystem": 5,
       "scalability": 8,
-      "learningCurve": 4,
+      "learningCurve": 3,
       "tooling": 7,
       "stability": 8,
-      "viability": 5
+      "viability": 4
     },
     {
       "name": "jquery",
-      "performance": 3,
-      "maintainability": 4,
+      "performance": 1,
+      "maintainability": 2,
       "bundleSize": 9,
       "buildTimes": 10,
       "ecosystem": 8,
-      "scalability": 2,
-      "learningCurve": 10,
-      "tooling": 5,
+      "scalability": 1,
+      "learningCurve": 9,
+      "tooling": 3,
       "stability": 4,
-      "viability": 2
+      "viability": 1
     },
     {
       "name": "lit",
@@ -71,7 +71,7 @@
       "maintainability": 7,
       "bundleSize": 8,
       "buildTimes": 8,
-      "ecosystem": 6,
+      "ecosystem": 5,
       "scalability": 7,
       "learningCurve": 5,
       "tooling": 7,
@@ -84,12 +84,12 @@
       "maintainability": 7,
       "bundleSize": 9,
       "buildTimes": 7,
-      "ecosystem": 5,
+      "ecosystem": 4,
       "scalability": 7,
       "learningCurve": 6,
       "tooling": 6,
       "stability": 7,
-      "viability": 6
+      "viability": 5
     },
     {
       "name": "nue",
@@ -97,12 +97,12 @@
       "maintainability": 6,
       "bundleSize": 8,
       "buildTimes": 8,
-      "ecosystem": 2,
+      "ecosystem": 1,
       "scalability": 5,
       "learningCurve": 5,
-      "tooling": 5,
-      "stability": 4,
-      "viability": 3
+      "tooling": 3,
+      "stability": 2,
+      "viability": 2
     },
     {
       "name": "preact",
@@ -120,7 +120,7 @@
     {
       "name": "qwik",
       "performance": 10,
-      "maintainability": 6,
+      "maintainability": 7,
       "bundleSize": 9,
       "buildTimes": 6,
       "ecosystem": 6,
@@ -136,12 +136,12 @@
       "maintainability": 6,
       "bundleSize": 8,
       "buildTimes": 8,
-      "ecosystem": 5,
+      "ecosystem": 3,
       "scalability": 7,
       "learningCurve": 6,
-      "tooling": 6,
+      "tooling": 5,
       "stability": 6,
-      "viability": 5
+      "viability": 4
     },
     {
       "name": "riot",
@@ -149,17 +149,17 @@
       "maintainability": 7,
       "bundleSize": 9,
       "buildTimes": 9,
-      "ecosystem": 4,
+      "ecosystem": 3,
       "scalability": 6,
       "learningCurve": 7,
-      "tooling": 6,
+      "tooling": 5,
       "stability": 6,
-      "viability": 5
+      "viability": 4
     },
     {
       "name": "react",
       "performance": 8,
-      "maintainability": 7,
+      "maintainability": 6,
       "bundleSize": 6,
       "buildTimes": 8,
       "ecosystem": 10,
@@ -175,7 +175,7 @@
       "maintainability": 8,
       "bundleSize": 9,
       "buildTimes": 8,
-      "ecosystem": 6,
+      "ecosystem": 7,
       "scalability": 7,
       "learningCurve": 6,
       "tooling": 7,
@@ -196,15 +196,15 @@
       "viability": 9
     },
     {
-      "name": "vanilla-js",
+      "name": "vanilla",
       "performance": 10,
-      "maintainability": 5,
+      "maintainability": 3,
       "bundleSize": 10,
       "buildTimes": 10,
-      "ecosystem": 2,
-      "scalability": 5,
-      "learningCurve": 4,
-      "tooling": 3,
+      "ecosystem": 1,
+      "scalability": 4,
+      "learningCurve": 6,
+      "tooling": 2,
       "stability": 8,
       "viability": 10
     },
@@ -214,16 +214,16 @@
       "maintainability": 6,
       "bundleSize": 10,
       "buildTimes": 9,
-      "ecosystem": 2,
-      "scalability": 5,
+      "ecosystem": 1,
+      "scalability": 4,
       "learningCurve": 6,
-      "tooling": 4,
-      "stability": 5,
-      "viability": 4
+      "tooling": 2,
+      "stability": 3,
+      "viability": 2
     },
     {
       "name": "vue",
-      "performance": 7,
+      "performance": 8,
       "maintainability": 9,
       "bundleSize": 7,
       "buildTimes": 9,
@@ -240,7 +240,9 @@
       "id": "react",
       "name": "React",
       "description": "Component-based library for building user interfaces with a large ecosystem",
-      "longDescription": "Declarative UI library with component-based architecture and virtual DOM.",
+      "longDescription": "Developed and maintained by Meta (Facebook), it introduced the virtual DOM concept in 2013. React has become the most widely adopted JavaScript library, with extensive community support and a vast ecosystem of tools and libraries.",
+      "category": "library",
+      "type": "spa",
       "branding": {
         "iconName": "react",
         "fallbackEmoji": "⚛️",
@@ -252,7 +254,8 @@
         "docs": "https://react.dev/learn",
         "github": "https://github.com/facebook/react",
         "npmPackage": "react",
-        "video": "Tn6-PIqc4UM"
+        "video": "Tn6-PIqc4UM",
+        "browserSupport": "https://create-react-app.dev/docs/supported-browsers-features/"
       },
       "example": {
         "title": "Web Check",
@@ -266,7 +269,9 @@
       "id": "angular",
       "name": "Angular",
       "description": "Full-featured framework with TypeScript, dependency injection, and CLI tooling",
-      "longDescription": "Opinionated platform with built-in routing, forms, HTTP client, and testing.",
+      "longDescription": "Backed by Google and used in many enterprise applications. Provides a complete solution with official packages for routing, forms, HTTP client, animations, and testing out of the box.",
+      "category": "framework",
+      "type": "spa",
       "branding": {
         "iconName": "angular",
         "fallbackEmoji": "🅰️",
@@ -278,7 +283,8 @@
         "docs": "https://angular.io/docs",
         "github": "https://github.com/angular/angular",
         "npmPackage": "@angular/core",
-        "video": "Ata9cSC2WpM"
+        "video": "Ata9cSC2WpM",
+        "browserSupport": "https://angular.io/guide/browser-support"
       },
       "example": {
         "title": "Domain Locker",
@@ -292,7 +298,10 @@
       "id": "svelte",
       "name": "Svelte",
       "description": "Compile-time optimized framework with no runtime overhead and small bundles",
-      "longDescription": "Compiled framework that generates vanilla JavaScript with no virtual DOM.",
+      "longDescription": "Created by Rich Harris, Svelte shifts work from the browser to the build step, compiling components into highly efficient imperative code. This approach eliminates the need for a virtual DOM and results in smaller bundle sizes and faster runtime performance.",
+      "category": "framework",
+      "type": "spa",
+      "openCollective": "svelte",
       "branding": {
         "iconName": "svelte",
         "fallbackEmoji": "🔥",
@@ -304,21 +313,24 @@
         "docs": "https://svelte.dev/docs",
         "github": "https://github.com/sveltejs/svelte",
         "npmPackage": "svelte",
-        "video": "rv3Yq-B8qp4"
+        "video": "rv3Yq-B8qp4",
+        "browserSupport": "https://svelte.dev/docs/introduction#browser-support"
       },
       "example": {
-        "title": "Portainer Templates",
-        "description": "Automated Docker deployment specs",
-        "repo": "https://github.com/Lissy93/portainer-templates",
-        "website": "https://portainer-templates.as93.net/",
-        "logo": "https://storage.googleapis.com/as93-screenshots/project-logos/portainer-templates.png"
+        "title": "Networking Toolbox",
+        "description": "100+ offline-first networking tools and utilities",
+        "repo": "https://github.com/Lissy93/networking-toolbox",
+        "website": "https://networkingtoolbox.net/",
+        "logo": "https://github.com/Lissy93/networking-toolbox/blob/main/static/icon.png?raw=true"
       }
     },
     {
       "id": "preact",
       "name": "Preact",
       "description": "3KB React alternative with the same API and ES6 features for fast apps",
-      "longDescription": "Lightweight React alternative with the same API but 3KB bundle size.",
+      "longDescription": "Offers the same modern API as React but with a significantly smaller footprint (3KB vs React's ~40KB). Compatible with most React libraries through a compatibility layer, making it ideal for performance-critical applications.",
+      "category": "library",
+      "type": "spa",
       "branding": {
         "iconName": "preact",
         "fallbackEmoji": "💜",
@@ -344,7 +356,9 @@
       "id": "solid",
       "name": "Solid.js",
       "description": "Fine-grained reactive framework with no virtual DOM and strong performance",
-      "longDescription": "Reactive framework with fine-grained updates and compile-time optimizations.",
+      "longDescription": "Uses fine-grained reactivity to track dependencies at a granular level, updating only what changes. This approach consistently achieves top performance scores in benchmarks while maintaining a familiar JSX-based developer experience.",
+      "category": "framework",
+      "type": "spa",
       "branding": {
         "iconName": "solid",
         "fallbackEmoji": "🚀",
@@ -370,7 +384,9 @@
       "id": "qwik",
       "name": "Qwik",
       "description": "Resumable framework with O(1) loading time regardless of app complexity",
-      "longDescription": "Resumable framework that loads instantly by streaming HTML and lazy-loading JS.",
+      "longDescription": "Developed by Builder.io, Qwik introduces resumability - the ability to pause execution on the server and resume on the client without replaying or hydrating. This enables instant-loading applications where initial JavaScript download size remains constant regardless of application complexity.",
+      "category": "framework",
+      "type": "hybrid",
       "branding": {
         "iconName": "qwik",
         "fallbackEmoji": "⚡",
@@ -396,7 +412,10 @@
       "id": "vue",
       "name": "Vue",
       "description": "Progressive framework that's incrementally adoptable with flexible architecture",
-      "longDescription": "Approachable framework that scales between a library and full-featured SPA.",
+      "longDescription": "Created by Evan You and maintained by a community-driven team. Designed to be approachable for beginners while scaling up to power sophisticated single-page applications. Features an intuitive template syntax and comprehensive official tooling.",
+      "category": "framework",
+      "type": "spa",
+      "openCollective": "vuejs",
       "branding": {
         "iconName": "vuedotjs",
         "fallbackEmoji": "💚",
@@ -408,7 +427,8 @@
         "docs": "https://vuejs.org/guide/",
         "github": "https://github.com/vuejs/core",
         "npmPackage": "vue",
-        "video": "nhBVL41-_Cw"
+        "video": "nhBVL41-_Cw",
+        "browserSupport": "https://vuejs.org/about/faq#what-browsers-does-vue-support"
       },
       "example": {
         "title": "Dashy",
@@ -422,7 +442,9 @@
       "id": "jquery",
       "name": "jQuery",
       "description": "Fast, lightweight DOM manipulation library with cross-browser compatibility",
-      "longDescription": "DOM manipulation library that simplifies HTML traversing and event handling.",
+      "longDescription": "Released in 2006, jQuery became the most popular JavaScript library by abstracting browser inconsistencies. While modern browsers have largely standardized their APIs, jQuery remains widely used in legacy projects and continues to power millions of websites.",
+      "category": "library",
+      "type": "spa",
       "branding": {
         "iconName": "jquery",
         "fallbackEmoji": "💙",
@@ -442,7 +464,9 @@
       "id": "alpine",
       "name": "Alpine.js",
       "description": "Minimal framework for composing behavior directly in HTML markup",
-      "longDescription": "Lightweight framework that adds reactive behavior directly to HTML.",
+      "longDescription": "Offers a Vue-like experience with a much smaller footprint (~15KB). Ideal for adding interactivity to server-rendered pages without the complexity of a full SPA framework.",
+      "category": "library",
+      "type": "spa",
       "branding": {
         "iconName": "alpinedotjs",
         "fallbackEmoji": "🏔️",
@@ -468,7 +492,9 @@
       "id": "lit",
       "name": "Lit",
       "description": "Web Components library built on standard APIs with efficient updates",
-      "longDescription": "Simple library for building web components with declarative templates.",
+      "longDescription": "Developed by Google as the successor to Polymer. Built on Web Components standards, allowing components to work anywhere web standards are supported, without framework lock-in.",
+      "category": "library",
+      "type": "spa",
       "branding": {
         "iconName": "lit",
         "fallbackEmoji": "🔥",
@@ -494,7 +520,9 @@
       "id": "vanjs",
       "name": "VanJS",
       "description": "Ultra-lightweight reactive UI framework with under 1kB bundle size",
-      "longDescription": "Minimalist framework that's smaller than most utility libraries.",
+      "longDescription": "At under 1KB minified and gzipped, VanJS is smaller than most utility libraries while providing reactive UI capabilities. Uses vanilla JavaScript without build steps, transpilers, or JSX.",
+      "category": "library",
+      "type": "spa",
       "branding": {
         "iconName": "vitess",
         "fallbackEmoji": "🚐",
@@ -520,7 +548,9 @@
       "id": "vanilla",
       "name": "Vanilla JS",
       "description": "Pure JavaScript without frameworks or libraries for maximum compatibility",
-      "longDescription": "Native browser JavaScript that runs everywhere without dependencies.",
+      "longDescription": "Refers to using standard JavaScript without any frameworks or libraries. Modern browser APIs have become powerful enough that many applications no longer require external dependencies, offering zero bundle overhead and maximum compatibility.",
+      "category": "library",
+      "type": "spa",
       "branding": {
         "iconName": "javascript",
         "fallbackEmoji": "🧪",
@@ -541,6 +571,144 @@
         "website": "",
         "logo": ""
       }
+    },
+    {
+      "id": "marko",
+      "name": "Marko",
+      "description": "Performant UI framework with streaming and partial hydration support",
+      "longDescription": "Originally developed by eBay for high-performance server-side rendering. Supports streaming HTML, progressive rendering, and automatic partial hydration, making it particularly well-suited for large-scale e-commerce applications.",
+      "category": "framework",
+      "type": "hybrid",
+      "branding": {
+        "iconName": "marko",
+        "fallbackEmoji": "📝",
+        "color": "#1C90FF",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/marko.png"
+      },
+      "links": {
+        "website": "https://markojs.com/",
+        "docs": "https://markojs.com/docs/",
+        "github": "https://github.com/marko-js/marko",
+        "npmPackage": "marko",
+        "video": ""
+      },
+      "example": {
+        "title": "Permissionator",
+        "description": "A Linux chmod calculator, for generating safe file permissions",
+        "repo": "https://github.com/Lissy93/permissionator",
+        "website": "https://permissionator.as93.net/",
+        "logo": "https://github.com/Lissy93/permissionator/blob/main/public/logo.png?raw=true"
+      }
+    },
+    {
+      "id": "ember",
+      "name": "Ember.js",
+      "description": "Opinionated framework for building ambitious web applications",
+      "longDescription": "Launched in 2011, Ember follows strong conventions and provides a complete toolkit for building large-scale applications. Known for its stability, backward compatibility guarantees, and comprehensive CLI tooling.",
+      "category": "framework",
+      "type": "spa",
+      "branding": {
+        "iconName": "emberdotjs",
+        "fallbackEmoji": "🔥",
+        "color": "#E04E39",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/ember.png"
+      },
+      "links": {
+        "website": "https://emberjs.com/",
+        "docs": "https://guides.emberjs.com/",
+        "github": "https://github.com/emberjs/ember.js",
+        "npmPackage": "ember-source",
+        "video": ""
+      },
+      "example": {}
+    },
+    {
+      "id": "backbone",
+      "name": "Backbone.js",
+      "description": "Lightweight MVC framework with minimal structure and RESTful JSON interface",
+      "longDescription": "Released in 2010, Backbone was one of the first JavaScript MVC frameworks to gain widespread adoption. Provides minimal structure with models, collections, and views while remaining lightweight and flexible.",
+      "category": "library",
+      "type": "spa",
+      "branding": {
+        "iconName": "backbonedotjs",
+        "fallbackEmoji": "🦴",
+        "color": "#0071B5",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/backbone.png"
+      },
+      "links": {
+        "website": "https://backbonejs.org/",
+        "docs": "https://backbonejs.org/",
+        "github": "https://github.com/jashkenas/backbone",
+        "npmPackage": "backbone",
+        "video": ""
+      },
+      "example": {}
+    },
+    {
+      "id": "riot",
+      "name": "Riot.js",
+      "description": "Simple and elegant component-based UI library with custom tags",
+      "longDescription": "Focuses on simplicity with a minimal API surface and small footprint (under 6KB). Uses custom tags that feel familiar to Web Components but work everywhere.",
+      "category": "library",
+      "type": "spa",
+      "branding": {
+        "iconName": "rive",
+        "fallbackEmoji": "🎭",
+        "color": "#ed1846",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/riot.png"
+      },
+      "links": {
+        "website": "https://riot.js.org/",
+        "docs": "https://riot.js.org/documentation/",
+        "github": "https://github.com/riot/riot",
+        "npmPackage": "riot",
+        "video": ""
+      },
+      "example": {}
+    },
+    {
+      "id": "nue",
+      "name": "Nue",
+      "description": "Minimalist alternative to React and Vue with a focus on simplicity",
+      "longDescription": "A modern framework emphasizing clean separation of concerns between content, styling, and logic. Aims to reduce complexity by focusing on web standards and avoiding heavy tooling requirements.",
+      "category": "framework",
+      "type": "spa",
+      "branding": {
+        "iconName": "naver",
+        "fallbackEmoji": "✨",
+        "color": "#00A9FF",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/nue.png"
+      },
+      "links": {
+        "website": "https://nuejs.org/",
+        "docs": "https://nuejs.org/docs/",
+        "github": "https://github.com/nuejs/nue",
+        "npmPackage": "nue",
+        "video": ""
+      },
+      "example": {}
+    },
+    {
+      "id": "rax",
+      "name": "Rax",
+      "description": "Progressive React-compatible framework optimized for multiple platforms",
+      "longDescription": "Developed by Alibaba for building cross-platform applications. Uses React-compatible APIs while optimizing for both web and mobile platforms, particularly supporting Weex for native mobile rendering.",
+      "category": "framework",
+      "type": "hybrid",
+      "branding": {
+        "iconName": "javascript",
+        "fallbackEmoji": "⚛️",
+        "color": "#ffd300",
+        "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/rax.png"
+      },
+      "links": {
+        "website": "https://rax.js.org/",
+        "docs": "https://rax.js.org/docs",
+        "github": "https://github.com/alibaba/rax",
+        "npmPackage": "rax",
+        "video": ""
+      },
+      "example": {}
     }
   ]
 }

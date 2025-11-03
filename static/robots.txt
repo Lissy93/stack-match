@@ -1,11 +1,11 @@
-# Framework Comparator - Allow all crawlers
+# Stack Match - Allow all crawlers
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://stack-match.vercel.app/sitemap.xml
+Sitemap: https://stack-match.as93.net/sitemap.xml
 
-# Crawl-delay for respectful crawling  
+# Crawl-delay for respectful crawling
 Crawl-delay: 1
 
 # No restrictions - all content is public

@@ -2,6 +2,7 @@
   import { X, ChevronUp, ChevronDown, ArrowUpDown } from 'lucide-svelte';
   import { ATTRIBUTES, ATTR_DESCRIPTIONS } from '../constants';
   import { getScoreColor, capitalize } from '../utils';
+  import { getSimpleIconUrl } from '../utils/branding-utils';
   import type { Framework, FrameworkMeta, Attribute } from '../types';
   import TooltipText from './TooltipText.svelte';
 
@@ -89,11 +90,8 @@
 </script>
 
 {#if showTable}
-  <section class="comparison-section" aria-labelledby="comparison-title">
-    <h2 id="comparison-title" class="section-title">Framework Comparison</h2>
-    
     <div class="table-wrapper">
-      <table class="comparison-table" role="table" aria-labelledby="comparison-title">
+      <table class="comparison-table" aria-labelledby="comparison-title">
         <caption class="sr-only">
           Comparison table showing attribute scores for {sortedFrameworks.length} selected frameworks across {sortedAttributes.length} different criteria.
         </caption>
@@ -114,14 +112,21 @@
             {#each sortedFrameworks as { framework, meta }}
               <th class="framework-header sortable" class:sorted={isColumnSorted(meta.name)} scope="col">
                 <div class="framework-header-content">
-                  <button 
+                  <button
                     type="button"
                     class="sort-button framework-sort"
                     on:click={() => handleSort(meta.name)}
                     aria-label="Sort by {meta.name} scores"
                     aria-pressed={isColumnSorted(meta.name)}
                   >
+                  <div class="framework-sort-label">
+                    <img
+                      src={getSimpleIconUrl(meta.branding.iconName, '#ffffff')}
+                      alt="{meta.name} icon"
+                      class="framework-icon"
+                    />
                     <span class="framework-name">{meta.name}</span>
+                    </div>
                     <svelte:component this={getSortIcon(meta.name)} size={14} />
                   </button>
                   <button
@@ -166,29 +171,24 @@
               {/each}
             </tr>
           {/each}
+          <tr class="details-row">
+            <th class="attribute-cell" scope="row">
+              <span class="details-label">View Details</span>
+            </th>
+            {#each sortedFrameworks as { framework, meta }}
+              <td class="framework-cell">
+                <a href="/{meta.id}" class="details-link">
+                  All {meta.name} Stats →
+                </a>
+              </td>
+            {/each}
+          </tr>
         </tbody>
       </table>
     </div>
-  </section>
 {/if}
 
 <style>
-  .comparison-section {
-    margin-top: 3rem;
-    padding: 2rem;
-    background: var(--surface-secondary);
-    border-radius: 1.25rem;
-    border: 1px solid var(--border-primary);
-  }
-
-  .section-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0 0 1.5rem 0;
-    text-align: center;
-  }
-
   .table-wrapper {
     overflow-x: auto;
     border-radius: 0.75rem;
@@ -293,8 +293,21 @@
     min-width: 0;
   }
 
+  .framework-sort-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .framework-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
   .framework-name {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -318,8 +331,36 @@
     background: var(--surface-danger);
   }
 
-  .attribute-row:last-child td {
+  .details-row {
+    background: var(--surface-tertiary);
+  }
+
+  .details-row th,
+  .details-row td {
     border-bottom: none;
+    padding: 1.25rem 1rem;
+  }
+
+  .details-label {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .details-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--font-sm);
+    font-weight: 500;
+    color: var(--accent-primary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .details-link:hover {
+    color: var(--accent-gradient);
+    transform: translateX(2px);
   }
 
   .attribute-cell {
@@ -337,13 +378,13 @@
   }
 
   .attribute-name {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 600;
     color: var(--text-primary);
   }
 
   .attribute-desc {
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     color: var(--text-secondary);
     line-height: 1.3;
   }
@@ -373,19 +414,12 @@
   }
 
   .score-text {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 600;
     min-width: 2.5rem;
   }
 
   @media (max-width: 768px) {
-    .comparison-section {
-      padding: 1rem;
-      margin-left: -1rem;
-      margin-right: -1rem;
-      border-radius: 0;
-    }
-
     .comparison-table th,
     .comparison-table td {
       padding: 0.75rem 0.5rem;

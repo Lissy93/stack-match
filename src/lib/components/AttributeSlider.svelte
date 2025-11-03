@@ -1,205 +1,217 @@
 <script lang="ts">
-  import { ATTR_DESCRIPTIONS } from '../constants';
-  import type { Attribute } from '../constants';
   import Tooltip from './Tooltip.svelte';
+  import { ATTR_DESCRIPTIONS } from '../constants';
+  import { capitalize, getScoreColor } from '../utils';
+  import type { Attribute } from '../constants';
 
   export let attribute: Attribute;
   export let value: number;
-  export let onValueChange: (value: number) => void;
+  export let onChange: (value: number) => void;
 
-  // Handle slider value change
   function handleInput(event: Event) {
     const target = event.target as HTMLInputElement;
-    onValueChange(parseInt(target.value));
+    onChange(parseInt(target.value));
   }
 
-  // Set specific values via legend clicks
-  function setValue(newValue: number) {
-    onValueChange(newValue);
+  function setLow() {
+    onChange(1);
   }
 
-  // Capitalize attribute name for display
-  function capitalize(str: string): string {
-    return str.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+  function setHigh() {
+    onChange(10);
   }
+
+  // Calculate percentage for gradient
+  $: percentage = ((value - 1) / 9) * 100;
+
+  // Get color for the value indicator
+  $: valueColor = getScoreColor(value);
 </script>
 
 <div class="slider-container">
   <div class="slider-header">
-    <Tooltip content={ATTR_DESCRIPTIONS[attribute]} position="top">
-      <label for={attribute} class="tooltip-label">
+    <Tooltip content={ATTR_DESCRIPTIONS[attribute]} position="top" maxWidth="250px">
+      <label for="slider-{attribute}" class="tooltip-label">
         {capitalize(attribute)}
       </label>
     </Tooltip>
-    <span class="value-indicator" aria-live="polite">{value}</span>
+    <span class="value-indicator" style="color: {valueColor}">{value}</span>
   </div>
-  
-  <div id="{attribute}-desc" class="sr-only">
-    {ATTR_DESCRIPTIONS[attribute]}
+
+  <div class="slider-track">
+    <input
+      id="slider-{attribute}"
+      type="range"
+      min="1"
+      max="10"
+      step="1"
+      {value}
+      class="slider"
+      style="background: linear-gradient(to right, {valueColor} 0%, {valueColor} {percentage}%, var(--surface-tertiary) {percentage}%, var(--surface-tertiary) 100%); --slider-color: {valueColor};"
+      on:input={handleInput}
+      aria-label="{capitalize(attribute)} importance level"
+    />
   </div>
-  
-  <input
-    id={attribute}
-    type="range"
-    min="0"
-    max="10"
-    {value}
-    on:input={handleInput}
-    class="slider"
-    style="--progress: {value * 10}%"
-    aria-label="Priority for {capitalize(attribute)}"
-    aria-describedby="{attribute}-desc"
-  />
-  
-  <div class="legend">
-    <button
-      type="button"
-      class="legend-item"
-      class:active={value === 0}
-      on:click={() => setValue(0)}
-    >
-      Ignore
-    </button>
-    <button
-      type="button"
-      class="legend-item"
-      class:active={value === 5}
-      on:click={() => setValue(5)}
-    >
-      Balanced
-    </button>
-    <button
-      type="button"
-      class="legend-item"
-      class:active={value === 10}
-      on:click={() => setValue(10)}
-    >
-      Max
-    </button>
+
+  <div class="slider-labels">
+    <button type="button" class="slider-label" on:click={setLow}>Low</button>
+    <button type="button" class="slider-label" on:click={setHigh}>High</button>
   </div>
 </div>
 
-<style>
+<style lang="scss">
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
   .slider-container {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.75rem;
+    gap: var(--gap-sm);
     background: var(--surface-secondary);
-    border-radius: 0.75rem;
-    border: 1px solid var(--border-primary);
-    transition: all 0.2s ease;
-  }
+    transition: all var(--transition-normal);
+    border-bottom: 1px solid var(--border-primary);
+    padding: var(--gap-2xs) var(--gap-2xs) var(--gap-sm) var(--gap-2xs);
+    border-radius: var(--radius-xs);
+    animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) backwards;
 
-  .slider-container:hover {
-    border-color: var(--accent-primary);
-    box-shadow: 0 4px 12px var(--shadow-color);
+    &:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
   }
 
   .slider-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .tooltip-label {
+      font-weight: 600;
+      font-size: var(--font-sm);
+      color: var(--text-primary);
+      cursor: help;
+    }
+
+    .value-indicator {
+      font-weight: 700;
+      font-size: var(--font-sm);
+      min-width: 1.5rem;
+      text-align: right;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
   }
 
-  label,
-  .tooltip-label {
-    font-weight: 600;
-    font-size: 0.875rem;
-    color: var(--text-primary);
-    cursor: help;
+  .slider-container:active .value-indicator {
+    animation: pulse 0.3s ease-out;
   }
 
-  .value-indicator {
-    font-weight: 700;
-    font-size: 0.875rem;
-    color: var(--accent-primary);
-    min-width: 1.5rem;
-    text-align: right;
+  .slider-track {
+    position: relative;
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 0.375rem;
+      border-radius: 9999px;
+      outline: none;
+      cursor: pointer;
+      transition: box-shadow var(--transition-normal), height 0.2s ease;
+
+      &:hover {
+        box-shadow: var(--shadow-sm);
+        height: 0.5rem;
+      }
+
+      &:active {
+        height: 0.5rem;
+      }
+
+      &:focus {
+        box-shadow: var(--shadow-md);
+      }
+
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 50%;
+        background: var(--slider-color);
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 3px solid var(--surface-secondary);
+        box-shadow: var(--shadow-sm);
+
+        &:hover {
+          transform: scale(1.15);
+          box-shadow: 0 4px 12px color-mix(in srgb, var(--slider-color) 40%, transparent);
+        }
+
+        &:active {
+          transform: scale(1.05);
+        }
+      }
+
+      &::-moz-range-thumb {
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 50%;
+        background: var(--slider-color);
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 3px solid var(--surface-secondary);
+        box-shadow: var(--shadow-sm);
+
+        &:hover {
+          transform: scale(1.15);
+          box-shadow: 0 4px 12px color-mix(in srgb, var(--slider-color) 40%, transparent);
+        }
+
+        &:active {
+          transform: scale(1.05);
+        }
+      }
+    }
   }
 
-  .slider {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 0.375rem;
-    border-radius: 9999px;
-    background: linear-gradient(
-      to right,
-      var(--accent-primary) 0%,
-      var(--accent-primary) var(--progress),
-      var(--surface-tertiary) var(--progress),
-      var(--surface-tertiary) 100%
-    );
-    outline: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 50%;
-    background: var(--accent-primary);
-    cursor: pointer;
-    border: 2px solid var(--surface-primary);
-    box-shadow: 0 2px 8px var(--shadow-color);
-    transition: all 0.2s ease;
-  }
-
-  .slider::-webkit-slider-thumb:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px var(--shadow-color);
-  }
-
-  .slider::-moz-range-thumb {
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 50%;
-    background: var(--accent-primary);
-    cursor: pointer;
-    border: 2px solid var(--surface-primary);
-    box-shadow: 0 2px 8px var(--shadow-color);
-  }
-
-  .legend {
+  .slider-labels {
     display: flex;
     justify-content: space-between;
-    gap: 0.25rem;
-  }
+    margin-top: 0.25rem;
 
-  .legend-item {
-    background: none;
-    border: none;
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.375rem;
-    transition: all 0.2s ease;
-  }
+    .slider-label {
+      font-size: var(--font-xs);
+      color: var(--text-tertiary);
+      font-weight: 500;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: var(--gap-xs);
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
 
-  .legend-item:hover {
-    color: var(--text-primary);
-    background: var(--surface-tertiary);
-  }
-
-  .legend-item.active {
-    color: var(--accent-primary);
-    font-weight: 600;
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+      &:hover {
+        color: var(--accent-primary);
+        background: var(--surface-tertiary);
+      }
+    }
   }
 </style>

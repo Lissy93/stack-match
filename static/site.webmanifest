@@ -1,32 +1,99 @@
 {
-  "name": "Framework Comparator",
-  "short_name": "FrameworkComp",
-  "description": "Interactive tool to compare frontend frameworks based on performance metrics and customizable scoring",
+  "name": "Stack Match - Frontend Framework Comparison",
+  "short_name": "Stack Match",
+  "description": "Compare 18+ frontend frameworks including React, Vue, Angular, Svelte with performance metrics, bundle size analysis, and scoring system",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#0a0f1c",
+  "theme_color": "#f33471",
+  "orientation": "any",
+  "dir": "ltr",
+  "lang": "en-US",
   "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
     {
       "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "theme_color": "#0a0f1c",
-  "background_color": "#0a0f1c",
-  "display": "standalone",
-  "orientation": "portrait-primary",
-  "start_url": "/",
-  "scope": "/",
-  "categories": ["productivity", "developer", "utilities"],
+  "categories": [
+    "development",
+    "utilities",
+    "productivity"
+  ],
   "screenshots": [
     {
-      "src": "/og_image.png",
-      "sizes": "1200x630",
+      "src": "/screenshots/home.png",
+      "sizes": "1920x1080",
       "type": "image/png",
-      "form_factor": "wide"
+      "form_factor": "wide",
+      "label": "Stack Match - Home page with framework comparison"
+    },
+    {
+      "src": "/screenshots/compare.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Stack Match - Side-by-side framework comparison"
+    },
+    {
+      "src": "/screenshots/framework.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Stack Match - Detailed framework statistics and metrics"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Compare Frameworks",
+      "short_name": "Compare",
+      "description": "Compare frontend frameworks side by side",
+      "url": "/compare",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "About",
+      "short_name": "About",
+      "description": "Learn about Stack Match",
+      "url": "/about",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

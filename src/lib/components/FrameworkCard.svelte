@@ -1,6 +1,8 @@
 <script lang="ts">
   import { ChevronDown, ChevronUp, Plus, Check } from 'lucide-svelte';
+  import { slide } from 'svelte/transition';
   import { getBestAttributes, getWorstAttributes, getScoreColor, getIconUrl, capitalize } from '../utils';
+  import { getSimpleIconUrl } from '../utils/branding-utils';
   import { ATTRIBUTES, ATTR_DESCRIPTIONS } from '../constants';
   import type { FrameworkScore, Framework } from '../types';
   import TooltipText from './TooltipText.svelte';
@@ -14,20 +16,32 @@
   $: bestAttrs = getBestAttributes(framework, 3);
   $: worstAttrs = getWorstAttributes(framework, 3);
   $: iconUrl = getIconUrl(framework.meta);
+  $: brandColor = framework.meta.branding?.color || null;
+
+  function handleImageError(event: Event) {
+    const target = event.currentTarget as HTMLImageElement;
+    if (target) {
+      target.style.display = 'none';
+    }
+  }
 </script>
 
-<article class="framework-card" class:expanded={isExpanded}>
+<div class="framework-card" class:expanded={isExpanded} on:click={onToggleExpanded} role="button" tabindex="0" on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? onToggleExpanded() : null} style={brandColor ? `--framework-color: ${brandColor}` : ''}>
   <!-- Card Header -->
   <header class="card-header">
     <div class="framework-info">
-      <img
-        src={iconUrl}
-        alt="{framework.meta.name} icon"
-        class="framework-icon"
-        on:error={(e) => e.currentTarget && (e.currentTarget.style.display = 'none')}
-      />
+      <a href="/{framework.meta.id}" on:click|stopPropagation class="framework-icon-link">
+        <img
+          src={iconUrl}
+          alt="{framework.meta.name} icon"
+          class="framework-icon"
+          on:error={handleImageError}
+        />
+      </a>
       <div class="framework-details">
-        <h3 class="framework-name">{framework.meta.name}</h3>
+        <a href="/{framework.meta.id}" on:click|stopPropagation class="framework-name-link">
+          <h3 class="framework-name">{framework.meta.name}</h3>
+        </a>
         <p class="framework-description">{framework.meta.description}</p>
       </div>
     </div>
@@ -66,7 +80,7 @@
     <button
       type="button"
       class="action-btn expand-btn"
-      on:click={onToggleExpanded}
+      on:click|stopPropagation={onToggleExpanded}
       aria-expanded={isExpanded}
       aria-label="{isExpanded ? 'Collapse' : 'Expand'} details for {framework.meta.name}"
     >
@@ -77,27 +91,26 @@
       {/if}
       Details
     </button>
-    
+
     <button
       type="button"
       class="action-btn shortlist-btn"
       class:added={isInShortlist}
-      on:click={onToggleShortlist}
+      on:click|stopPropagation={onToggleShortlist}
       aria-label="{isInShortlist ? 'Remove from' : 'Add to'} comparison shortlist"
     >
       {#if isInShortlist}
         <Check size={16} />
-        In List
       {:else}
         <Plus size={16} />
-        Compare
       {/if}
+      Compare
     </button>
   </div>
 
   <!-- Expanded Details -->
   {#if isExpanded}
-    <div class="expanded-content">
+    <div class="expanded-content" transition:slide={{ duration: 400 }}>
       <!-- All Attributes -->
       <div class="all-attributes">
         <h4 class="section-title">All Attributes</h4>
@@ -153,7 +166,7 @@
                   src={framework.meta.example.logo} 
                   alt="{framework.meta.example.title} logo"
                   class="example-logo-img"
-                  on:error={(e) => e.currentTarget && (e.currentTarget.style.display = 'none')}
+                  on:error={handleImageError}
                 />
               </div>
             {/if}
@@ -164,23 +177,25 @@
               {/if}
               <div class="example-links">
                 {#if framework.meta.example.repo}
-                  <a 
-                    href={framework.meta.example.repo} 
-                    class="example-link primary" 
-                    target="_blank" 
+                  <a
+                    href={framework.meta.example.repo}
+                    class="example-link primary"
+                    target="_blank"
                     rel="noopener noreferrer"
                     aria-label="View {framework.meta.example.title} source code"
+                    on:click|stopPropagation
                   >
                     GitHub
                   </a>
                 {/if}
                 {#if framework.meta.example.website}
-                  <a 
-                    href={framework.meta.example.website} 
-                    class="example-link secondary" 
-                    target="_blank" 
+                  <a
+                    href={framework.meta.example.website}
+                    class="example-link secondary"
+                    target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Visit {framework.meta.example.title}"
+                    on:click|stopPropagation
                   >
                     View App
                   </a>
@@ -192,43 +207,67 @@
         </div>
       {/if}
 
+      <!-- Full Info Section -->
+      <div class="full-info-section">
+        <h4 class="section-title">Want More Details?</h4>
+        <p class="info-description">
+          View comprehensive statistics, metrics, and ecosystem health for {framework.meta.name}.
+        </p>
+        <a
+          href="/{framework.meta.id}"
+          class="full-info-btn"
+          on:click|stopPropagation
+        >
+          <img
+            src={getSimpleIconUrl(framework.meta.branding.iconName, '#ffffff')}
+            alt=""
+            class="full-info-icon"
+          />
+          View Full Framework Details
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+
       <!-- Links -->
       {#if framework.meta.links.website || framework.meta.links.docs || framework.meta.links.github}
         <div class="framework-links">
           <h4 class="section-title">Resources</h4>
           <div class="links-grid" role="list">
             {#if framework.meta.links.website}
-              <a 
-                href={framework.meta.links.website} 
-                class="resource-link" 
-                target="_blank" 
+              <a
+                href={framework.meta.links.website}
+                class="resource-link"
+                target="_blank"
                 rel="noopener noreferrer"
-                role="listitem"
                 aria-label="Visit {framework.meta.name} website"
+                on:click|stopPropagation
               >
                 Website
               </a>
             {/if}
             {#if framework.meta.links.docs}
-              <a 
-                href={framework.meta.links.docs} 
-                class="resource-link" 
-                target="_blank" 
+              <a
+                href={framework.meta.links.docs}
+                class="resource-link"
+                target="_blank"
                 rel="noopener noreferrer"
-                role="listitem"
                 aria-label="View {framework.meta.name} documentation"
+                on:click|stopPropagation
               >
                 Documentation
               </a>
             {/if}
             {#if framework.meta.links.github}
-              <a 
-                href={framework.meta.links.github} 
-                class="resource-link" 
-                target="_blank" 
+              <a
+                href={framework.meta.links.github}
+                class="resource-link"
+                target="_blank"
                 rel="noopener noreferrer"
-                role="listitem"
                 aria-label="View {framework.meta.name} GitHub repository"
+                on:click|stopPropagation
               >
                 GitHub
               </a>
@@ -238,7 +277,7 @@
       {/if}
     </div>
   {/if}
-</article>
+</div>
 
 <style>
   .framework-card {
@@ -246,20 +285,27 @@
     border: 1px solid var(--border-primary);
     border-radius: 1rem;
     padding: 1.5rem;
-    transition: all 0.3s ease;
+    transition: all var(--transition-slow);
     position: relative;
     overflow: hidden;
     height: 100%;
+    transform-origin: center top;
   }
 
   .framework-card:hover {
-    border-color: var(--accent-primary);
-    box-shadow: 0 8px 25px var(--shadow-color);
+    border-color: var(--framework-color, var(--accent-primary));
+    box-shadow: var(--shadow-xl);
     transform: translateY(-2px);
   }
 
   .framework-card.expanded {
     border-color: var(--accent-primary);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, var(--surface-secondary), var(--surface-tertiary));
+  }
+
+  .framework-card.expanded:hover {
+    transform: none;
   }
 
   .card-header {
@@ -270,6 +316,21 @@
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
+  }
+
+  .framework-icon-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .framework-name-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  .framework-name-link:hover .framework-name {
+    color: var(--framework-color, var(--accent-primary));
   }
 
   .framework-icon {
@@ -285,14 +346,14 @@
   }
 
   .framework-name {
-    font-size: 1.25rem;
+    font-size: var(--font-xl);
     font-weight: 700;
     color: var(--text-primary);
     margin: 0 0 0.25rem 0;
   }
 
   .framework-description {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     color: var(--text-secondary);
     margin: 0;
     line-height: 1.4;
@@ -310,13 +371,13 @@
   }
 
   .score-label {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 500;
     color: var(--text-secondary);
   }
 
   .score-value {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 700;
     color: var(--text-primary);
   }
@@ -347,7 +408,7 @@
   .attribute-chip {
     padding: 0.375rem 0.75rem;
     border-radius: 9999px;
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     font-weight: 600;
     border: 1px solid;
     background: transparent;
@@ -362,9 +423,9 @@
     display: flex;
     align-items: center;
     gap: 0.375rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 500;
     border: 1px solid var(--border-primary);
     background: var(--surface-primary);
@@ -373,39 +434,29 @@
     transition: all 0.2s ease;
     flex: 1;
     justify-content: center;
+    text-decoration: none;
   }
 
   .action-btn:hover {
     background: var(--surface-tertiary);
-    border-color: var(--accent-primary);
+    border-color: var(--border-secondary);
   }
 
   .shortlist-btn.added {
-    background: var(--accent-secondary);
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
+    background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 15%, transparent);
+    border-color: var(--framework-color, var(--accent-primary));
+    color: var(--framework-color, var(--accent-primary));
   }
 
   .expanded-content {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border-primary);
-    animation: slideIn 0.3s ease-out;
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    overflow: hidden;
   }
 
   .section-title {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     font-weight: 600;
     color: var(--text-primary);
     margin: 0 0 0.75rem 0;
@@ -429,7 +480,7 @@
   }
 
   .attribute-name {
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     font-weight: 500;
     color: var(--text-secondary);
   }
@@ -448,7 +499,7 @@
   }
 
   .attribute-score {
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     font-weight: 600;
     min-width: 2.5rem;
     text-align: right;
@@ -463,7 +514,7 @@
   }
 
   .framework-long-desc {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     color: var(--text-secondary);
     line-height: 1.5;
     margin: 0;
@@ -484,7 +535,7 @@
   }
 
   .example-card:hover {
-    box-shadow: 0 4px 12px var(--shadow-color);
+    box-shadow: var(--shadow-md);
   }
 
   .example-logo {
@@ -505,14 +556,14 @@
   }
 
   .example-title {
-    font-size: 1rem;
+    font-size: var(--font-base);
     font-weight: 600;
     color: var(--text-primary);
     margin: 0 0 0.5rem 0;
   }
 
   .example-description {
-    font-size: 0.875rem;
+    font-size: var(--font-sm);
     color: var(--text-secondary);
     line-height: 1.4;
     margin: 0 0 0.75rem 0;
@@ -527,7 +578,7 @@
   .example-link {
     padding: 0.375rem 0.75rem;
     border-radius: 0.375rem;
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     font-weight: 500;
     text-decoration: none;
     transition: all 0.2s ease;
@@ -543,7 +594,7 @@
   .example-link.primary:hover {
     background: var(--accent-gradient);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    box-shadow: var(--shadow-accent-md);
   }
 
   .example-link.secondary {
@@ -554,6 +605,49 @@
 
   .example-link.secondary:hover {
     background: var(--accent-secondary);
+  }
+
+  .full-info-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .info-description {
+    margin: var(--gap-sm) 0 var(--gap-md) 0;
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .full-info-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    padding: var(--gap-md) var(--gap-lg);
+    background: var(--framework-color, var(--accent-primary));
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 0 auto;
+    display: flex;
+    width: fit-content;
+  }
+
+  .full-info-btn:hover {
+    background: color-mix(in srgb, var(--framework-color, var(--accent-primary)) 85%, black);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--framework-color, var(--accent-primary)) 40%, transparent);
+  }
+
+  .full-info-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 
   .framework-links {
@@ -570,7 +664,7 @@
     padding: 0.375rem 0.75rem;
     border: 1px solid var(--border-primary);
     border-radius: 0.375rem;
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     font-weight: 500;
     color: var(--accent-primary);
     text-decoration: none;
@@ -599,7 +693,7 @@
     }
 
     .example-title {
-      font-size: 0.875rem;
+      font-size: var(--font-sm);
     }
 
     .example-description {

@@ -1,4 +1,6 @@
-import type { Attribute } from './constants';
+import type { Attribute } from "./constants";
+
+export type { Attribute };
 
 export interface Framework {
   name: string;
@@ -82,4 +84,39 @@ export interface FrameworkCommentary {
   id: string;
   name: string;
   about: string;
+}
+
+// API Response types for framework detail cards
+export interface OpenCollectiveData {
+  slug: string;
+  name: string;
+  description: string;
+  totalAmountReceived: number;
+  yearlyBudget: number;
+  currency: string;
+  backerCount: number;
+  sponsorCount: number;
+  url: string;
+  balance: number;
+  monthlySpending: number;
+  totalAmountSpent: number;
+  contributorsCount: number;
+  runwayMonths: number | null;
+  recurringContributions: {
+    monthly: number;
+    yearly: number;
+  };
+  createdAt: string;
+}
+
+export interface JsDelivrData {
+  last30Days: number;
+  total: number;
+  rank: number;
+  packageName: string;
+}
+
+export interface StackOverflowData {
+  count: number;
+  name: string;
 }
