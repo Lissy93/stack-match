@@ -278,8 +278,8 @@
 
       <!-- Framework Cards -->
       <section id="main-content" class="frameworks-grid" role="main" aria-label="Framework comparison results">
-        {#each $sortedFrameworks as framework (framework.name)}
-          <div class="framework-card-wrapper animate-slide-up" class:expanded={$expandedCards.has(framework.name)}>
+        {#each $sortedFrameworks as framework, i (framework.name)}
+          <div class="framework-card-wrapper" class:expanded={$expandedCards.has(framework.name)} style="--index: {i}">
             <FrameworkCard
               {framework}
               isExpanded={$expandedCards.has(framework.name)}
@@ -368,6 +368,11 @@
 </main>
 
 <style>
+  @keyframes cardSlideIn {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   .app-container {
     min-height: 100vh;
     max-width: var(--container-max-width);
@@ -499,7 +504,8 @@
   }
 
   .framework-card-wrapper {
-    animation-delay: calc(var(--index, 0) * 50ms);
+    animation: cardSlideIn 0.4s ease-out backwards;
+    animation-delay: calc(var(--index, 0) * 40ms);
     transition: all var(--transition-slow);
 
     &.expanded {

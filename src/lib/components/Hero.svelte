@@ -244,10 +244,31 @@
 
     a {
       color: var(--accent-primary);
-      text-decoration: underline;
+      text-decoration: none;
+      position: relative;
+      transition: color var(--transition-fast);
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 1px;
+        background: var(--accent-primary);
+        transform: scaleX(1);
+        transform-origin: left;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color var(--transition-fast);
+      }
 
       &:hover {
         color: var(--accent-gradient);
+
+        &::after {
+          background: var(--accent-gradient);
+          transform: scaleX(1.05);
+          transform-origin: right;
+        }
       }
     }
   }

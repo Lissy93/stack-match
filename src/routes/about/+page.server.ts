@@ -1,7 +1,11 @@
 import { env } from '$env/dynamic/private';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ fetch }) => {
+export const load: PageServerLoad = async ({ fetch, setHeaders }) => {
+  // Cache for 24 hours
+  setHeaders({
+    'Cache-Control': 'public, max-age=86400, s-maxage=86400'
+  });
   const repoStars: Record<string, number> = {};
 
   // List of repos to fetch stars for

@@ -1,6 +1,6 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { frameworkCache, fetchWithRetry, CACHE_TTL } from "$lib/api-cache";
+import { frameworkCache, fetchWithRetry, CACHE_TTL, CACHE_CONTROL } from "$lib/api-cache";
 import { env } from "$env/dynamic/private";
 
 interface GitHubLicenseResponse {
@@ -38,7 +38,7 @@ export const GET: RequestHandler = async ({ params }) => {
   if (cachedLicense) {
     return json(cachedLicense, {
       headers: {
-        "Cache-Control": "public, max-age=86400", // 24 hours
+        "Cache-Control": `public, max-age=${CACHE_CONTROL.PAGE_RESPONSE}, s-maxage=${CACHE_CONTROL.PAGE_RESPONSE}`,
         "X-Cache-Hit": "true",
       },
     });
@@ -78,7 +78,7 @@ export const GET: RequestHandler = async ({ params }) => {
 
     return json(licenseData, {
       headers: {
-        "Cache-Control": "public, max-age=86400", // 24 hours
+        "Cache-Control": `public, max-age=${CACHE_CONTROL.PAGE_RESPONSE}, s-maxage=${CACHE_CONTROL.PAGE_RESPONSE}`,
         "X-Cache-Hit": "false",
       },
     });

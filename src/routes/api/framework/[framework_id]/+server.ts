@@ -11,6 +11,7 @@ import {
   getBundleCacheKey,
   getSecurityCacheKey,
   CACHE_TTL,
+  CACHE_CONTROL,
 } from "$lib/api-cache";
 import { env } from "$env/dynamic/private";
 import rawData from '../../../../data.json';
@@ -860,7 +861,7 @@ export const GET: RequestHandler = async ({ params, request }) => {
   if (cachedResponse) {
     return json(cachedResponse, {
       headers: {
-        "Cache-Control": "public, max-age=3600",
+        "Cache-Control": `public, max-age=${CACHE_CONTROL.API_RESPONSE}, s-maxage=${CACHE_CONTROL.API_RESPONSE}, stale-while-revalidate=3600`,
         "X-Framework-ID": frameworkId,
         "X-Data-Sources": "github,npm,bundlephobia,osv",
         "X-Cache-Hit": "true",
@@ -936,10 +937,10 @@ export const GET: RequestHandler = async ({ params, request }) => {
     // Cache the complete response
     frameworkCache.set(fullCacheKey, response, CACHE_TTL.FRAMEWORK_STATS);
 
-    // Set cache headers for 1 hour
+    // Set cache headers for 6 hours
     return json(response, {
       headers: {
-        "Cache-Control": "public, max-age=3600",
+        "Cache-Control": `public, max-age=${CACHE_CONTROL.API_RESPONSE}, s-maxage=${CACHE_CONTROL.API_RESPONSE}, stale-while-revalidate=3600`,
         "X-Framework-ID": frameworkId,
         "X-Data-Sources": "github,npm,bundlephobia,osv",
         "X-Cache-Hit": "false",

@@ -261,14 +261,21 @@ export function getSecurityCacheKey(packageName: string): string {
 
 // Cache TTL constants (in milliseconds)
 export const CACHE_TTL = {
-  GITHUB_REPO: 30 * 60 * 1000, // 30 minutes
-  GITHUB_ACTIVITY: 60 * 60 * 1000, // 1 hour
-  GITHUB_RELEASES: 60 * 60 * 1000, // 1 hour
-  NPM_PACKAGE: 30 * 60 * 1000, // 30 minutes
-  NPM_DOWNLOADS: 60 * 60 * 1000, // 1 hour
+  GITHUB_REPO: 6 * 60 * 60 * 1000, // 6 hours
+  GITHUB_ACTIVITY: 6 * 60 * 60 * 1000, // 6 hours
+  GITHUB_RELEASES: 6 * 60 * 60 * 1000, // 6 hours
+  NPM_PACKAGE: 6 * 60 * 60 * 1000, // 6 hours
+  NPM_DOWNLOADS: 6 * 60 * 60 * 1000, // 6 hours
   BUNDLE_SIZE: 30 * 24 * 60 * 60 * 1000, // 30 days - bundle sizes rarely change
   SECURITY_AUDIT: 6 * 60 * 60 * 1000, // 6 hours
-  FRAMEWORK_STATS: 60 * 60 * 1000, // 1 hour for complete response
+  FRAMEWORK_STATS: 6 * 60 * 60 * 1000, // 6 hours for complete response
+} as const;
+
+// HTTP Cache-Control header values (in seconds)
+export const CACHE_CONTROL = {
+  API_RESPONSE: 21600, // 6 hours for API endpoints
+  PAGE_RESPONSE: 86400, // 24 hours for server-rendered pages
+  STATIC_ASSETS: 31536000, // 1 year for immutable assets
 } as const;
 
 // Health check for external APIs

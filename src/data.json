@@ -698,7 +698,7 @@
       "branding": {
         "iconName": "javascript",
         "fallbackEmoji": "⚛️",
-        "color": "#3B5998",
+        "color": "#ffd300",
         "logo": "https://storage.googleapis.com/as93-screenshots/frontend-benchmarks/framework-logos/rax.png"
       },
       "links": {

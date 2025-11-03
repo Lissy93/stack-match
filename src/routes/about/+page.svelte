@@ -17,21 +17,47 @@
 
 <div class="about-page">
   <header class="page-header">
-    <h1>About Stack Match</h1>
-    <p class="subtitle">
-      An unbiased, data-driven tool to help you choose the right frontend framework for your project.
-    </p>
+    <div class="animated-bg"></div>
+    <div class="header-content">
+      <h1>About Stack Match</h1>
+      <p class="subtitle">
+        An unbiased, data-driven tool to help you choose the right frontend framework for your project.
+      </p>
+    </div>
   </header>
 
   <div class="sections-container">
-    <DataSourceSection />
-    <WhyBuiltSection />
-    <ExperienceSection repoStars={data.repoStars || {}} />
-    <MoreProjectsSection />
+    <div class="section-wrapper" style="--delay: 0">
+      <DataSourceSection />
+    </div>
+    <div class="section-wrapper" style="--delay: 1">
+      <WhyBuiltSection />
+    </div>
+    <div class="section-wrapper" style="--delay: 2">
+      <ExperienceSection repoStars={data.repoStars || {}} />
+    </div>
+    <div class="section-wrapper" style="--delay: 3">
+      <MoreProjectsSection />
+    </div>
   </div>
 </div>
 
 <style lang="scss">
+  @keyframes bgPulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes sectionSlideIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   .about-page {
     max-width: var(--container-max-width);
     margin: 0 auto;
@@ -41,8 +67,39 @@
 
   .page-header {
     text-align: center;
-    padding: var(--gap-2xl) 0;
-    margin-bottom: var(--gap-xl);
+    padding: var(--gap-2xl) var(--gap-xl);
+    margin: var(--gap-xl) auto;
+    border-radius: var(--radius-2xl);
+    max-width: 1200px;
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-primary);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-primary) 30%, var(--accent-gradient) 70%, transparent);
+      opacity: 0.4;
+      animation: shimmer 6s linear infinite;
+    }
+  }
+
+  .animated-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, color-mix(in srgb, var(--accent-primary) 12%, transparent) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, color-mix(in srgb, var(--accent-gradient) 8%, transparent) 0%, transparent 40%);
+    animation: bgPulse 16s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .header-content {
+    position: relative;
+    z-index: 1;
 
     h1 {
       font-size: var(--font-4xl);
@@ -71,6 +128,11 @@
     gap: var(--gap-2xl);
   }
 
+  .section-wrapper {
+    animation: sectionSlideIn 0.5s ease-out backwards;
+    animation-delay: calc(var(--delay) * 100ms);
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -86,8 +148,10 @@
     }
 
     .page-header {
-      padding: var(--gap-xl) 0;
+      padding: var(--gap-xl) var(--gap-lg);
+    }
 
+    .header-content {
       h1 {
         font-size: var(--font-2xl);
       }
