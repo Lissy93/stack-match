@@ -2,7 +2,7 @@
 <h1 align="center">Stack Match</h1>
 <p align="center">
   😌 <i>Find the perfect frontend framework, based on what matters most for your project.</i><br>
-  <img width="64" src="https://storage.googleapis.com/as93-screenshots/project-logos/stack-match.png" />
+  <a href="https://stack-match.as93.net"><img width="128" src="https://github.com/Lissy93/stack-match/blob/main/static/android-chrome-192x192.png?raw=true" /></a>
   <br>
   🌐 Try out the app live, at: <b><a href="https://stack-match.as93.net">stack-match.as93.net</a></b><br>
   📊 Uses data from <b><a href="https://github.com/Lissy93/framework-benchmarks">lissy93/framework-benchmarks</a></b>
@@ -45,9 +45,11 @@ And then start the container, by running `docker run -p 8080:80 stack-match`
 ### Screenshot
 
 <p align="center">
- <img width="800" src="https://storage.googleapis.com/as93-screenshots/project-screenshots/stack-match" />
-  <br>
-  <sup><i>A screenshot of the main app</i></sup>
+ <a href="https://stack-match.as93.net/about"><img width="800" src="https://github.com/Lissy93/stack-match/blob/main/static/screenshots/home.png?raw=true" /></a>
+</p>
+<p align="center">
+  <img width="400" src="https://github.com/Lissy93/stack-match/blob/main/static/screenshots/framework.png?raw=true" />
+  <img width="400" src="https://github.com/Lissy93/stack-match/blob/main/static/screenshots/compare.png?raw=true" />
 </p>
 
 ---
